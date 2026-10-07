@@ -6,6 +6,8 @@
   const raiz = document.documentElement;
   const rnd = (a, b) => a + Math.random() * (b - a);
   const NS = "http://www.w3.org/2000/svg";
+  // respuesta táctil en el móvil (Android; en iPhone no hace nada)
+  const zum = (p) => { try { navigator.vibrate && navigator.vibrate(p); } catch {} };
 
   // ---------- el cielo, el lago y los fuegos (un solo canvas) ----------
   const cv = document.createElement("canvas");
@@ -142,6 +144,7 @@
   // clic en el cielo (fuera de las targetas): un cohete hasta donde has hecho clic
   document.getElementById("stage").addEventListener("click", (e) => {
     if (e.target.closest(".slab, button, a")) return;
+    zum(15);
     lanza(e.clientX / innerWidth, Math.min(e.clientY / innerHeight, horizonte - .1), Math.random() < .5 ? "peacock" : "ring", "peacock");
   });
 
@@ -170,6 +173,7 @@
       wick.classList.remove("locked", "burning");
       wick.querySelector(".light-btn")?.remove();
       const r = wick.getBoundingClientRect();
+      zum([20, 40, 60]);
       lanza((r.left + r.width / 2) / innerWidth, Math.max(.1, (r.top - 60) / innerHeight), "peacock", "peacock");
       chisporrotea(r.left + r.width / 2, r.top + r.height / 2, 24, "gold");
     };
@@ -216,6 +220,7 @@
   // al copiar: un cohete sale del botón
   document.querySelectorAll(".cp[data-copy]").forEach((b) => b.addEventListener("click", () => {
     const r = b.getBoundingClientRect();
+    zum(25);
     lanza((r.left + r.width / 2) / innerWidth, Math.max(.08, (r.top - 220) / innerHeight), "ring", "red");
   }));
 
@@ -232,7 +237,7 @@
     const abre = (si) => {
       const abierto = si ?? !slab.classList.contains("open");
       slab.classList.toggle("open", abierto); slab.setAttribute("aria-expanded", abierto);
-      if (abierto) { const r = ojo.getBoundingClientRect(); chisporrotea(r.left + r.width / 2, r.top + r.height / 2, 14, "peacock"); }
+      if (abierto) { zum(12); const r = ojo.getBoundingClientRect(); chisporrotea(r.left + r.width / 2, r.top + r.height / 2, 14, "peacock"); }
     };
     slab.addEventListener("click", () => abre());
     slab.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); abre(); } });
