@@ -1,0 +1,123 @@
+/* ICE — el concepto de esta pieza: todo está congelado y se libera a golpecitos, como el mono. */
+
+/* nieve detrás de las targetas */
+#snow { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
+
+/* el título brilla como hielo */
+.reel-ice .hero h1.big {
+  background: linear-gradient(100deg, var(--bone) 0%, var(--bone) 40%, #FFFFFF 47%, #DDEAF0 50%, var(--bone) 56%, var(--bone) 100%);
+  background-size: 260% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: glint 5.5s ease-in-out infinite;
+}
+.reel-ice .hero h1.big em { -webkit-text-fill-color: var(--signal); }
+@keyframes glint { 0%, 55% { background-position: 100% 0; } 85%, 100% { background-position: 0% 0; } }
+
+/* las targetas lejanas, empañadas */
+.reel-ice.fly .slab:not(.on) { filter: blur(2.5px) saturate(.6); }
+.reel-ice.fly .slab { transition: opacity .8s, filter .9s; }
+
+/* los beats entran uno a uno al llegar */
+.reel-ice.fly .beats li { opacity: 0; transform: translateX(-10px); }
+.reel-ice.fly .slab.on .beats li { animation: beat-in .5s cubic-bezier(.2, .8, .2, 1) forwards; }
+.reel-ice .beats li:nth-child(1) { animation-delay: .35s; }
+.reel-ice .beats li:nth-child(2) { animation-delay: .5s; }
+.reel-ice .beats li:nth-child(3) { animation-delay: .65s; }
+.reel-ice .beats li:nth-child(4) { animation-delay: .8s; }
+.reel-ice .beats li:nth-child(5) { animation-delay: .95s; }
+.reel-ice .beats li:nth-child(6) { animation-delay: 1.1s; }
+@keyframes beat-in { to { opacity: 1; transform: none; } }
+
+/* ---------- el prompt congelado ---------- */
+.ice { position: relative; border-radius: 14px; }
+.ice .code { transition: filter .5s; }
+.ice.frozen .code { filter: blur(2.2px); user-select: none; }
+.ice-cover {
+  position: absolute; inset: 0; border-radius: 14px; overflow: hidden;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34'%3E%3Cg transform='rotate(-40 17 17)'%3E%3Crect x='15' y='12' width='4' height='20' rx='2' fill='%23F3EEEB'/%3E%3Crect x='7' y='4' width='20' height='10' rx='3' fill='%23FF2A1F' stroke='%230A0807' stroke-width='1.5'/%3E%3C/g%3E%3C/svg%3E") 8 8, pointer;
+  background:
+    radial-gradient(120% 70% at 20% 0%, rgba(255, 255, 255, .34), transparent 55%),
+    radial-gradient(90% 60% at 100% 100%, rgba(214, 232, 240, .22), transparent 60%),
+    repeating-linear-gradient(115deg, rgba(255, 255, 255, .05) 0 2px, transparent 2px 9px),
+    linear-gradient(180deg, rgba(233, 242, 246, .30), rgba(200, 222, 232, .18));
+  -webkit-backdrop-filter: blur(5px) saturate(.7); backdrop-filter: blur(5px) saturate(.7);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .35), inset 0 1px 18px rgba(255, 255, 255, .28), inset 0 -12px 30px rgba(170, 205, 220, .18);
+}
+.ice-cover svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ice-cover path { fill: none; stroke: rgba(255, 255, 255, .92); stroke-width: 1.4; stroke-linecap: round; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 2px rgba(255, 255, 255, .7)); stroke-dasharray: var(--len); stroke-dashoffset: var(--len); animation: crack .32s ease-out forwards; }
+.ice-cover path.thin { stroke-width: .8; stroke: rgba(255, 255, 255, .7); animation-delay: .08s; }
+@keyframes crack { to { stroke-dashoffset: 0; } }
+
+.ice-hint {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  font: 800 12px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; white-space: nowrap;
+  background: rgba(10, 8, 7, .78); color: var(--bone); border: 1px solid rgba(255, 255, 255, .3);
+  border-radius: 999px; padding: 13px 18px; pointer-events: none;
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.ice-hint i { display: inline-flex; gap: 5px; }
+.ice-hint i b { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 8px var(--signal); transition: background .2s, box-shadow .2s; }
+.ice-hint i b.used { background: rgba(255, 255, 255, .25); box-shadow: none; }
+.ice-hit { position: absolute; inset: 0; opacity: 0; cursor: inherit; border: 0; background: none; }
+.ice-hit:focus-visible { opacity: 1; outline: 2px solid var(--bone); outline-offset: 2px; border-radius: 14px; }
+
+.ice.hit { animation: knock .22s ease-out; }
+@keyframes knock { 25% { transform: translate(2px, -1px) rotate(.25deg); } 55% { transform: translate(-2px, 1px) rotate(-.2deg); } }
+
+/* trozos que caen al romperse */
+.shard {
+  position: absolute; inset: 0; border-radius: 14px; pointer-events: none;
+  background: inherit;
+  animation: fall var(--dur, 1.1s) cubic-bezier(.45, 0, .9, .6) forwards;
+}
+@keyframes fall {
+  0% { transform: none; opacity: 1; }
+  15% { transform: translate(calc(var(--dx) * .15), -6px) rotate(calc(var(--rot) * .1)); }
+  100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; }
+}
+
+/* esquirlas: al golpear y al copiar */
+.chip {
+  position: fixed; z-index: 60; width: var(--s, 7px); height: var(--s, 7px); pointer-events: none;
+  background: linear-gradient(135deg, #FFFFFF, rgba(205, 228, 238, .75));
+  clip-path: polygon(50% 0, 100% 70%, 20% 100%);
+  animation: chip var(--dur, .8s) cubic-bezier(.2, .7, .4, 1) forwards;
+}
+.chip.red { background: linear-gradient(135deg, #FF6A60, var(--signal)); }
+@keyframes chip {
+  0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; }
+}
+
+/* ---------- reglas que se giran ---------- */
+.reel-ice.fly .slab.rule { overflow: visible; background: none; border: 0; box-shadow: none; padding: 0; }
+.flip { perspective: 1000px; cursor: pointer; display: block; width: 100%; text-align: left; background: none; border: 0; padding: 0; }
+.flip-in { position: relative; min-height: 300px; transform-style: preserve-3d; transition: transform .75s cubic-bezier(.3, 1.3, .5, 1); }
+.flip.open .flip-in { transform: rotateY(180deg); }
+.face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: var(--glass); border: 1px solid var(--line); border-radius: 22px;
+  box-shadow: 0 40px 90px rgba(0, 0, 0, .66), inset 0 1px 0 rgba(255, 255, 255, .07);
+  padding: 26px 26px 24px; display: flex; flex-direction: column;
+}
+.face.front {
+  background:
+    radial-gradient(120% 80% at 10% 0%, rgba(255, 255, 255, .16), transparent 55%),
+    repeating-linear-gradient(115deg, rgba(255, 255, 255, .035) 0 2px, transparent 2px 10px),
+    var(--glass);
+}
+.face.back { transform: rotateY(180deg); border-color: rgba(255, 42, 31, .55); }
+.face .huge { font: 400 92px/.9 var(--display); color: rgba(243, 238, 235, .13); margin: 6px 0 auto; }
+.face h3 { margin-top: 18px; }
+.face .turn { font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--dim); margin-top: 14px; }
+.face .turn::after { content: " ↻"; color: var(--signal); }
+
+@media (max-width: 760px) {
+  .flip-in { min-height: 260px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reel-ice .hero h1.big { animation: none; }
+  .reel-ice.fly .beats li { opacity: 1; transform: none; animation: none !important; }
+  .flip-in { transition: none; }
+}
