@@ -40,6 +40,17 @@
   const phone = matchMedia("(max-width: 760px)");
   let views = [], i = 0, lx = 0, ly = 0;
 
+  // trayectoria de la cámara: cada pieza puede elegir la suya en reel.json ("fly")
+  //   drift — hacia la derecha y al fondo (la de por defecto)
+  //   rise  — hacia arriba, como un cohete que sube
+  const modo = document.documentElement.dataset.fly || "drift";
+  const parada = (si) => modo === "rise"
+    ? [si % 2 ? 160 : -160, -si * 1150, -si * 260]
+    : [si * 1500, si % 2 ? -150 : 130, -si * 640];
+  const suelta = (g) => modo === "rise"
+    ? [g % 2 ? 70 : -70, -g * 950, -g * 220, g % 2 ? 4 : -4]
+    : [g * 900, g % 2 ? -110 : 110, -g * 480, g % 2 ? 6 : -6];
+
   function layout() {
     views = [];
     const W = innerWidth;
@@ -47,7 +58,7 @@
     stops.forEach((s, si) => {
       const slabs = [...s.children].filter((c) => c.classList.contains("slab"));
       if (!phone.matches) {
-        const sx = si * 1500, sy = si % 2 ? -150 : 130, sz = -si * 640;
+        const [sx, sy, sz] = parada(si);
         s.style.transform = `translate3d(${sx}px, ${sy}px, ${sz}px)`;
         const gap = 44;
         const widths = slabs.map((el) => el.offsetWidth);
@@ -66,7 +77,7 @@
       } else {
         s.style.transform = "none";
         slabs.forEach((el) => {
-          const x = g * 900, y = g % 2 ? -110 : 110, z = -g * 480, ry = g % 2 ? 6 : -6;
+          const [x, y, z, ry] = suelta(g);
           el.style.transform = `translate(-50%, -50%) translate3d(${x}px, ${y}px, ${z}px) rotateY(${ry}deg)`;
           views.push({ x, y, z, stop: si, els: [el] });
           g++;

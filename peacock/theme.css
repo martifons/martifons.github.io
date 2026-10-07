@@ -1,0 +1,76 @@
+/* PEACOCK — noche de fuegos sobre un lago: la cámara sube como un cohete, cada prompt se
+   enciende con una mecha que recorre su borde, y las reglas se abren como ojos de pluma. */
+
+.reel-peacock body::before { display: none; }
+.reel-peacock body { background: #05060C; }
+#night { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+/* el cristal, más oscuro y azulado para que los fuegos se vean detrás */
+.reel-peacock .slab { background: rgba(10, 11, 22, .8); border-color: rgba(160, 190, 255, .14); }
+.reel-peacock .slab.hero { border-color: rgba(255, 42, 31, .6); }
+
+/* al llegar, las targetas se abren en abanico como una cola */
+.reel-peacock .slab { transform-origin: 50% 150%; }
+.fanin { animation: fanin .9s cubic-bezier(.2, 1.3, .4, 1) both; }
+@keyframes fanin { from { rotate: -16deg; scale: .9; } to { rotate: 0deg; scale: 1; } }
+
+/* título: la segunda línea se enciende letra a letra */
+.reel-peacock .hero .big em span { opacity: .08; transition: opacity .25s, text-shadow .6s; }
+.reel-peacock .hero .big em span.lit { opacity: 1; text-shadow: 0 0 18px rgba(255, 42, 31, .75), 0 0 2px #FFD9A0; }
+
+/* la mecha alrededor del prompt */
+.wick { position: relative; border-radius: 14px; }
+.wick .code { transition: filter .7s, opacity .7s; }
+.wick.locked .code { filter: blur(4px) brightness(.55); opacity: .7; user-select: none; pointer-events: none; }
+.wick svg { position: absolute; inset: -5px; width: calc(100% + 10px); height: calc(100% + 10px); pointer-events: none; overflow: visible; }
+.wick .cord { fill: none; stroke: rgba(243, 238, 235, .35); stroke-width: 1.6; stroke-dasharray: 2 5; }
+.wick .burn { fill: none; stroke: url(#ember); stroke-width: 2.4; stroke-dasharray: 0 100; filter: drop-shadow(0 0 4px #FF8A3D); }
+.wick .ash { fill: none; stroke: rgba(255, 140, 80, .25); stroke-width: 1.2; }
+.wick .head {
+  position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; left: 0; top: 0;
+  background: radial-gradient(circle, #FFF6D8 0%, #FFC66B 40%, rgba(255, 42, 31, .6) 70%, transparent 72%);
+  box-shadow: 0 0 14px 4px rgba(255, 150, 60, .7); opacity: 0; pointer-events: none;
+}
+.wick.burning .head { opacity: 1; }
+.light-btn {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 2; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 12px; white-space: nowrap;
+  font: 800 12px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase;
+  background: rgba(10, 8, 7, .85); color: var(--bone); border: 1px solid rgba(255, 166, 77, .55);
+  border-radius: 999px; padding: 15px 22px 15px 18px; box-shadow: 0 0 30px rgba(255, 120, 40, .25);
+}
+.light-btn:hover { border-color: #FFC66B; }
+.light-btn .flame {
+  width: 12px; height: 16px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 50% 70%, #FFF3C4 0%, #FFB03B 45%, #FF2A1F 85%);
+  box-shadow: 0 0 12px rgba(255, 140, 40, .9); animation: flicker .18s ease-in-out infinite alternate;
+}
+@keyframes flicker { from { transform: scale(1, 1) rotate(-3deg); } to { transform: scale(.92, 1.08) rotate(3deg); } }
+.light-btn kbd { color: var(--bone); border-color: rgba(255, 255, 255, .25); }
+.wick:not(.locked) .light-btn { display: none; }
+
+/* reglas: un ojo de pluma que se abre y deja ver el texto */
+.reel-peacock .slab.rule { cursor: pointer; text-align: center; }
+.feye {
+  width: 74px; height: 92px; margin: 0 auto 16px; border-radius: 50%;
+  background:
+    radial-gradient(ellipse 30% 26% at 50% 54%, #10163A 0 60%, transparent 62%),
+    radial-gradient(ellipse 44% 38% at 50% 54%, #2B6BFF 0 62%, transparent 64%),
+    radial-gradient(ellipse 58% 50% at 50% 54%, #3FE0D0 0 64%, transparent 66%),
+    radial-gradient(ellipse 72% 62% at 50% 54%, #B9874A 0 66%, transparent 68%),
+    radial-gradient(ellipse 100% 92% at 50% 54%, rgba(70, 160, 90, .55) 0 60%, transparent 70%);
+  filter: saturate(.25) brightness(.5); transition: filter .6s, transform .6s cubic-bezier(.2, 1.5, .4, 1);
+}
+.slab.rule.open .feye { filter: none; transform: scale(1.08); }
+.slab.rule .more { clip-path: circle(0% at 50% 0%); transition: clip-path .9s cubic-bezier(.3, .8, .3, 1); }
+.slab.rule.open .more { clip-path: circle(160% at 50% 0%); }
+.slab.rule .hint { font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--dim); margin-top: 6px; }
+.slab.rule.open .hint { visibility: hidden; }
+
+@media (max-width: 760px) { .light-btn kbd { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .fanin { animation: none; }
+  .light-btn .flame { animation: none; }
+  .slab.rule .more, .feye, .wick .code { transition: none; }
+}
