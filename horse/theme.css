@@ -1,7 +1,7 @@
 /* SNAP — el concepto de esta pieza: un atardecer que se va poniendo según avanzas, y todo
    sale de detrás de una cresta cuando chasqueas los dedos, como el caballo. */
 
-.reel-snap body::before { display: none; }
+.reel-horse body::before { display: none; }
 
 /* cielo, sol y crestas */
 #sky {
@@ -20,9 +20,9 @@
 #motes { position: fixed; inset: 0; z-index: 3; pointer-events: none; }
 
 /* el título: la segunda línea sube desde detrás, después de un chasquido */
-.reel-snap .hero .big .rise { display: block; overflow: hidden; padding-bottom: .06em; }
-.reel-snap .hero .big em { transform: translateY(110%); transition: transform .9s cubic-bezier(.18, 1.5, .42, 1); }
-.reel-snap .hero .big.up em { transform: none; }
+.reel-horse .hero .big .rise { display: block; overflow: hidden; padding-bottom: .06em; }
+.reel-horse .hero .big em { transform: translateY(110%); transition: transform .9s cubic-bezier(.18, 1.5, .42, 1); }
+.reel-horse .hero .big.up em { transform: none; }
 
 /* ondas del chasquido */
 .ring {
@@ -58,7 +58,7 @@
 .crest:not(.locked) .snap-btn { display: none; }
 
 /* reglas: cascos que caen uno detrás de otro y se abren */
-.reel-snap .slab.rule { cursor: pointer; }
+.reel-horse .slab.rule { cursor: pointer; }
 .hoof-num { font: 400 64px/.9 var(--display); color: rgba(243, 238, 235, .14); margin: 2px 0 10px; transition: color .4s; }
 .slab.rule.open .hoof-num { color: var(--signal); }
 .slab.rule .more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s cubic-bezier(.3, 1.2, .5, 1); }
@@ -75,7 +75,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #sun, #ridges svg, .crest .code, .ridge, .reel-snap .hero .big em { transition: none; }
+  #sun, #ridges svg, .crest .code, .ridge, .reel-horse .hero .big em { transition: none; }
   .snap-btn i::before, .snap-btn i::after, .ring, .thud { animation: none; }
 }
 
