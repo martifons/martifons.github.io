@@ -113,6 +113,8 @@ kbd {
 .fly .stop { position: absolute; left: 0; top: 0; transform-style: preserve-3d; display: block; }
 .fly .slab { position: absolute; left: 0; top: 0; max-width: none; max-height: min(68vh, 660px); overflow: auto; opacity: .2; transition: opacity .8s; cursor: auto; overscroll-behavior: contain; }
 .fly .slab.on { opacity: 1; }
+/* la targeta del vídeo se estrecha si el vídeo es muy alto, para que quepa entera con su pie */
+.fly .slab.narrow { width: min(300px, calc((min(68vh, 660px) - 74px) * var(--arn, .626) + 32px)); }
 html:not(.fly) #nav, html:not(.fly) #rail, html:not(.fly) #foot { display: none; }
 
 /* ---------- targetas ---------- */
@@ -150,7 +152,7 @@ h2.big { font-size: 40px; }
 .beats b { color: var(--signal); font-weight: 700; margin-right: 8px; }
 
 .shot { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: #000; position: relative; }
-.shot video, .shot img { width: 100%; aspect-ratio: 720 / 1150; object-fit: cover; }
+.shot video, .shot img { width: 100%; aspect-ratio: var(--ar, 720 / 1150); object-fit: cover; }
 .cap { font: 700 10.5px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--dim); margin-top: 12px; display: flex; justify-content: space-between; align-items: center; }
 .sound { background: none; border: 1px solid var(--line); border-radius: 999px; color: var(--soft); font: 700 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; padding: 7px 10px; cursor: pointer; }
 .step-img { margin-top: 18px; }
@@ -158,7 +160,7 @@ h2.big { font-size: 40px; }
 
 .frames { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .frames figure { margin: 0; }
-.frames img { width: 100%; aspect-ratio: 720 / 1150; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
+.frames img { width: 100%; aspect-ratio: var(--ar, 720 / 1150); object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
 .frames figcaption { font: 600 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--dimmer); margin-top: 7px; }
 
 .code {
@@ -200,7 +202,7 @@ h2.big { font-size: 40px; }
   .on-phone { display: inline; }
   #nav { bottom: 40px; }
   .fly .slab { width: min(86vw, 420px); max-height: calc(100svh - 236px); }
-  .fly .slab.narrow { width: min(66vw, calc((100svh - 330px) * 720 / 1150 + 34px)); }
+  .fly .slab.narrow { width: min(66vw, calc((100svh - 330px) * var(--arn, .626) + 34px)); }
   .fly .slab.rule { width: min(86vw, 420px); }
   .big { font-size: 38px; }
   h2.big { font-size: 31px; }

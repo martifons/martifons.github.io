@@ -56,7 +56,7 @@
         const mid = (slabs.length - 1) / 2;
         slabs.forEach((el, k) => {
           const cx = x + widths[k] / 2; x += widths[k] + gap;
-          const ry = (mid - k) * 8, z = k % 2 ? -40 : 0, y = k % 2 ? 22 : 0;
+          const ry = (mid - k) * 8, z = 0, y = k % 2 ? 22 : 0;
           el.style.transform = `translate(-50%, -50%) translate3d(${cx}px, ${y}px, ${z}px) rotateY(${ry}deg)`;
         });
         // si la fila no cabe, la cámara se aleja lo justo
@@ -174,5 +174,6 @@
   if (fromHash > 0) i = fromHash - 1;
   // esperar a las fuentes: el ancho de las targetas depende de ellas
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(layout);
-  layout();
+  // en el siguiente frame: así el theme.js de la pieza ya escucha el primer "flyview"
+  requestAnimationFrame(() => layout());
 })();
