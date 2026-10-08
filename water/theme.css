@@ -1,0 +1,81 @@
+/* WATER — toda la pantalla es una lámina de agua que se toca y hace ondas; la cámara se hunde
+   como la piedra; cada prompt está bajo el agua hasta que le dejas caer una piedra; las reglas
+   son gotas que revientan. */
+
+.reel-water body::before { display: none; }
+.reel-water body { background: #070A0D; }
+#pond { position: fixed; inset: 0; z-index: 0; pointer-events: none; filter: blur(2.5px); transform: scale(1.02); }
+
+/* cristal más frío, como mirado a través del agua */
+.reel-water .slab { background: rgba(8, 14, 18, .78); border-color: rgba(190, 230, 240, .14); }
+.reel-water .slab.hero { border-color: rgba(255, 42, 31, .6); }
+
+/* al llegar, las targetas se asientan como si cayeran en agua */
+.settle { animation: settle 1.1s cubic-bezier(.2, .9, .3, 1) both; }
+@keyframes settle {
+  0% { translate: 0 -40px; scale: .96; }
+  45% { translate: 0 8px; }
+  70% { translate: 0 -3px; }
+  100% { translate: 0 0; scale: 1; }
+}
+
+/* el título: la segunda línea tiembla bajo el agua hasta que se aclara */
+.reel-water .hero .big em { filter: url(#wobble-title); transition: filter .4s; }
+.reel-water .hero .big.clear em { filter: none; }
+
+/* el prompt, bajo el agua */
+.deep { position: relative; border-radius: 14px; overflow: hidden; }
+.deep .code { transition: opacity .6s; }
+.deep.under .code { filter: var(--wob); opacity: .75; user-select: none; pointer-events: none; }
+.deep.under::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: 14px;
+  background: linear-gradient(180deg, rgba(120, 190, 210, .12), rgba(20, 60, 80, .28));
+}
+.stone {
+  position: absolute; left: 50%; top: 0; width: 34px; height: 28px; margin-left: -17px; z-index: 3;
+  border-radius: 52% 48% 45% 55% / 55% 50% 50% 45%;
+  background: radial-gradient(circle at 35% 30%, #6B6460 0%, #2E2926 55%, #141110 100%);
+  box-shadow: inset -3px -4px 6px rgba(0, 0, 0, .5), 0 4px 8px rgba(0, 0, 0, .4);
+  transform: translateY(-60px); opacity: 0; pointer-events: none;
+}
+.drop-btn {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 4; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 12px; white-space: nowrap; min-height: 48px;
+  font: 800 12px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase;
+  background: rgba(7, 10, 13, .86); color: var(--bone); border: 1px solid rgba(190, 230, 240, .45);
+  border-radius: 999px; padding: 15px 22px 15px 16px; box-shadow: 0 0 30px rgba(120, 200, 230, .18);
+}
+.drop-btn .pebble {
+  width: 16px; height: 13px; border-radius: 52% 48% 45% 55% / 55% 50% 50% 45%;
+  background: radial-gradient(circle at 35% 30%, #8A817B, #2E2926 60%); animation: bob 1.6s ease-in-out infinite;
+}
+@keyframes bob { 50% { transform: translateY(-3px) rotate(-8deg); } }
+.drop-btn kbd { color: var(--bone); border-color: rgba(255, 255, 255, .25); }
+.deep:not(.under) .drop-btn { display: none; }
+
+/* reglas: gotas que revientan y dejan el texto */
+.reel-water .slab.rule { cursor: pointer; text-align: center; position: relative; }
+.gota {
+  width: 64px; height: 84px; margin: 4px auto 18px; position: relative;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(circle at 38% 62%, rgba(255, 255, 255, .9) 0 6%, rgba(200, 236, 245, .55) 18%, rgba(90, 160, 185, .35) 55%, rgba(40, 90, 110, .25) 100%);
+  box-shadow: inset 0 -6px 12px rgba(255, 255, 255, .25), 0 10px 24px rgba(0, 0, 0, .4);
+  transform: rotate(180deg); transition: transform .5s cubic-bezier(.3, 1.5, .5, 1), opacity .4s, height .5s .25s, margin .5s .25s;
+}
+.slab.rule.open .gota { transform: rotate(180deg) scale(1.6, .2); opacity: 0; height: 0; margin: 0 auto; }
+.slab.rule .more { opacity: 0; transform: translateY(10px); filter: blur(4px); transition: opacity .6s .15s, transform .6s .15s, filter .6s .15s; }
+.slab.rule.open .more { opacity: 1; transform: none; filter: none; }
+.slab.rule .hint { font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--dim); margin-top: 8px; }
+.slab.rule.open .hint { visibility: hidden; }
+.ripple-ring {
+  position: absolute; left: 50%; top: 48px; width: 20px; height: 8px; margin: -4px 0 0 -10px; pointer-events: none;
+  border: 2px solid rgba(200, 236, 245, .8); border-radius: 50%; animation: ringout .9s ease-out forwards;
+}
+@keyframes ringout { to { transform: scale(9); opacity: 0; } }
+
+@media (max-width: 760px) { .drop-btn kbd { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .settle, .drop-btn .pebble, .ripple-ring { animation: none; }
+  .gota, .slab.rule .more { transition: none; }
+}
