@@ -7,7 +7,7 @@
   const rnd = (a, b) => a + Math.random() * (b - a);
   const NS = "http://www.w3.org/2000/svg";
   // respuesta táctil en el móvil (Android; en iPhone no hace nada)
-  const zum = (p) => { try { navigator.vibrate && navigator.vibrate(p); } catch {} };
+  const zum = (p) => { try { if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return; navigator.vibrate && navigator.vibrate(p); } catch {} };
 
   // ---------- el cielo, el lago y los fuegos (un solo canvas) ----------
   const cv = document.createElement("canvas");

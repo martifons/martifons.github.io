@@ -4,7 +4,7 @@
 (() => {
   const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const rnd = (a, b) => a + Math.random() * (b - a);
-  const zum = (p) => { try { navigator.vibrate && navigator.vibrate(p); } catch {} };
+  const zum = (p) => { try { if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return; navigator.vibrate && navigator.vibrate(p); } catch {} };
   const NS = "http://www.w3.org/2000/svg";
 
   // ---------- la lámina de agua (simulación de ondas en una rejilla pequeña) ----------

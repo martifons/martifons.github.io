@@ -1,0 +1,86 @@
+/* ELEPHANT — tierra polvorienta: la cámara avanza como andando y cada llegada es un paso que
+   retumba; tocar el suelo deja una huella; cada prompt está pisado por una pata que se levanta
+   manteniendo pulsado; las reglas están bajo huellas que se levantan una a una. */
+
+.reel-elephant body::before {
+  background:
+    radial-gradient(70% 45% at 50% 105%, rgba(176, 116, 60, .28), transparent 70%),
+    radial-gradient(50% 40% at 15% 0%, rgba(255, 42, 31, .10), transparent 65%),
+    repeating-linear-gradient(97deg, rgba(255, 220, 170, .018) 0 1px, transparent 1px 9px),
+    repeating-linear-gradient(3deg, rgba(0, 0, 0, .12) 0 2px, transparent 2px 13px);
+}
+.reel-elephant body { background: #0F0B08; }
+#dust { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+
+.reel-elephant .slab { background: rgba(24, 18, 13, .82); border-color: rgba(230, 190, 140, .14); }
+.reel-elephant .slab.hero { border-color: rgba(255, 42, 31, .6); }
+
+/* el paso: el escenario retumba al llegar */
+.stomp { animation: stomp .42s cubic-bezier(.3, 0, .3, 1); }
+@keyframes stomp { 0% { translate: 0 0; } 25% { translate: 0 7px; } 50% { translate: -2px -3px; } 75% { translate: 1px 2px; } 100% { translate: 0 0; } }
+
+/* la planta de una pata de elefante */
+.sole {
+  position: absolute; border-radius: 47% 47% 50% 50% / 46% 46% 54% 54%;
+  background:
+    radial-gradient(ellipse 12% 9% at 24% 13%, #E9DCC6 0 60%, transparent 66%),
+    radial-gradient(ellipse 12% 9% at 41% 7%, #E9DCC6 0 60%, transparent 66%),
+    radial-gradient(ellipse 12% 9% at 59% 7%, #E9DCC6 0 60%, transparent 66%),
+    radial-gradient(ellipse 12% 9% at 76% 13%, #E9DCC6 0 60%, transparent 66%),
+    repeating-linear-gradient(37deg, rgba(0, 0, 0, .35) 0 1.5px, transparent 1.5px 17px),
+    repeating-linear-gradient(-51deg, rgba(0, 0, 0, .3) 0 1.5px, transparent 1.5px 21px),
+    repeating-linear-gradient(83deg, rgba(255, 255, 255, .05) 0 1px, transparent 1px 13px),
+    radial-gradient(circle at 45% 40%, #6F655C, #45403B 55%, #2A2622);
+  box-shadow: inset 0 -10px 22px rgba(0, 0, 0, .55), inset 0 8px 18px rgba(255, 255, 255, .06), 0 24px 40px rgba(0, 0, 0, .55);
+}
+
+/* el prompt, pisado */
+.press { position: relative; border-radius: 14px; overflow: hidden; }
+.press .code { transition: filter .5s; }
+.press.stepped .code { filter: blur(3px) brightness(calc(.35 + var(--lift, 0) * .5)); user-select: none; pointer-events: none; }
+.press .sole { left: 9%; right: 9%; top: 6%; height: 74%; transform: translateY(calc(var(--lift, 0) * -38px)) scale(calc(1 + var(--lift, 0) * .14)); z-index: 2; }
+.press .shade { position: absolute; left: 6%; right: 6%; bottom: 8%; height: 22%; border-radius: 50%; background: radial-gradient(closest-side, rgba(0, 0, 0, .65), transparent); opacity: calc(1 - var(--lift, 0) * .7); transform: scale(calc(1 + var(--lift, 0) * .3)); pointer-events: none; z-index: 1; }
+.press.gone .sole { transition: transform .9s cubic-bezier(.5, 0, .3, 1), opacity .5s .5s; transform: translate(-130%, -70%) rotate(-24deg) scale(1.2); opacity: 0; }
+.press.gone .shade { transition: opacity .4s; opacity: 0; }
+.hold-btn {
+  position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%); z-index: 3; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 12px; white-space: nowrap; min-height: 50px;
+  font: 800 12px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase;
+  background: rgba(15, 11, 8, .9); color: var(--bone); border: 1px solid rgba(230, 190, 140, .45);
+  border-radius: 999px; padding: 12px 22px 12px 12px; touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.hold-btn svg { width: 26px; height: 26px; transform: rotate(-90deg); }
+.hold-btn circle { fill: none; stroke-width: 3; }
+.hold-btn .track { stroke: rgba(255, 255, 255, .15); }
+.hold-btn .fill { stroke: var(--signal); stroke-dasharray: 100; stroke-dashoffset: calc(100 - var(--lift, 0) * 100); }
+.press:not(.stepped) .hold-btn { display: none; }
+
+/* huellas al tocar el suelo */
+.print { position: fixed; z-index: 6; pointer-events: none; width: 92px; height: 104px; margin: -52px 0 0 -46px; opacity: .85; animation: print 2.8s ease-out forwards; }
+.print .sole { inset: 0; box-shadow: inset 0 -8px 16px rgba(0, 0, 0, .6), 0 0 0 rgba(0, 0, 0, 0); }
+@keyframes print { 0% { transform: scale(1.35) rotate(var(--r, 0deg)); opacity: 0; } 12% { transform: scale(1) rotate(var(--r, 0deg)); opacity: .85; } 70% { opacity: .55; } 100% { transform: scale(1) rotate(var(--r, 0deg)); opacity: 0; } }
+
+/* reglas: debajo de una huella */
+.reel-elephant .slab.rule { cursor: pointer; position: relative; overflow: hidden; }
+.slab.rule .sole { width: 130px; height: 150px; left: 50%; top: 50%; margin: -75px 0 0 -65px; z-index: 2; transition: transform .8s cubic-bezier(.5, 0, .3, 1), opacity .4s .4s; }
+.slab.rule.open .sole { transform: translate(140%, -120%) rotate(28deg) scale(1.2); opacity: 0; }
+.slab.rule .k, .slab.rule h3, .slab.rule p { transition: opacity .5s .2s, filter .5s .2s; }
+.slab.rule:not(.open) h3, .slab.rule:not(.open) p:not(.k) { opacity: .15; filter: blur(3px); }
+.slab.rule .hint { font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--dim); margin-top: 10px; position: relative; z-index: 3; }
+.slab.rule.open .hint { visibility: hidden; }
+
+/* tortuguita que cruza el botón al copiar */
+.tortoise {
+  position: absolute; bottom: -2px; left: -40px; width: 34px; height: 18px; z-index: 4; pointer-events: none;
+  border-radius: 50% 50% 18% 18% / 100% 100% 18% 18%;
+  background: radial-gradient(circle at 30% 45%, #3B2A16 0 10%, transparent 12%), radial-gradient(circle at 62% 40%, #3B2A16 0 10%, transparent 12%), radial-gradient(circle at 46% 75%, #3B2A16 0 9%, transparent 11%), linear-gradient(#D8B27A, #A97C45);
+  animation: crawl 2.4s linear forwards;
+}
+.tortoise::after { content: ""; position: absolute; right: -6px; bottom: 2px; width: 8px; height: 6px; border-radius: 50%; background: #7C6A50; }
+@keyframes crawl { to { transform: translateX(calc(var(--w, 300px) + 60px)); } }
+
+
+@media (prefers-reduced-motion: reduce) {
+  .stomp, .print, .tortoise { animation: none; }
+  .press.gone .sole, .slab.rule .sole { transition: none; }
+}

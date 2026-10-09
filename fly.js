@@ -44,16 +44,21 @@
   //   drift — hacia la derecha y al fondo (la de por defecto)
   //   rise  — hacia arriba, como un cohete que sube
   //   sink  — hacia abajo, como una piedra que se hunde
+  //   walk  — hacia delante por un camino, como quien anda
   const modo = document.documentElement.dataset.fly || "drift";
   const parada = (si) => modo === "rise"
     ? [si % 2 ? 160 : -160, -si * 1150, -si * 260]
     : modo === "sink"
     ? [si % 2 ? -140 : 140, si * 1150, -si * 240]
+    : modo === "walk"
+    ? [si % 2 ? 90 : -90, si % 2 ? -30 : 30, -si * 1500]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
   const suelta = (g) => modo === "rise"
     ? [g % 2 ? 70 : -70, -g * 950, -g * 220, g % 2 ? 4 : -4]
     : modo === "sink"
     ? [g % 2 ? -60 : 60, g * 950, -g * 200, g % 2 ? -3 : 3]
+    : modo === "walk"
+    ? [g % 2 ? 40 : -40, g % 2 ? -20 : 20, -g * 1300, 0]
     : [g * 900, g % 2 ? -110 : 110, -g * 480, g % 2 ? 6 : -6];
 
   function layout() {
