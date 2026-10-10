@@ -1,0 +1,118 @@
+/* AURORA — noche de nieve: cortinas de aurora que se doblan hacia el dedo; cada prompt dentro de
+   un tarro de cristal con tapa de rosca; un tarro abajo que atrapa las luces; reglas que se
+   encienden cuando la aurora cae dentro. */
+
+.reel-aurora body { background: #050A10; }
+.reel-aurora body::before {
+  background:
+    radial-gradient(70% 40% at 50% 100%, rgba(150, 190, 225, .10), transparent 70%),
+    linear-gradient(180deg, #02050A 0%, #061220 50%, #0A1925 82%, #0E1E2A 100%);
+}
+#sky { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+
+.reel-aurora .slab { background: rgba(6, 13, 21, .80); border-color: rgba(140, 235, 210, .13); }
+.reel-aurora .slab.hero { border-color: rgba(255, 42, 31, .6); }
+
+/* el título, con los colores de la aurora */
+.reel-aurora .big em {
+  background: linear-gradient(90deg, #5CFFB0, #4FD8FF 30%, #A27CFF 55%, #FF72D6 70%, #5CFFB0);
+  background-size: 280% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: shimmer 9s linear infinite;
+}
+@keyframes shimmer { to { background-position: 280% 0; } }
+
+/* ---------- el prompt, dentro de un tarro ---------- */
+.jarred { position: relative; }
+.twist {
+  position: relative; z-index: 3; display: flex; align-items: center; justify-content: center;
+  width: 100%; min-height: 50px; margin-bottom: -8px; overflow: hidden; cursor: grab;
+  border: 0; border-radius: 12px 12px 6px 6px; touch-action: none; user-select: none; -webkit-user-select: none;
+  font: 800 12px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: #0B1117;
+  background: linear-gradient(180deg, #F6F8FA, #BCC5CE 42%, #8C96A0 56%, #D7DEE4);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .22), inset 0 1px 0 rgba(255, 255, 255, .8), 0 8px 20px rgba(0, 0, 0, .5);
+}
+.twist:active { cursor: grabbing; }
+.twist .ridges {
+  position: absolute; inset: 0; opacity: .8;
+  background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .17) 0 2px, transparent 2px 9px);
+  background-position: var(--rx, 0px) 0;
+}
+.twist .lbl { position: relative; display: inline-flex; align-items: center; gap: 10px; }
+.twist svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transform: rotate(calc(var(--twist, 0) * 720deg)); }
+.jarred.open .twist { animation: lidoff .85s cubic-bezier(.4, 0, .3, 1) forwards; pointer-events: none; }
+@keyframes lidoff { 30% { transform: translateY(-12px) rotate(-4deg); } 100% { transform: translate(-35%, -170%) rotate(-24deg); opacity: 0; visibility: hidden; } }
+
+.reel-aurora .code {
+  position: relative; z-index: 1;
+  background: rgba(3, 9, 15, .62); border-color: rgba(185, 230, 255, .24);
+  border-radius: 10px 10px 26px 26px; padding-top: 22px;
+  box-shadow: inset 10px 0 18px rgba(255, 255, 255, .035), inset -10px 0 18px rgba(255, 255, 255, .02);
+  max-height: calc(min(68vh, 660px) - 200px);
+  transition: filter .9s .15s, opacity .9s .15s;
+}
+.jarred.sealed .code { filter: blur(5px) saturate(.5); opacity: .5; user-select: none; pointer-events: none; overflow: hidden; }
+.jarred .caught {
+  position: absolute; left: 10%; right: 10%; top: 20%; bottom: 10%; z-index: 2; pointer-events: none; border-radius: 40%;
+  background:
+    radial-gradient(40% 32% at 50% 72%, rgba(90, 255, 170, .6), transparent 70%),
+    radial-gradient(36% 30% at 44% 46%, rgba(80, 190, 255, .42), transparent 70%),
+    radial-gradient(32% 26% at 58% 24%, rgba(175, 115, 255, .4), transparent 70%);
+  filter: blur(14px); mix-blend-mode: screen; opacity: calc(.75 + var(--twist, 0) * .5);
+  animation: sway 5s ease-in-out infinite alternate;
+}
+@keyframes sway { from { transform: translateX(-6%) skewX(-7deg) scaleY(.95); } to { transform: translateX(6%) skewX(7deg) scaleY(1.05); } }
+.jarred.open .caught { animation: escape 1s cubic-bezier(.5, 0, .3, 1) forwards; }
+@keyframes escape { to { transform: translateY(-75%) scale(1.3); opacity: 0; } }
+
+/* ---------- el tarro de abajo ---------- */
+#jar { left: var(--gutter); bottom: 40px; width: 44px; height: 58px; padding: 0; border: 0; background: none; cursor: pointer; }
+#jar i { position: absolute; display: block; }
+#jar .lid { left: 9px; right: 9px; top: 2px; height: 8px; border-radius: 3px; background: linear-gradient(#EEF2F5, #8D97A1); }
+#jar .glass { left: 5px; right: 5px; top: 9px; bottom: 2px; overflow: hidden; border: 1.5px solid rgba(200, 230, 255, .55); border-radius: 8px 8px 13px 13px; background: rgba(255, 255, 255, .04); }
+#jar .fill { left: 0; right: 0; bottom: 0; height: calc(var(--n, 0) * 100%); transition: height .5s; filter: blur(2px); background: linear-gradient(0deg, rgba(90, 255, 170, .9), rgba(80, 190, 255, .65) 60%, rgba(175, 115, 255, .55)); }
+#jar b { position: absolute; left: 0; right: 0; top: -17px; text-align: center; font: 700 11px/1 var(--mono); letter-spacing: .08em; color: var(--dim); }
+#jar.has { filter: drop-shadow(0 0 calc(5px + var(--n, 0) * 16px) rgba(90, 255, 170, .6)); }
+#jar.has b { color: #8DFFC9; }
+#jar.gulp { animation: gulp .45s; }
+@keyframes gulp { 35% { transform: scale(1.14, .9); } 70% { transform: scale(.95, 1.06); } }
+
+/* un trocito de aurora volando */
+.wisp {
+  position: fixed; left: 0; top: 0; z-index: 40; width: 46px; height: 62px; margin: -31px 0 0 -23px;
+  pointer-events: none; border-radius: 50%; filter: blur(5px); mix-blend-mode: screen;
+  background:
+    radial-gradient(45% 38% at 50% 74%, rgba(90, 255, 170, .95), transparent 70%),
+    radial-gradient(40% 34% at 48% 46%, rgba(80, 190, 255, .7), transparent 70%),
+    radial-gradient(34% 28% at 55% 22%, rgba(190, 120, 255, .65), transparent 72%);
+}
+
+/* ---------- reglas: la aurora cae dentro ---------- */
+.reel-aurora .slab.rule { cursor: pointer; overflow: hidden; }
+.slab.rule .fall {
+  position: absolute; left: 0; right: 0; top: 0; height: 100%; z-index: 2; pointer-events: none;
+  transform: translateY(-105%); mix-blend-mode: screen;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 3px, rgba(90, 255, 170, .32) 3px 5px, rgba(80, 190, 255, .14) 5px 9px),
+    linear-gradient(180deg, transparent, rgba(175, 115, 255, .22) 30%, rgba(90, 255, 170, .5) 82%, rgba(90, 255, 170, .85));
+  -webkit-mask: linear-gradient(180deg, transparent, #000 40%, #000 92%, transparent);
+  mask: linear-gradient(180deg, transparent, #000 40%, #000 92%, transparent);
+}
+.slab.rule.lit .fall { animation: fall 1.4s cubic-bezier(.45, 0, .35, 1); }
+@keyframes fall { from { transform: translateY(-105%); } to { transform: translateY(105%); } }
+.slab.rule h3, .slab.rule p:not(.k) { transition: opacity .6s .45s, text-shadow .6s .45s; }
+.slab.rule:not(.lit) h3, .slab.rule:not(.lit) p:not(.k) { opacity: .14; }
+.reel-aurora .slab.rule.lit { border-color: rgba(90, 255, 170, .36); box-shadow: 0 0 44px rgba(90, 255, 170, .12), 0 40px 90px rgba(0, 0, 0, .66); transition: opacity .8s, border-color .6s .5s, box-shadow .6s .5s; }
+.slab.rule.lit h3 { text-shadow: 0 0 18px rgba(90, 255, 170, .4); }
+.slab.rule .hint { font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--dim); margin-top: 10px; }
+.slab.rule.lit .hint { visibility: hidden; }
+
+@media (max-width: 760px) {
+  .reel-aurora .code { max-height: calc(100svh - 236px - 200px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reel-aurora .big em, .jarred .caught, .wisp, #jar.gulp { animation: none; }
+  .jarred.open .twist { animation: none; visibility: hidden; }
+  .jarred.open .caught { animation: none; opacity: 0; }
+  .slab.rule.lit .fall { animation: none; }
+}
