@@ -15,7 +15,7 @@
 
 /* las targetas lejanas, empañadas */
 .reel-ice.fly .slab:not(.on) { filter: blur(2.5px) saturate(.6); }
-.reel-ice.fly .slab { transition: opacity .8s, filter .9s; }
+.reel-ice.fly .slab { transition: opacity .8s, filter .9s, var(--fly); }
 
 /* los beats entran uno a uno al llegar */
 .reel-ice.fly .beats li { opacity: 0; transform: translateX(-10px); }

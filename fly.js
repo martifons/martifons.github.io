@@ -46,6 +46,7 @@
   //   sink  — hacia abajo, como una piedra que se hunde
   //   walk  — hacia delante por un camino, como quien anda
   //   wave  — a la derecha en ola, arriba y abajo, como una cortina de aurora
+  //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   const parada = (si) => modo === "rise"
     ? [si % 2 ? 160 : -160, -si * 1150, -si * 260]
@@ -66,15 +67,27 @@
     ? [g * 760, g % 2 ? -260 : 260, -g * 380, g % 2 ? 7 : -7]
     : [g * 900, g % 2 ? -110 : 110, -g * 480, g % 2 ? 6 : -6];
 
+  // orbit: las paradas en un anillo visto desde arriba; la cámara solo se traslada (girarla junto con
+  // traslaciones grandes se dibuja mal en Chrome con un devicePixelRatio no entero)
+  const orbita = modo === "orbit";
+  const anillo = (k, n, R) => { const a = k / n * 2 * Math.PI; return [R * Math.sin(a), Math.sin(a * 2) * 60, R * Math.cos(a) - R]; };
+
+  // la cámara no se traslada: se trasladan las paradas (escritorio) o las targetas (móvil), y la que
+  // está delante queda siempre cerca del origen. Con la cámara a miles de px en Z, Chrome dibuja bien
+  // pero calcula mal los toques y los botones de las targetas de más adelante dejan de responder.
+  let movers = [];
+
   function layout() {
-    views = [];
+    views = []; movers = [];
     const W = innerWidth;
     let g = 0;
+    const sueltas = stops.reduce((a, s) => a + [...s.children].filter((c) => c.classList.contains("slab")).length, 0);
     stops.forEach((s, si) => {
       const slabs = [...s.children].filter((c) => c.classList.contains("slab"));
       if (!phone.matches) {
-        const [sx, sy, sz] = parada(si);
-        s.style.transform = `translate3d(${sx}px, ${sy}px, ${sz}px)`;
+        const [sx, sy, sz] = orbita ? anillo(si, stops.length, 1700) : parada(si);
+        s._b = [sx, sy, sz]; s._ry = undefined; movers.push(s);
+        slabs.forEach((el) => { el._z = sz; });
         const gap = 44;
         const widths = slabs.map((el) => el.offsetWidth);
         const total = widths.reduce((a, b) => a + b, 0) + gap * (slabs.length - 1);
@@ -92,8 +105,9 @@
       } else {
         s.style.transform = "none";
         slabs.forEach((el) => {
-          const [x, y, z, ry] = suelta(g);
-          el.style.transform = `translate(-50%, -50%) translate3d(${x}px, ${y}px, ${z}px) rotateY(${ry}deg)`;
+          const [x, y, z, ry] = orbita ? [...anillo(g, sueltas, Math.max(1100, sueltas * 110)), 0] : suelta(g);
+          el._b = [x, y, z]; el._ry = ry; movers.push(el);
+          el._z = z;
           views.push({ x, y, z, stop: si, els: [el] });
           g++;
         });
@@ -103,11 +117,24 @@
     go(Math.min(i, views.length - 1), true);
   }
 
+  // mirar alrededor (arrastrar con el ratón): solo gira la cámara
+  function mira(instant) {
+    if (instant) cam.style.transition = "none";
+    cam.style.transform = `rotateX(${ly}deg) rotateY(${lx}deg)`;
+    if (instant) { cam.offsetWidth; cam.style.transition = ""; }
+  }
+
   function aim(instant) {
     const v = views[i];
-    if (instant) cam.style.transition = "none";
-    cam.style.transform = `rotateX(${ly}deg) rotateY(${lx}deg) translate3d(${-v.x}px, ${-v.y}px, ${-v.z}px)`;
-    if (instant) { cam.offsetWidth; cam.style.transition = ""; }
+    if (instant) movers.forEach((el) => { el.style.transition = "none"; });
+    mira(instant);
+    for (const el of movers) {
+      const [x, y, z] = el._b;
+      el.style.transform = el._ry === undefined
+        ? `translate3d(${x - v.x}px, ${y - v.y}px, ${z - v.z}px)`
+        : `translate(-50%, -50%) translate3d(${x - v.x}px, ${y - v.y}px, ${z - v.z}px) rotateY(${el._ry}deg)`;
+    }
+    if (instant) { cam.offsetWidth; movers.forEach((el) => { el.style.transition = ""; }); }
   }
 
   function go(n, instant) {
@@ -118,6 +145,8 @@
       const on = v.els.includes(el);
       el.classList.toggle("on", on);
       el.inert = !on;
+      // en el anillo, lo que queda a la espalda de la cámara no se pinta: Chrome lo proyecta del revés y se come los toques
+      if (orbita) el.style.visibility = (el._z ?? 0) - v.z > P * .8 ? "hidden" : "";
     });
     rail.forEach((d, k) => d.classList.toggle("on", k === v.stop));
     now.textContent = stops[v.stop].dataset.label || "";
@@ -169,7 +198,7 @@
   // arrastrar para mirar (ratón) y deslizar o tocar para volar (dedo)
   let start = null;
   stage.addEventListener("pointerdown", (e) => {
-    if (e.target.closest("button, a, .code, video")) return;
+    if (e.target.closest("button, a, .code, video, [data-nofly]")) return;
     start = { x: e.clientX, y: e.clientY, t: Date.now(), touch: e.pointerType !== "mouse", inSlab: !!e.target.closest(".slab") };
     if (!start.touch && !start.inSlab) { stage.classList.add("dragging"); stage.setPointerCapture(e.pointerId); }
   });
@@ -177,7 +206,7 @@
     if (!start || start.touch || start.inSlab) return;
     lx = Math.max(-12, Math.min(12, (e.clientX - start.x) / 18));
     ly = Math.max(-7, Math.min(7, -(e.clientY - start.y) / 26));
-    aim(true);
+    mira(true);
   });
   const end = (e) => {
     if (!start) return;
@@ -186,7 +215,7 @@
       if (Math.max(Math.abs(dx), Math.abs(dy)) > 45) go(i + ((Math.abs(dx) > Math.abs(dy) ? dx : dy) < 0 ? 1 : -1));
       else if (!start.inSlab && Date.now() - start.t < 400) go(i + 1);
     } else if (!start.inSlab) {
-      lx = 0; ly = 0; aim(false);
+      lx = 0; ly = 0; mira(false);
     }
     stage.classList.remove("dragging");
     start = null;

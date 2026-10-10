@@ -15,6 +15,7 @@
   --body: "Manrope", "Helvetica Neue", Arial, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
   --gutter: clamp(16px, 3vw, 28px);
+  --fly: transform 1.15s cubic-bezier(.66, 0, .2, 1); /* el vuelo: lo animan las paradas y las targetas */
   color-scheme: dark;
 }
 
@@ -110,8 +111,8 @@ kbd {
 .fly #stage { position: fixed; inset: 0; padding: 0; perspective: 1300px; overflow: hidden; touch-action: none; cursor: grab; }
 .fly #stage.dragging { cursor: grabbing; }
 .fly #cam { position: absolute; left: 50%; top: 47%; width: 0; height: 0; max-width: none; margin: 0; display: block; transform-style: preserve-3d; transition: transform 1.15s cubic-bezier(.66, 0, .2, 1); }
-.fly .stop { position: absolute; left: 0; top: 0; transform-style: preserve-3d; display: block; }
-.fly .slab { position: absolute; left: 0; top: 0; max-width: none; max-height: min(68vh, 660px); overflow: auto; opacity: .2; transition: opacity .8s; cursor: auto; overscroll-behavior: contain; }
+.fly .stop { position: absolute; left: 0; top: 0; transform-style: preserve-3d; display: block; transition: var(--fly); }
+.fly .slab { position: absolute; left: 0; top: 0; max-width: none; max-height: min(68vh, 660px); overflow: auto; opacity: .2; transition: opacity .8s, var(--fly); cursor: auto; overscroll-behavior: contain; }
 .fly .slab.on { opacity: 1; }
 /* la targeta del vídeo se estrecha si el vídeo es muy alto, para que quepa entera con su pie */
 .fly .slab.narrow { width: min(300px, calc((min(68vh, 660px) - 74px) * var(--arn, .626) + 32px)); }
@@ -213,5 +214,5 @@ h2.big { font-size: 40px; }
 
 @media (prefers-reduced-motion: reduce) {
   #ticker span { animation: none; }
-  .fly #cam, .fly .slab, #bar i { transition: none; }
+  .fly #cam, .fly .stop, .fly .slab, #bar i { transition: none; }
 }

@@ -54,7 +54,7 @@
 .deep:not(.under) .drop-btn { display: none; }
 
 /* reglas: gotas que revientan y dejan el texto */
-.reel-water .slab.rule { cursor: pointer; text-align: center; position: relative; }
+.reel-water .slab.rule { cursor: pointer; text-align: center; }
 .gota {
   width: 64px; height: 84px; margin: 4px auto 18px; position: relative;
   border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;

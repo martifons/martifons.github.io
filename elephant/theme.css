@@ -61,7 +61,7 @@
 @keyframes print { 0% { transform: scale(1.35) rotate(var(--r, 0deg)); opacity: 0; } 12% { transform: scale(1) rotate(var(--r, 0deg)); opacity: .85; } 70% { opacity: .55; } 100% { transform: scale(1) rotate(var(--r, 0deg)); opacity: 0; } }
 
 /* reglas: debajo de una huella */
-.reel-elephant .slab.rule { cursor: pointer; position: relative; overflow: hidden; }
+.reel-elephant .slab.rule { cursor: pointer; overflow: hidden; }
 .slab.rule .sole { width: 130px; height: 150px; left: 50%; top: 50%; margin: -75px 0 0 -65px; z-index: 2; transition: transform .8s cubic-bezier(.5, 0, .3, 1), opacity .4s .4s; }
 .slab.rule.open .sole { transform: translate(140%, -120%) rotate(28deg) scale(1.2); opacity: 0; }
 .slab.rule .k, .slab.rule h3, .slab.rule p { transition: opacity .5s .2s, filter .5s .2s; }
