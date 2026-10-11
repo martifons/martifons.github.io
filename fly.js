@@ -46,6 +46,7 @@
   //   sink  — hacia abajo, como una piedra que se hunde
   //   walk  — hacia delante por un camino, como quien anda
   //   wave  — a la derecha en ola, arriba y abajo, como una cortina de aurora
+  //   dive  — en diagonal hacia abajo y al fondo, como quien se mete en una nube
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   const parada = (si) => modo === "rise"
@@ -56,6 +57,8 @@
     ? [si % 2 ? 90 : -90, si % 2 ? -30 : 30, -si * 1500]
     : modo === "wave"
     ? [si * 1350, si % 2 ? -380 : 380, -si * 420]
+    : modo === "dive"
+    ? [si % 2 ? -70 : 70, si * 950, -si * 900]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
   const suelta = (g) => modo === "rise"
     ? [g % 2 ? 70 : -70, -g * 950, -g * 220, g % 2 ? 4 : -4]
@@ -65,6 +68,8 @@
     ? [g % 2 ? 40 : -40, g % 2 ? -20 : 20, -g * 1300, 0]
     : modo === "wave"
     ? [g * 760, g % 2 ? -260 : 260, -g * 380, g % 2 ? 7 : -7]
+    : modo === "dive"
+    ? [g % 2 ? -40 : 40, g * 820, -g * 700, g % 2 ? 3 : -3]
     : [g * 900, g % 2 ? -110 : 110, -g * 480, g % 2 ? 6 : -6];
 
   // orbit: las paradas en un anillo visto desde arriba; la cámara solo se traslada (girarla junto con
