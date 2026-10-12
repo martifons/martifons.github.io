@@ -1,0 +1,60 @@
+/* DIVE — caída libre al atardecer: nubes que suben, ráfagas al tocar; cada prompt plegado como un
+   paracaídas que se abre tirando de la anilla; reglas boca abajo que se dan la vuelta. */
+
+.reel-dive body { background: #26325A; }
+#freefall { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+
+.reel-dive .slab { background: rgba(22, 18, 34, .82); border-color: rgba(255, 210, 180, .14); }
+.reel-dive .slab.hero { border-color: rgba(255, 42, 31, .6); }
+
+/* el HUD se lee sobre el cielo claro */
+.reel-dive #top b { color: rgba(24, 16, 34, .72); }
+.reel-dive #nav button:not(#next) { background: rgba(22, 18, 34, .8); color: var(--soft); }
+.reel-dive #foot { color: rgba(30, 20, 40, .7); }
+.reel-dive #foot kbd { color: rgba(30, 20, 40, .8); border-color: rgba(30, 20, 40, .25); }
+
+/* el título cae letra a letra */
+.drop { display: inline-block; white-space: pre; animation: drop .75s cubic-bezier(.3, 1.4, .5, 1) both; }
+@keyframes drop { from { transform: translateY(-90px) rotate(-22deg); opacity: 0; } 60% { opacity: 1; } to { transform: none; opacity: 1; } }
+
+/* ---------- el prompt, plegado como un paracaídas ---------- */
+.chute { position: relative; --tug: 0; }
+.chute .code { transform-origin: 50% 0; transition: transform .75s cubic-bezier(.2, 1.55, .4, 1), filter .5s, opacity .5s; }
+.chute.packed .code { transform: scaleY(calc(.62 + var(--tug) * .05)); filter: blur(2.5px) saturate(.6); opacity: .5; overflow: hidden; user-select: none; pointer-events: none; }
+.chute .folds {
+  position: absolute; left: 0; right: 0; top: 0; height: 62%; border-radius: 14px; pointer-events: none; z-index: 2;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, .07) 0 12px, rgba(0, 0, 0, .38) 12px 24px),
+    linear-gradient(180deg, rgba(255, 42, 31, .38), rgba(122, 28, 22, .5));
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .12), inset 0 0 0 6px rgba(0, 0, 0, .25);
+  transform: translateY(calc(var(--tug) * 4px)); transition: opacity .4s;
+}
+.chute.open .folds { opacity: 0; }
+.chute .cord { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 3; }
+.chute .cord line { stroke: #F3EEEB; stroke-width: 2; stroke-dasharray: 5 4; }
+.chute .ring {
+  position: absolute; left: 50%; bottom: 8px; z-index: 4; transform: translateX(-50%); cursor: grab;
+  display: inline-flex; align-items: center; gap: 10px; min-height: 46px; padding: 8px 18px 8px 8px;
+  border-radius: 999px; border: 1px solid rgba(255, 210, 180, .5); background: rgba(22, 18, 34, .92); color: var(--bone);
+  font: 800 12px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase;
+  touch-action: none; user-select: none; -webkit-user-select: none; box-shadow: 0 8px 20px rgba(0, 0, 0, .45);
+}
+.chute .ring:active { cursor: grabbing; }
+.chute .ring i { width: 26px; height: 26px; border-radius: 50%; border: 4px solid var(--signal); box-shadow: 0 0 14px rgba(255, 42, 31, .6); }
+.chute.open .ring, .chute.open .cord { opacity: 0; transition: opacity .3s; }
+
+/* paracaídas pequeño al copiar */
+.minichute { position: fixed; left: 0; top: 0; z-index: 45; width: 40px; height: 52px; pointer-events: none; }
+.minichute svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .35)); }
+
+/* ---------- reglas: boca abajo ---------- */
+.reel-dive .slab.rule { cursor: pointer; }
+.slab.rule .flip { transform: rotate(180deg); transition: transform .85s cubic-bezier(.3, 1.45, .5, 1); }
+.slab.rule.upright .flip { transform: none; }
+.slab.rule .hint { font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--dim); margin-top: 10px; }
+.slab.rule.upright .hint { visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .drop { animation: none; }
+  .chute .code, .slab.rule .flip { transition: none; }
+}

@@ -28,6 +28,9 @@
   const cam = document.getElementById("cam");
   if (!cam || !cam.querySelector(".stop")) return;
   document.documentElement.classList.add("fly");
+  // el escenario no se desplaza nunca: al enfocar o tocar algo cerca del borde de una targeta, el
+  // navegador lo desplazaba para "enseñarlo" (mide la caja sin la transformación 3D) y la targeta subía
+  stage.addEventListener("scroll", () => { if (stage.scrollTop || stage.scrollLeft) { stage.scrollTop = 0; stage.scrollLeft = 0; } });
 
   const P = 1300; // perspectiva, igual que en el CSS
   const stops = [...cam.querySelectorAll(".stop")];
@@ -47,6 +50,7 @@
   //   walk  — hacia delante por un camino, como quien anda
   //   wave  — a la derecha en ola, arriba y abajo, como una cortina de aurora
   //   dive  — en diagonal hacia abajo y al fondo, como quien se mete en una nube
+  //   spiral — cae hacia abajo dando vueltas en espiral, como una zambullida desde las nubes
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   const parada = (si) => modo === "rise"
@@ -59,6 +63,8 @@
     ? [si * 1350, si % 2 ? -380 : 380, -si * 420]
     : modo === "dive"
     ? [si % 2 ? -70 : 70, si * 950, -si * 900]
+    : modo === "spiral"
+    ? [Math.sin(si * 1.3) * 420, si * 1300, -si * 260 - Math.cos(si * 1.3) * 200]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
   const suelta = (g) => modo === "rise"
     ? [g % 2 ? 70 : -70, -g * 950, -g * 220, g % 2 ? 4 : -4]
@@ -70,6 +76,8 @@
     ? [g * 760, g % 2 ? -260 : 260, -g * 380, g % 2 ? 7 : -7]
     : modo === "dive"
     ? [g % 2 ? -40 : 40, g * 820, -g * 700, g % 2 ? 3 : -3]
+    : modo === "spiral"
+    ? [Math.sin(g * 1.1) * 220, g * 1000, -g * 200, Math.sin(g * 1.1) * 6]
     : [g * 900, g % 2 ? -110 : 110, -g * 480, g % 2 ? 6 : -6];
 
   // orbit: las paradas en un anillo visto desde arriba; la cámara solo se traslada (girarla junto con
