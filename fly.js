@@ -51,6 +51,7 @@
   //   wave  — a la derecha en ola, arriba y abajo, como una cortina de aurora
   //   dive  — en diagonal hacia abajo y al fondo, como quien se mete en una nube
   //   spiral — cae hacia abajo dando vueltas en espiral, como una zambullida desde las nubes
+  //   meteor — cae en diagonal pronunciada, abajo y a la derecha, como un trozo de luna
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   const parada = (si) => modo === "rise"
@@ -65,6 +66,8 @@
     ? [si % 2 ? -70 : 70, si * 950, -si * 900]
     : modo === "spiral"
     ? [Math.sin(si * 1.3) * 420, si * 1300, -si * 260 - Math.cos(si * 1.3) * 200]
+    : modo === "meteor"
+    ? [si * 760, si * 1150, -si * 480]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
   const suelta = (g) => modo === "rise"
     ? [g % 2 ? 70 : -70, -g * 950, -g * 220, g % 2 ? 4 : -4]
@@ -78,6 +81,8 @@
     ? [g % 2 ? -40 : 40, g * 820, -g * 700, g % 2 ? 3 : -3]
     : modo === "spiral"
     ? [Math.sin(g * 1.1) * 220, g * 1000, -g * 200, Math.sin(g * 1.1) * 6]
+    : modo === "meteor"
+    ? [g * 460, g * 820, -g * 320, 4]
     : [g * 900, g % 2 ? -110 : 110, -g * 480, g % 2 ? 6 : -6];
 
   // orbit: las paradas en un anillo visto desde arriba; la cámara solo se traslada (girarla junto con
