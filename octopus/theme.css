@@ -1,0 +1,80 @@
+/* OCTOPUS — el casco blanco del crucero con sus ojos de buey, el mar abajo y tentáculos que suben
+   por los bordes; cada prompt agarrado por un tentáculo que se suelta reventando sus ventosas;
+   reglas tras un párpado de pulpo. */
+
+.reel-octopus body { background: #E9ECEF; }
+.reel-octopus body::before {
+  background:
+    radial-gradient(circle at 50% 50%, #34505E 0 11px, #2A3F4B 11px 13px, #C3CBD2 13px 17px, transparent 17.5px) 0 40px / 96px 140px,
+    repeating-linear-gradient(180deg, transparent 0 139px, rgba(80, 92, 104, .16) 139px 140px),
+    repeating-linear-gradient(90deg, transparent 0 287px, rgba(80, 92, 104, .10) 287px 288px),
+    linear-gradient(180deg, #F4F6F7, #DDE2E6);
+}
+#hull { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+
+.reel-octopus .slab { background: rgba(14, 22, 28, .94); border-color: rgba(255, 255, 255, .12); box-shadow: 0 30px 70px rgba(20, 30, 40, .35); }
+.reel-octopus #top b { color: rgba(20, 28, 36, .72); }
+.reel-octopus .mark, .reel-octopus #rail .dot span { color: #16202A; }
+.reel-octopus #rail .dot i { background: rgba(20, 28, 36, .3); }
+.reel-octopus #nav button:not(#next) { background: rgba(14, 22, 28, .82); color: var(--soft); }
+.reel-octopus #foot { color: rgba(20, 28, 36, .7); }
+.reel-octopus #foot kbd { color: rgba(20, 28, 36, .8); border-color: rgba(20, 28, 36, .25); }
+
+/* ---------- el prompt, agarrado por un tentáculo ---------- */
+.grip { position: relative; overflow: hidden; border-radius: 14px; }
+.grip.held .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(2.5px); opacity: .5; }
+.grip .code { transition: filter .6s .3s, opacity .6s .3s; }
+.grip .arm {
+  --loose: 0;
+  position: absolute; left: -12%; top: 38%; width: 124%; height: 78px; z-index: 3; cursor: pointer;
+  border-radius: 40px 999px 999px 40px;
+  background:
+    radial-gradient(14% 30% at 20% 30%, rgba(255, 190, 160, .35), transparent 70%),
+    radial-gradient(8% 20% at 60% 40%, rgba(60, 20, 14, .35), transparent 70%),
+    radial-gradient(10% 22% at 82% 30%, rgba(60, 20, 14, .3), transparent 70%),
+    linear-gradient(180deg, #A9523A, #7E3324 55%, #4F1E15);
+  box-shadow: inset 0 6px 10px rgba(255, 210, 190, .25), inset 0 -8px 12px rgba(0, 0, 0, .35), 0 12px 24px rgba(0, 0, 0, .45);
+  transform: rotate(-16deg) translateY(calc(var(--loose) * 6px));
+  transition: transform .9s cubic-bezier(.5, 0, .7, .4), opacity .5s .4s;
+}
+.grip.free .arm { transform: rotate(-4deg) translate(40%, 160%); opacity: 0; }
+.grip .sucker {
+  position: absolute; bottom: -6px; left: calc(12% + var(--k) * 13.5%); width: 44px; height: 44px; padding: 0; cursor: pointer;
+  border-radius: 50%; border: 0;
+  background: radial-gradient(circle, #6E2E22 0 26%, #E9C3A6 30% 62%, #C99A7C 66%, #8E4A36 72%);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, .35);
+}
+.grip .sucker.popped { animation: pop .35s ease-out forwards; }
+@keyframes pop { 40% { transform: scale(1.25); } 100% { transform: scale(.55); opacity: .35; filter: saturate(.4); } }
+.grip .pop-hint {
+  position: absolute; left: 50%; top: 14%; transform: translateX(-50%); z-index: 4; pointer-events: none; white-space: nowrap;
+  font: 800 11px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--bone);
+  background: rgba(14, 22, 28, .9); border-radius: 999px; padding: 10px 14px; border: 1px solid rgba(233, 195, 166, .5);
+}
+.grip.free .pop-hint { opacity: 0; transition: opacity .2s; }
+
+/* la marca de una ventosa al copiar */
+.suckmark { position: fixed; z-index: 45; width: 34px; height: 34px; margin: -17px 0 0 -17px; pointer-events: none; border-radius: 50%; border: 5px solid rgba(233, 195, 166, .9); box-shadow: inset 0 0 0 4px rgba(110, 46, 34, .7); animation: mark 1s ease-out forwards; }
+@keyframes mark { 0% { transform: scale(.4); opacity: 0; } 20% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
+
+/* ---------- reglas: tras un párpado ---------- */
+.reel-octopus .slab.rule { cursor: pointer; overflow: hidden; }
+.slab.rule .lid {
+  position: absolute; left: 0; right: 0; height: 51%; z-index: 3; pointer-events: none;
+  background:
+    radial-gradient(12% 18% at 30% 40%, rgba(60, 20, 14, .35), transparent 70%),
+    radial-gradient(10% 16% at 70% 60%, rgba(60, 20, 14, .3), transparent 70%),
+    linear-gradient(180deg, #9A4A34, #6E2C20);
+  transition: transform .75s cubic-bezier(.6, 0, .3, 1);
+}
+.slab.rule .lid.up { top: 0; box-shadow: inset 0 -6px 0 #3E1710; }
+.slab.rule .lid.down { bottom: 0; box-shadow: inset 0 6px 0 #3E1710; }
+.slab.rule.awake .lid.up { transform: translateY(-104%); }
+.slab.rule.awake .lid.down { transform: translateY(104%); }
+.slab.rule .hint { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); z-index: 4; text-align: center; font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #F2D9C4; }
+.slab.rule.awake .hint { visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .grip .arm, .slab.rule .lid, .grip .code { transition: none; }
+  .grip .sucker.popped, .suckmark { animation: none; }
+}
