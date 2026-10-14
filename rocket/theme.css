@@ -1,0 +1,102 @@
+/* ROCKET — el cielo de noche sobre una urbanización, con un cohete que sube al avanzar y la medusa
+   azul que se le hincha alrededor; cada prompt dentro de una cofia que se abre subiendo el
+   acelerador; un cohetito al copiar; reglas dentro de una burbuja que crece. */
+
+.reel-rocket body { background: #03050D; }
+#sky { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-rocket .slab { background: rgba(8, 12, 26, .82); border-color: rgba(160, 200, 255, .14); }
+.reel-rocket .slab.hero { background: rgba(12, 10, 20, .84); }
+
+/* el reloj de misión */
+#mission {
+  position: fixed; left: var(--gutter); top: 62px; z-index: 20; pointer-events: none; white-space: nowrap;
+  font: 600 10.5px/1 var(--mono); letter-spacing: .16em; color: rgba(205, 222, 255, .78);
+  text-shadow: 0 0 10px rgba(120, 170, 255, .45);
+}
+
+/* ---------- el prompt, dentro de la cofia ---------- */
+.fairing { position: relative; border-radius: 14px; overflow: hidden; --t: 0; }
+.fairing.closed .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(3px); opacity: .35; }
+.fairing .code { transition: filter .6s .35s, opacity .6s .35s; }
+.fairing .shell {
+  position: absolute; top: 0; bottom: 0; width: 50%; z-index: 2;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 63px, rgba(10, 8, 7, .16) 63px 64px),
+    linear-gradient(180deg, transparent 0 17%, #FF2A1F 17% 21%, transparent 21%),
+    linear-gradient(90deg, #BDB5B0, #EFE9E5 30%, #FBF8F6 52%, #DDD5D0 80%, #B5ADA8);
+  transition: transform 1s cubic-bezier(.45, 0, .65, .3), opacity .5s .45s;
+}
+.fairing .shell.l { left: 0; border-radius: 14px 0 0 14px; transform-origin: 0 100%; box-shadow: inset -1px 0 0 rgba(10, 8, 7, .45); }
+.fairing .shell.r { right: 0; border-radius: 0 14px 14px 0; transform-origin: 100% 100%; box-shadow: inset 1px 0 0 rgba(10, 8, 7, .45); }
+.fairing .shell b { position: absolute; top: 25%; font: 800 10px/1 var(--mono); letter-spacing: .2em; color: #0A0807; opacity: .7; }
+.fairing .shell.l b { left: 14px; }
+.fairing .shell.r b { right: 14px; }
+.fairing.open .shell.l { transform: translate(-40%, 6%) rotate(-28deg); opacity: 0; }
+.fairing.open .shell.r { transform: translate(40%, 6%) rotate(28deg); opacity: 0; }
+.fairing .glow {
+  position: absolute; left: 50%; bottom: -60px; width: 220px; height: 160px; margin-left: -110px; z-index: 3; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(255, 250, 230, .95), rgba(255, 170, 70, .7) 35%, rgba(255, 90, 30, 0));
+  opacity: var(--t); transform: scale(calc(.4 + var(--t) * .8)); transform-origin: 50% 100%;
+}
+.fairing.open .glow { opacity: 0; transition: opacity .6s; }
+
+.fairing .track {
+  position: absolute; left: 50%; top: 13%; bottom: 13%; width: 52px; margin-left: -26px; z-index: 4;
+  border-radius: 26px; background: rgba(6, 8, 16, .86); border: 1px solid rgba(255, 255, 255, .2);
+  background-image: repeating-linear-gradient(0deg, transparent 0 17px, rgba(255, 255, 255, .14) 17px 18px);
+  touch-action: none; cursor: pointer;
+}
+.fairing .thumb {
+  position: absolute; left: 3px; bottom: 3px; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; cursor: grab;
+  background: var(--signal); color: #fff; font: 800 20px/44px var(--body); text-align: center;
+  box-shadow: 0 0 calc(10px + var(--t) * 30px) rgba(255, 42, 31, .7); touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.fairing .thumb:active { cursor: grabbing; }
+.fairing .pct { position: absolute; left: 50%; top: -24px; transform: translateX(-50%); font: 800 11px/1 var(--mono); letter-spacing: .1em; color: #0A0807; }
+.fairing .lift-hint {
+  position: absolute; left: 50%; bottom: 3%; transform: translateX(-50%); z-index: 4; pointer-events: none; white-space: nowrap;
+  font: 800 10.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--bone);
+  background: rgba(6, 8, 16, .9); border: 1px solid rgba(160, 200, 255, .4); border-radius: 999px; padding: 9px 13px;
+}
+.fairing.open .track, .fairing.open .lift-hint { opacity: 0; pointer-events: none; transition: opacity .25s; }
+
+/* el cohetito al copiar, su humo y la medusa donde acaba */
+.minirocket {
+  position: fixed; left: 0; top: 0; z-index: 46; width: 6px; height: 18px; margin: -9px 0 0 -3px; pointer-events: none;
+  border-radius: 3px 3px 1px 1px; background: linear-gradient(90deg, #CFC8C3, #FFFFFF 50%, #CFC8C3);
+}
+.minirocket::after { content: ""; position: absolute; left: -3px; top: 16px; width: 12px; height: 16px; border-radius: 50%; background: radial-gradient(closest-side, #FFF6DC, rgba(255, 160, 60, .8) 45%, rgba(255, 90, 30, 0)); }
+.smoke { position: fixed; z-index: 45; width: 10px; height: 10px; margin: -5px 0 0 -5px; pointer-events: none; border-radius: 50%; background: radial-gradient(closest-side, rgba(200, 200, 215, .55), rgba(200, 200, 215, 0)); animation: smoke 1.3s ease-out forwards; }
+@keyframes smoke { to { transform: scale(3.6); opacity: 0; } }
+.jelly {
+  position: fixed; z-index: 46; width: 110px; height: 110px; margin: -80px 0 0 -55px; pointer-events: none; border-radius: 50%;
+  background: radial-gradient(circle at 50% 30%, #fff 0 3px, rgba(200, 230, 255, .5) 4px, rgba(130, 180, 255, .12) 30%, rgba(170, 215, 255, .35) 64%, rgba(215, 238, 255, .7) 69%, rgba(215, 238, 255, 0) 72%);
+  box-shadow: 0 0 40px rgba(120, 180, 255, .35);
+  animation: jelly 1.8s cubic-bezier(.2, .7, .2, 1) forwards;
+}
+@keyframes jelly { 0% { transform: scale(.05); opacity: 1; } 60% { opacity: .95; } 100% { transform: scale(1.35); opacity: 0; } }
+
+/* ---------- reglas: dentro de una burbuja que se hincha ---------- */
+.reel-rocket .slab.rule { cursor: pointer; overflow: hidden; }
+.slab.rule .inner { clip-path: circle(0% at 10% 50%); transition: none; }
+.slab.rule.bloom .inner { clip-path: circle(150% at 10% 50%); transition: clip-path 1.6s cubic-bezier(.2, .7, .2, 1); }
+.slab.rule .halo {
+  position: absolute; left: 10%; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle, rgba(150, 200, 255, .06) 58%, rgba(170, 215, 255, .4) 67%, rgba(215, 238, 255, .75) 69.5%, rgba(215, 238, 255, 0) 71%);
+}
+.slab.rule.bloom .halo { animation: halo 1.6s cubic-bezier(.2, .7, .2, 1) forwards; }
+@keyframes halo { 0% { opacity: 1; transform: scale(1); } 75% { opacity: .9; } 100% { opacity: 0; transform: scale(var(--hs, 90)); } }
+.slab.rule .bulb {
+  position: absolute; left: 10%; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; pointer-events: none;
+  background: #fff; box-shadow: 0 0 10px 4px rgba(190, 225, 255, .9), 0 0 30px 12px rgba(120, 180, 255, .4);
+  animation: bulb 1.4s ease-in-out infinite;
+}
+@keyframes bulb { 50% { transform: scale(1.35); } }
+.slab.rule.bloom .bulb { opacity: 0; transition: opacity .8s .9s; }
+.slab.rule .hint { position: absolute; left: 20%; right: 0; top: 50%; transform: translateY(-50%); text-align: center; pointer-events: none; font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #BFD6FF; }
+.slab.rule.bloom .hint { visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fairing .shell, .fairing .code, .slab.rule.bloom .inner { transition: none; }
+  .slab.rule.bloom .halo, .slab.rule .bulb, .smoke, .jelly { animation: none; }
+}
