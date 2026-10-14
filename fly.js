@@ -53,9 +53,15 @@
   //   spiral — cae hacia abajo dando vueltas en espiral, como una zambullida desde las nubes
   //   meteor — cae en diagonal pronunciada, abajo y a la derecha, como un trozo de luna
   //   climb  — sube en zigzag por una pared, como un tentáculo por el casco de un barco
+  //   ess    — baja trazando una S, como el chorro de trazadoras que dibuja un dólar en el cielo
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
-  const parada = (si) => modo === "rise"
+  // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
+  const nSueltas = stops.reduce((a, s) => a + [...s.children].filter((c) => c.classList.contains("slab")).length, 0);
+  const ese = (k, n) => (n > 1 ? k / (n - 1) : 0) * 2 * Math.PI;
+  const parada = (si) => modo === "ess"
+    ? [-Math.sin(ese(si, stops.length)) * 900, si * 1050, -si * 300]
+    : modo === "rise"
     ? [si % 2 ? 160 : -160, -si * 1150, -si * 260]
     : modo === "sink"
     ? [si % 2 ? -140 : 140, si * 1150, -si * 240]
@@ -72,7 +78,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "rise"
+  const suelta = (g) => modo === "ess"
+    ? [-Math.sin(ese(g, nSueltas)) * 380, g * 820, -g * 240, -Math.cos(ese(g, nSueltas)) * 5]
+    : modo === "rise"
     ? [g % 2 ? 70 : -70, -g * 950, -g * 220, g % 2 ? 4 : -4]
     : modo === "sink"
     ? [g % 2 ? -60 : 60, g * 950, -g * 200, g % 2 ? -3 : 3]

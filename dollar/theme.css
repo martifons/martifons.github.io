@@ -1,0 +1,108 @@
+/* DOLLAR — la pista de noche y un "$" de trazadoras que se dibuja en el cielo al avanzar; cada
+   prompt bajo un fajo de billetes con su faja; casquillos al copiar; reglas escritas por una
+   trazadora. */
+
+.reel-dollar body { background: #05060B; }
+#sky { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-dollar .slab { background: rgba(10, 10, 16, .8); border-color: rgba(255, 200, 120, .13); }
+.reel-dollar .slab.hero { background: rgba(14, 9, 10, .82); }
+
+/* ---------- el prompt, debajo de un fajo ---------- */
+.stash { position: relative; border-radius: 14px; }
+.stash.wrapped .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(3px); opacity: .4; }
+.stash .code { transition: filter .6s .25s, opacity .6s .25s; }
+.cash {
+  position: absolute; inset: 0; z-index: 2; padding: 0; border: 0; border-radius: 14px; cursor: grab;
+  background: radial-gradient(60% 50% at 50% 46%, rgba(255, 190, 100, .1), rgba(5, 6, 11, .3));
+  touch-action: none; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none;
+}
+.cash:active { cursor: grabbing; }
+
+.bill {
+  --k: 0;
+  position: absolute; left: 50%; top: 44%; width: min(86%, 340px); aspect-ratio: 2.35 / 1; display: block;
+  transform: translate(-50%, -50%) translate(calc(var(--k) * 1.5px), calc(var(--k) * -2px)) rotate(calc((var(--k) - 2) * 1.6deg));
+  border-radius: 6px; overflow: hidden; pointer-events: none;
+  background:
+    repeating-radial-gradient(circle at 18% 50%, rgba(10, 8, 7, .07) 0 1px, transparent 1px 5px),
+    repeating-radial-gradient(circle at 82% 50%, rgba(10, 8, 7, .07) 0 1px, transparent 1px 5px),
+    linear-gradient(160deg, #F7F2EE, #E4DAD3);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .25), 0 10px 22px rgba(0, 0, 0, .45);
+}
+.bill.gone { visibility: hidden; }
+.bill b { position: absolute; }
+.bill .frame { inset: 6px; border: 1px solid rgba(10, 8, 7, .55); border-radius: 3px; box-shadow: inset 0 0 0 3px #F1EBE6, inset 0 0 0 4px rgba(10, 8, 7, .28); }
+.bill .med {
+  left: 50%; top: 50%; width: 30%; height: 74%; transform: translate(-50%, -50%);
+  border-radius: 50%; border: 2px solid #0A0807; display: grid; place-items: center;
+  font: 400 40px/1 var(--display); color: #0A0807; background: radial-gradient(circle, #FBF8F5 40%, #E0D5CC);
+}
+.bill .seal { left: 13%; top: 50%; width: 15%; aspect-ratio: 1; transform: translateY(-50%); border-radius: 50%; border: 2px dotted #FF2A1F; background: radial-gradient(circle, rgba(255, 42, 31, .28) 0 38%, transparent 40%); }
+.bill .no { font: 400 15px/1 var(--display); color: #0A0807; }
+.bill .no.a { left: 15px; top: 13px; }
+.bill .no.b { right: 15px; bottom: 13px; }
+.bill .ser { right: 15px; top: 14px; font: 700 9px/1 var(--mono); letter-spacing: .12em; color: #FF2A1F; }
+
+/* la faja roja, de 500 */
+.strap { position: absolute; left: 50%; top: 44%; width: min(86%, 340px); aspect-ratio: 2.35 / 1; transform: translate(-50%, -50%) translate(4px, -6px); pointer-events: none; z-index: 2; }
+.strap i { position: absolute; left: 64%; width: 15%; height: calc(50% + 7px); background: linear-gradient(90deg, #C9160D, #FF2A1F 30%, #FF4A3F 50%, #E01C12); box-shadow: 0 2px 8px rgba(0, 0, 0, .35); transition: transform .7s cubic-bezier(.3, 0, .6, 1), opacity .5s .25s; }
+.strap i:first-child { top: -7px; border-radius: 2px 2px 0 0; }
+.strap i:last-child { bottom: -7px; border-radius: 0 0 2px 2px; }
+.strap::after { content: "$500"; position: absolute; left: 64%; width: 15%; top: 50%; transform: translateY(-50%); text-align: center; font: 800 10px/1 var(--mono); color: #fff; letter-spacing: .04em; transition: opacity .2s; }
+.stash.snapped .strap i:first-child { transform: translate(-30px, -70px) rotate(-38deg); opacity: 0; }
+.stash.snapped .strap i:last-child { transform: translate(26px, 80px) rotate(32deg); opacity: 0; }
+.stash.snapped .strap::after { opacity: 0; }
+
+.cash-hint {
+  position: absolute; left: 50%; bottom: 12%; transform: translateX(-50%); z-index: 3; pointer-events: none; white-space: nowrap;
+  font: 800 11px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--bone);
+  background: rgba(10, 10, 16, .92); border: 1px solid rgba(255, 200, 120, .45); border-radius: 999px; padding: 11px 15px;
+}
+.tally { position: absolute; right: 14px; top: 12px; z-index: 3; pointer-events: none; font: 400 24px/1 var(--display); color: #FFC46B; text-shadow: 0 0 14px rgba(255, 150, 50, .7); opacity: 0; }
+.tally.pop { animation: tally .7s ease-out forwards; }
+@keyframes tally { 0% { opacity: 0; transform: translateY(8px) scale(.8); } 25% { opacity: 1; transform: none; } 100% { opacity: .9; } }
+.stash.open .cash-hint, .stash.open .tally { opacity: 0; transition: opacity .3s; animation: none; }
+
+/* billetes en vuelo y la lluvia */
+.bill.flying { position: fixed; left: 0; top: 0; z-index: 46; aspect-ratio: auto; transform: none; will-change: transform; }
+.bill.flying .med { font-size: 40px; }
+.bill.mini .med { font-size: 15px; border-width: 1px; }
+.bill.mini .no, .bill.mini .ser { display: none; }
+.bill.mini .frame { inset: 3px; }
+
+/* casquillos al copiar */
+.casing {
+  position: fixed; left: 0; top: 0; z-index: 46; width: 8px; height: 22px; margin: -11px 0 0 -4px; pointer-events: none;
+  border-radius: 3px 3px 1px 1px;
+  background: linear-gradient(90deg, #8A5A1C, #F2C46A 40%, #FFE7A8 50%, #C8902E 72%, #6E4512);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .28), 0 0 8px rgba(255, 190, 90, .35);
+}
+
+/* ---------- reglas: las escribe una trazadora ---------- */
+.reel-dollar .slab.rule { cursor: pointer; overflow: hidden; transition: border-color .6s, box-shadow .6s, opacity .8s, var(--fly); }
+.reel-dollar .slab.rule.lit { border-color: rgba(255, 196, 107, .55); box-shadow: 0 0 46px rgba(255, 150, 50, .2), 0 40px 90px rgba(0, 0, 0, .6); }
+.slab.rule > .k { transition: clip-path .38s linear; }
+.slab.rule > h3 { transition: clip-path .42s linear .38s; }
+.slab.rule > h3 + p { transition: clip-path .7s linear .82s; }
+.slab.rule.dark > .k, .slab.rule.dark > h3, .slab.rule.dark > h3 + p { clip-path: inset(0 100% 0 0); transition: none; }
+.slab.rule .tracer {
+  position: absolute; left: 0; top: 0; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; z-index: 4; pointer-events: none; opacity: 0;
+  background: #FFF4DA; box-shadow: 0 0 8px 3px rgba(255, 190, 90, .95), 0 0 26px 10px rgba(255, 130, 40, .5);
+}
+.slab.rule.lit .tracer { animation: escribe 1.55s linear forwards; }
+@keyframes escribe {
+  0% { opacity: 1; transform: translate(var(--x0), var(--y1)); }
+  24% { transform: translate(var(--x1), var(--y1)); }
+  25% { transform: translate(var(--x0), var(--y2)); }
+  52% { transform: translate(var(--x1), var(--y2)); }
+  53% { transform: translate(var(--x0), var(--y3)); }
+  97% { opacity: 1; transform: translate(var(--x1), var(--y3)); }
+  100% { opacity: 0; transform: translate(var(--x1), var(--y3)); }
+}
+.slab.rule .hint { position: absolute; inset: 0; display: grid; place-items: center; z-index: 3; pointer-events: none; font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #FFC46B; }
+.slab.rule:not(.dark) .hint { visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .stash .code, .strap i, .reel-dollar .slab.rule, .slab.rule > .k, .slab.rule > h3, .slab.rule > h3 + p { transition: none; }
+  .slab.rule.lit .tracer, .tally.pop { animation: none; }
+}
