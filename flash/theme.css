@@ -1,0 +1,118 @@
+/* FLASH — el cuarto viejo del estudio (pared de yeso, fluorescente, cortina, flash de estudio, mesa con
+   papeles) que se va destrozando con cada flash; cada prompt es una polaroid que se revela
+   sacudiéndola; las reglas, negativos que se positivan. */
+
+.reel-flash body { background: #E2D9C6; }
+.reel-flash body::before {
+  background:
+    radial-gradient(22% 14% at 18% 30%, rgba(150, 118, 64, .2), transparent 70%),
+    radial-gradient(14% 22% at 82% 24%, rgba(150, 118, 64, .18), transparent 70%),
+    radial-gradient(30% 10% at 60% 62%, rgba(150, 118, 64, .14), transparent 70%),
+    radial-gradient(9% 7% at 34% 12%, rgba(255, 255, 250, .5), transparent 70%),
+    radial-gradient(12% 9% at 74% 70%, rgba(255, 255, 250, .45), transparent 70%),
+    repeating-linear-gradient(90deg, transparent 0 140px, rgba(120, 100, 70, .05) 140px 143px),
+    linear-gradient(0deg, #9C8C72 0 8vh, #7E6F57 8vh calc(8vh + 3px), transparent calc(8vh + 3px)),
+    linear-gradient(180deg, #E9E2D2, #DCD2BD);
+}
+
+#props { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+#props > * { position: absolute; display: block; }
+#papers { position: fixed; inset: 0; z-index: 3; pointer-events: none; }
+#flashlight { position: fixed; inset: 0; z-index: 60; pointer-events: none; background: #FFFFFF; opacity: 0; }
+
+.tube {
+  left: 50%; top: 7vh; width: min(46vw, 420px); height: 10px; translate: -50% 0; border-radius: 6px; background: #FDFDF6;
+  box-shadow: 0 0 18px 6px rgba(240, 255, 235, .85), 0 0 90px 40px rgba(232, 250, 226, .35);
+  animation: tube 7s steps(1) infinite;
+}
+@keyframes tube { 0%, 100% { opacity: 1; } 61% { opacity: .35; } 62% { opacity: 1; } 64% { opacity: .55; } 65% { opacity: 1; } }
+.rod { left: 19vw; right: 19vw; top: 19vh; height: 5px; border-radius: 3px; background: linear-gradient(#A3A3A3, #5E5E5E); transform-origin: 0 50%; transition: transform .9s cubic-bezier(.3, 1.7, .5, 1) .15s; }
+.curtain {
+  left: 20vw; right: 20vw; top: calc(19vh + 3px); bottom: 15vh; border-radius: 0 0 3px 3px; transform-origin: 0 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, .12), transparent 8%, transparent 85%, rgba(0, 0, 0, .14)),
+    repeating-linear-gradient(90deg, #8D8F91 0, #B7B8B9 22px, #A2A3A5 34px, #8A8C8E 48px);
+  box-shadow: 0 10px 24px rgba(60, 50, 40, .25);
+  transition: transform 1.15s cubic-bezier(.3, .1, .5, 1), border-radius 1.15s;
+}
+.no-curtain .curtain { transform: translate(-18vw, 62vh) rotate(-4deg) scale(.38, .18); border-radius: 46% 54% 12% 18%; }
+.no-curtain .rod { transform: rotate(5deg); }
+.stand { left: 3vw; bottom: 7vh; height: 46vh; width: auto; transform-origin: 50% 100%; transition: transform .95s cubic-bezier(.55, 0, .9, .45); }
+.no-stand .stand { transform: rotate(80deg); }
+.desk { right: 3vw; bottom: 7vh; width: min(24vw, 230px); height: 15vh; border-radius: 3px; background: linear-gradient(#80603F, #5B4230); box-shadow: 0 6px 14px rgba(40, 30, 20, .3); }
+.desk .monitor {
+  position: absolute; right: 8%; bottom: 100%; width: 44%; aspect-ratio: 1.05; border-radius: 6px 6px 3px 3px;
+  background: radial-gradient(70% 60% at 40% 40%, #3E4A45, #1E2522) content-box, linear-gradient(#E4DDC9, #C8BFA6);
+  padding: 9%; box-sizing: border-box;
+}
+.desk .stack {
+  position: absolute; left: 8%; bottom: 100%; width: 40%; height: 9vh; border-radius: 2px;
+  background: repeating-linear-gradient(0deg, #FBFAF6 0 3px, #D5D0C4 3px 4px);
+  box-shadow: 2px 0 0 rgba(0, 0, 0, .08); transition: height .15s;
+}
+.no-stack .desk .stack { height: 4px; }
+#props.instant * { transition: none !important; }
+
+/* lo de siempre, oscuro sobre una pared clara */
+.reel-flash .slab { background: rgba(18, 15, 13, .93); border-color: rgba(255, 255, 255, .1); box-shadow: 0 30px 70px rgba(60, 45, 30, .35); }
+.reel-flash #top b { color: rgba(30, 24, 18, .72); }
+.reel-flash .mark, .reel-flash #rail .dot span { color: #1E1813; }
+.reel-flash #rail .dot i { background: rgba(30, 24, 18, .3); }
+.reel-flash #nav button:not(#next) { background: rgba(18, 15, 13, .85); color: var(--soft); }
+.reel-flash #foot { color: rgba(30, 24, 18, .72); }
+.reel-flash #foot kbd { color: rgba(30, 24, 18, .8); border-color: rgba(30, 24, 18, .25); }
+
+/* el titular que se encrespa */
+.slab.hero h1 { cursor: pointer; }
+.slab.hero h1 .w { white-space: nowrap; }
+.slab.hero h1 .ch { display: inline-block; }
+
+/* ---------- el prompt, una polaroid ---------- */
+.polaroid {
+  --dev: 0;
+  position: relative; background: #F5F2EC; border-radius: 4px; padding: 10px 10px 0;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .45), inset 0 0 0 1px rgba(0, 0, 0, .06);
+  transform-origin: 50% 20%; transition: rotate .35s cubic-bezier(.3, 1.5, .5, 1);
+}
+.polaroid.raw { cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
+.polaroid.raw:active { cursor: grabbing; }
+.polaroid .pic { position: relative; border-radius: 2px; overflow: hidden; }
+.polaroid .code { border-radius: 2px; background: #15130F; border-color: transparent; filter: blur(calc((1 - var(--dev)) * 5px)) sepia(calc(1 - var(--dev))); transition: filter .4s; }
+/* el marco de la polaroid ocupa sitio: el prompt encoge lo mismo para que el botón de copiar se siga viendo */
+.fly .polaroid .code { max-height: calc(min(68vh, 660px) - 150px - 76px); }
+@media (max-width: 760px) { .fly .polaroid .code { max-height: calc(100svh - 236px - 150px - 76px); } }
+.polaroid.raw .code { overflow: hidden; pointer-events: none; }
+.polaroid .dev {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 90% at 30% 20%, #4A3E30, #23302B 60%, #141A17);
+  opacity: calc(1 - var(--dev)); transition: opacity .5s;
+}
+.polaroid .shake-hint {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; pointer-events: none; white-space: nowrap;
+  font: 800 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--bone);
+  border: 1px solid rgba(255, 255, 255, .45); border-radius: 999px; padding: 11px 16px; background: rgba(0, 0, 0, .35);
+  transition: opacity .3s;
+}
+.polaroid.developed .shake-hint { opacity: 0; }
+.polaroid .caption { display: flex; justify-content: space-between; align-items: center; margin: 0; padding: 12px 4px 13px; font: 700 11px/1 var(--mono); letter-spacing: .14em; color: #2A241F; }
+.polaroid .dots { display: flex; gap: 6px; }
+.polaroid .dots i { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #2A241F; transition: background .2s; }
+.polaroid .dots i.on { background: var(--signal); border-color: var(--signal); }
+.polaroid.wiggle { animation: wiggle .38s ease-out; }
+@keyframes wiggle { 25% { rotate: -4deg; } 60% { rotate: 3deg; } 100% { rotate: 0deg; } }
+.polaroid .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; padding: 0; border: 0; }
+
+/* ---------- reglas: negativos que se positivan ---------- */
+.reel-flash .slab.rule { cursor: pointer; overflow: hidden; transition: filter 1.1s ease-out .12s, opacity .8s, var(--fly); }
+.reel-flash .slab.rule.neg { filter: invert(.92) hue-rotate(180deg) sepia(.55) saturate(1.5); }
+.reel-flash .slab.rule.snap { transition: none; }
+.slab.rule .hint { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; pointer-events: none; font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--signal-soft); }
+.slab.rule.pos .hint { visibility: hidden; }
+.slab.rule .pop { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+.slab.rule.pos .pop { animation: pop .5s ease-out; }
+@keyframes pop { 0% { opacity: .9; } 100% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .tube, .polaroid.wiggle, .slab.rule.pos .pop { animation: none; }
+  .curtain, .rod, .stand, .polaroid, .polaroid .code, .polaroid .dev, .reel-flash .slab.rule { transition: none; }
+}
