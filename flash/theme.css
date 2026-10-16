@@ -79,8 +79,8 @@
 .polaroid .pic { position: relative; border-radius: 2px; overflow: hidden; }
 .polaroid .code { border-radius: 2px; background: #15130F; border-color: transparent; filter: blur(calc((1 - var(--dev)) * 5px)) sepia(calc(1 - var(--dev))); transition: filter .4s; }
 /* el marco de la polaroid ocupa sitio: el prompt encoge lo mismo para que el botón de copiar se siga viendo */
-.fly .polaroid .code { max-height: calc(min(68vh, 660px) - 150px - 76px); }
-@media (max-width: 760px) { .fly .polaroid .code { max-height: calc(100svh - 236px - 150px - 76px); } }
+.fly .polaroid .code { max-height: calc(min(68vh, 660px) - 150px - 58px); }
+@media (max-width: 760px) { .fly .polaroid .code { max-height: calc(100svh - 236px - 150px - 58px); } }
 .polaroid.raw .code { overflow: hidden; pointer-events: none; }
 .polaroid .dev {
   position: absolute; inset: 0; pointer-events: none;

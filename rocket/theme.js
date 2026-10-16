@@ -216,8 +216,7 @@
     const caja = document.createElement("div");
     caja.className = "fairing closed";
     code.replaceWith(caja); caja.appendChild(code);
-    caja.insertAdjacentHTML("beforeend", `<div class="shell l" aria-hidden="true"><b>PL-0${n + 1}</b></div><div class="shell r" aria-hidden="true"><b>PROMPT</b></div><div class="glow" aria-hidden="true"></div>
-      <div class="track" data-nofly><span class="pct" aria-hidden="true">0%</span><button class="thumb" type="button" aria-label="Slide up to launch and reveal the prompt">↑</button></div><span class="lift-hint" aria-hidden="true">Slide up to launch</span>`);
+    caja.insertAdjacentHTML("beforeend", `<div class="shell l" aria-hidden="true"><b>PL-0${n + 1}</b></div><div class="shell r" aria-hidden="true"><b>PROMPT</b></div><div class="glow" aria-hidden="true"></div><div class="track" data-nofly><span class="pct" aria-hidden="true">0%</span><button class="thumb" type="button" aria-label="Slide up to launch and reveal the prompt">↑</button></div><span class="lift-hint" aria-hidden="true">Slide up to launch</span>`);
     const via = caja.querySelector(".track"), mando = caja.querySelector(".thumb"), pct = caja.querySelector(".pct");
     const conchas = caja.querySelectorAll(".shell");
     let t = 0, abierta = false, arr = null, anim = 0, tramo = 0;

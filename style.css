@@ -165,6 +165,7 @@ h2.big { font-size: 40px; }
 .frames figcaption { font: 600 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--dimmer); margin-top: 7px; }
 
 .code {
+  margin: 0; /* el pre trae 1em arriba y abajo: dentro de un envoltorio con overflow hidden no se funden y la targeta desborda */
   font: 12.5px/1.68 var(--mono); color: #DCD3CF; white-space: pre-wrap; word-break: break-word;
   background: rgba(0, 0, 0, .34); border: 1px solid var(--line); border-radius: 14px;
   padding: 16px 16px 20px; max-height: calc(min(68vh, 660px) - 150px); overflow: auto;

@@ -1,0 +1,79 @@
+/* TORNADO — la pantalla del radar de un cazador de tormentas, con la célula y su gancho que se
+   acercan a ti; cada prompt tras el ruido de la radio del tiempo, que se sintoniza con un dial;
+   un remolino de polvo al copiar; reglas reveladas por el barrido del radar. */
+
+.reel-tornado body { background: #031009; }
+.reel-tornado body::before { background: none; }
+#radar { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+#swirl { position: fixed; inset: 0; z-index: 46; pointer-events: none; }
+.reel-tornado .slab { background: rgba(4, 14, 9, .74); border-color: rgba(110, 230, 150, .2); }
+.reel-tornado .slab.hero { background: rgba(12, 10, 10, .76); }
+
+#readout {
+  position: fixed; left: var(--gutter); top: 62px; z-index: 20; pointer-events: none; white-space: nowrap;
+  font: 700 10.5px/1 var(--mono); letter-spacing: .14em; color: #8EF0AC; text-shadow: 0 0 10px rgba(90, 235, 130, .5);
+}
+#readout.warn { color: #FF5A4F; text-shadow: 0 0 12px rgba(255, 42, 31, .6); animation: warn 1s steps(1) infinite; }
+@keyframes warn { 50% { opacity: .55; } }
+
+/* ---------- el prompt, tras el ruido de la radio ---------- */
+.radio { position: relative; border-radius: 14px; overflow: hidden; --sig: 0; }
+.radio .code { transition: filter .5s; }
+.radio.static .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(calc((1 - var(--sig)) * 4px)); }
+.radio .snow {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none;
+  image-rendering: pixelated; opacity: calc(.92 - var(--sig) * .8); mix-blend-mode: screen; transition: opacity .6s;
+}
+.radio.locked .snow { opacity: 0; }
+.radio .lcd {
+  position: absolute; left: 12px; right: 12px; top: 12px; z-index: 3; display: flex; align-items: baseline; gap: 6px;
+  padding: 10px 12px; border-radius: 8px; background: #0B1A10; border: 1px solid rgba(110, 230, 150, .3);
+  font: 700 22px/1 var(--mono); color: #8EF0AC; text-shadow: 0 0 10px rgba(90, 235, 130, .55); transition: opacity .5s .5s;
+}
+.radio .lcd small { font-size: 10px; letter-spacing: .14em; color: rgba(142, 240, 172, .7); }
+.radio .bars { margin-left: auto; display: flex; align-items: flex-end; gap: 3px; height: 18px; }
+.radio .bars i { width: 5px; background: rgba(142, 240, 172, .18); border-radius: 1px; }
+.radio .bars i:nth-child(1) { height: 20%; } .radio .bars i:nth-child(2) { height: 40%; } .radio .bars i:nth-child(3) { height: 60%; } .radio .bars i:nth-child(4) { height: 80%; } .radio .bars i:nth-child(5) { height: 100%; }
+.radio .bars i.on { background: #8EF0AC; box-shadow: 0 0 6px rgba(90, 235, 130, .7); }
+.radio.locked .lcd { opacity: 0; }
+.radio .tune-hint {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; z-index: 3; pointer-events: none; white-space: nowrap;
+  font: 800 11px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--bone);
+  background: rgba(3, 12, 7, .88); border: 1px solid rgba(110, 230, 150, .4); border-radius: 999px; padding: 11px 15px;
+}
+.radio .dial {
+  position: absolute; left: 22px; right: 22px; bottom: 18px; height: 52px; z-index: 3; cursor: pointer; touch-action: none;
+  border-radius: 10px; background: linear-gradient(#0E2016, #07140C); border: 1px solid rgba(110, 230, 150, .3);
+}
+.radio .ticks { position: absolute; left: 0; right: 0; top: 50%; height: 0; pointer-events: none; }
+.radio .ticks::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 2px; background: rgba(142, 240, 172, .25); }
+.radio .ticks i { position: absolute; top: -8px; width: 2px; height: 16px; margin-left: -1px; background: rgba(142, 240, 172, .45); }
+.radio .knob {
+  position: absolute; top: 50%; left: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px; padding: 0; border: 0; border-radius: 50%; cursor: grab;
+  background: radial-gradient(circle at 40% 35%, #FF6A5F, var(--signal) 55%, #A3140C); box-shadow: 0 0 calc(8px + var(--sig) * 24px) rgba(255, 42, 31, .7), inset 0 0 0 3px rgba(255, 255, 255, .25);
+  touch-action: none;
+}
+.radio .knob::after { content: ""; position: absolute; left: 50%; top: 7px; bottom: 7px; width: 2px; margin-left: -1px; background: #fff; border-radius: 1px; }
+.radio .knob:active { cursor: grabbing; }
+.radio.locked .dial, .radio.locked .tune-hint { opacity: 0; pointer-events: none; transition: opacity .3s; }
+
+/* ---------- reglas: el barrido del radar ---------- */
+@property --a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.reel-tornado .slab.rule { cursor: pointer; overflow: hidden; }
+.slab.rule .inner { -webkit-mask: conic-gradient(#000 var(--a), transparent 0); mask: conic-gradient(#000 var(--a), transparent 0); }
+.slab.rule.swept .inner { animation: barre 1.6s linear forwards; }
+@keyframes barre { to { --a: 360deg; } }
+.slab.rule .beam {
+  position: absolute; left: 50%; top: 50%; width: 200%; aspect-ratio: 1; translate: -50% -50%; pointer-events: none; opacity: 0;
+  background: conic-gradient(from -50deg, transparent 0deg, rgba(90, 235, 130, .3) 50deg, transparent 50.5deg);
+}
+.slab.rule.swept .beam { animation: haz 1.6s linear forwards; }
+@keyframes haz { 0% { opacity: 1; rotate: 0deg; } 92% { opacity: 1; } 100% { opacity: 0; rotate: 360deg; } }
+.slab.rule .hint { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #8EF0AC; }
+.slab.rule.swept .hint { visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  #readout.warn, .slab.rule.swept .beam { animation: none; }
+  .slab.rule.swept .inner { animation: none; -webkit-mask: none; mask: none; }
+  .radio .snow, .radio .lcd, .radio .code { transition: none; }
+}

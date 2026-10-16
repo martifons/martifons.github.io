@@ -56,12 +56,15 @@
   //   ess    — baja trazando una S, como el chorro de trazadoras que dibuja un dólar en el cielo
   //   launch — sube cada vez más deprisa y se tumba hacia la izquierda, como un cohete en su giro
   //   sheet  — recorre una hoja de contactos: fila a fila, de izquierda a derecha y luego abajo
+  //   track  — avanza en diagonal hacia arriba a la derecha, como una tormenta en el radar
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
   const nSueltas = stops.reduce((a, s) => a + [...s.children].filter((c) => c.classList.contains("slab")).length, 0);
   const ese = (k, n) => (n > 1 ? k / (n - 1) : 0) * 2 * Math.PI;
-  const parada = (si) => modo === "sheet"
+  const parada = (si) => modo === "track"
+    ? [si * 1250, -si * 620 + Math.sin(si * 1.7) * 160, -si * 340]
+    : modo === "sheet"
     ? [(si % 3) * 1450, Math.floor(si / 3) * 1150, -(si % 3) * 60]
     : modo === "launch"
     ? [-si * si * 160, -(si * 1000 + si * si * 120), -si * 220]
@@ -84,7 +87,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "sheet"
+  const suelta = (g) => modo === "track"
+    ? [g * 520, -g * 420 + Math.sin(g * 1.7) * 90, -g * 220, g % 2 ? 4 : -4]
+    : modo === "sheet"
     ? [(g % 3) * 560, Math.floor(g / 3) * 940, 0, 0]
     : modo === "launch"
     ? [-g * g * 26, -(g * 720 + g * g * 30), -g * 160, g % 2 ? 3 : -3]
