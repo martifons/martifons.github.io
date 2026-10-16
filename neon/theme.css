@@ -1,0 +1,79 @@
+/* NEON — la fachada de LED de la torre como fondo, con ondas de luz; cada prompt es un letrero de
+   neón apagado que se enciende enchufando su cable; las reglas se encienden como rótulos. */
+
+.reel-neon body { background: #12081F; }
+.reel-neon body::before { background: none; }
+#facade { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-neon .slab { background: rgba(16, 8, 28, .86); border-color: rgba(230, 200, 255, .16); box-shadow: 0 40px 90px rgba(0, 0, 0, .6), 0 0 40px rgba(200, 140, 255, .08); }
+.reel-neon .slab.hero { background: rgba(20, 8, 20, .86); }
+
+/* ---------- el letrero de neón, apagado hasta que se enchufa ---------- */
+.sign { position: relative; border-radius: 14px; overflow: hidden; }
+.sign.off .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(3px); }
+.sign .code { transition: filter .6s; }
+.sign .unlit {
+  position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; pointer-events: none; border-radius: 14px;
+  background: radial-gradient(70% 50% at 50% 42%, rgba(40, 14, 50, .9), rgba(10, 5, 16, .97));
+  transition: opacity .6s;
+}
+.sign.on .unlit { opacity: 0; }
+.sign .tube {
+  font: 400 clamp(34px, 9vw, 52px)/1 var(--display); letter-spacing: .06em; margin-top: -18%;
+  color: rgba(255, 170, 230, .14); /* el tubo apagado: cristal sin gas, apenas visible */
+}
+.sign.plugged .tube { animation: zumbido 1.1s steps(1) forwards; }
+@keyframes zumbido {
+  0% { color: rgba(255, 170, 230, .14); text-shadow: none; }
+  12% { color: #FFE3F6; text-shadow: 0 0 6px #fff, 0 0 18px #FF4FC1, 0 0 42px #FF2A8A; }
+  18% { color: rgba(255, 170, 230, .14); text-shadow: none; }
+  34% { color: #FFE3F6; text-shadow: 0 0 6px #fff, 0 0 18px #FF4FC1, 0 0 42px #FF2A8A; }
+  40% { color: rgba(255, 227, 246, .4); text-shadow: 0 0 8px #FF4FC1; }
+  52%, 100% { color: #FFE3F6; text-shadow: 0 0 6px #fff, 0 0 18px #FF4FC1, 0 0 42px #FF2A8A, 0 0 80px #FF2A8A; }
+}
+.sign .cable { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; overflow: visible; pointer-events: none; }
+.sign .cable path { fill: none; stroke: #2A1838; stroke-width: 7; stroke-linecap: round; }
+.sign.plugged .cable path { stroke: #3A1E4C; }
+.sign .outlet {
+  position: absolute; right: 22px; bottom: 24px; width: 44px; height: 44px; z-index: 3; pointer-events: none;
+  border-radius: 10px; background: linear-gradient(#ECE6F2, #BDB3C8); box-shadow: 0 0 0 3px rgba(0, 0, 0, .35), inset 0 -3px 0 rgba(0, 0, 0, .15);
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+}
+.sign .outlet b { width: 5px; height: 14px; border-radius: 2px; background: #241630; }
+.sign.near .outlet { box-shadow: 0 0 0 3px rgba(255, 42, 31, .8), 0 0 18px rgba(255, 42, 31, .6); }
+.sign .plug {
+  position: absolute; left: 44px; top: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px; padding: 0; z-index: 4; cursor: grab; touch-action: none;
+  border: 0; border-radius: 10px; background: linear-gradient(90deg, #E43025, var(--signal) 45%, #B5190F);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .5), inset 0 2px 0 rgba(255, 255, 255, .25);
+}
+.sign .plug::after { content: ""; position: absolute; right: -9px; top: 13px; width: 10px; height: 18px; background: repeating-linear-gradient(180deg, #D8D2DE 0 5px, transparent 5px 13px); border-radius: 1px; }
+.sign.dragging .plug { cursor: grabbing; }
+.sign.plugged .plug { cursor: default; }
+.sign.on .plug, .sign.on .cable, .sign.on .outlet { opacity: 0; transition: opacity .5s .2s; pointer-events: none; }
+.sign .plug-hint {
+  position: absolute; left: 50%; bottom: 84px; translate: -50% 0; z-index: 3; pointer-events: none; white-space: nowrap;
+  font: 800 11px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--bone);
+  background: rgba(16, 8, 28, .9); border: 1px solid rgba(255, 170, 230, .4); border-radius: 999px; padding: 10px 14px;
+}
+
+/* ---------- reglas: rótulos de neón ---------- */
+.reel-neon .slab.rule { cursor: pointer; }
+.slab.rule h3 { color: rgba(255, 227, 246, .22); transition: none; }
+.slab.rule > p:not(.k) { opacity: 0; }
+.slab.rule.lit h3 { animation: rotulo 1.2s steps(1) forwards; }
+.slab.rule.lit > p:not(.k) { opacity: 1; transition: opacity .5s .9s; }
+@keyframes rotulo {
+  0% { color: rgba(255, 227, 246, .22); text-shadow: none; }
+  10% { color: #FFE3F6; text-shadow: 0 0 4px #fff, 0 0 14px #FF4FC1, 0 0 30px #FF2A8A; }
+  16% { color: rgba(255, 227, 246, .22); text-shadow: none; }
+  30% { color: #FFE3F6; text-shadow: 0 0 4px #fff, 0 0 14px #FF4FC1, 0 0 30px #FF2A8A; }
+  36% { color: rgba(255, 227, 246, .5); text-shadow: 0 0 6px #FF4FC1; }
+  50%, 100% { color: #FFE3F6; text-shadow: 0 0 4px #fff, 0 0 14px #FF4FC1, 0 0 30px #FF2A8A; }
+}
+.slab.rule .hint { position: absolute; left: 0; right: 0; bottom: 16px; text-align: center; pointer-events: none; font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: rgba(255, 170, 230, .7); }
+.slab.rule.lit .hint { visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sign.plugged .tube, .slab.rule.lit h3 { animation: none; }
+  .slab.rule.lit h3 { color: #FFE3F6; text-shadow: 0 0 14px #FF4FC1; }
+  .sign .unlit, .slab.rule.lit > p:not(.k) { transition: none; }
+}
