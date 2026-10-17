@@ -58,6 +58,7 @@
   //   sheet  — recorre una hoja de contactos: fila a fila, de izquierda a derecha y luego abajo
   //   track  — avanza en diagonal hacia arriba a la derecha, como una tormenta en el radar
   //   arc    — un cuarto de vuelta hacia la derecha alrededor de un punto, como la cámara que rodea a alguien
+  //   slalom — baja haciendo eses anchas, de un lado a otro, como una tabla bajando por una ladera
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -66,7 +67,9 @@
   // arc: un cuarto de círculo a lo largo de todo el recorrido, con el radio justo para que las paradas
   // queden a "paso" px unas de otras
   const cuarto = (k, n, paso) => { const R = Math.max(1, n - 1) * paso / (Math.PI / 2), a = (n > 1 ? k / (n - 1) : 0) * Math.PI / 2; return [R * Math.sin(a), -k * 90, R * Math.cos(a) - R]; };
-  const parada = (si) => modo === "arc"
+  const parada = (si) => modo === "slalom"
+    ? [si % 2 ? 560 : -560, si * 820, -si * 260]
+    : modo === "arc"
     ? cuarto(si, stops.length, 1500)
     : modo === "track"
     ? [si * 1250, -si * 620 + Math.sin(si * 1.7) * 160, -si * 340]
@@ -93,7 +96,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "arc"
+  const suelta = (g) => modo === "slalom"
+    ? [g % 2 ? 230 : -230, g * 700, -g * 200, g % 2 ? -6 : 6]
+    : modo === "arc"
     ? [...cuarto(g, nSueltas, 560), -3]
     : modo === "track"
     ? [g * 520, -g * 420 + Math.sin(g * 1.7) * 90, -g * 220, g % 2 ? 4 : -4]
