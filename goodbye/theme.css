@@ -1,0 +1,67 @@
+/* GOODBYE — la carretera al anochecer con el resplandor rojo y azul del coche patrulla y un coche que
+   despega al avanzar; cada prompt bajo una multa que se arranca por la línea de puntos; dos puños que
+   chocan al copiar; reglas a oscuras que barre la linterna. */
+
+.reel-goodbye body { background: #0B1636; }
+.reel-goodbye body::before { background: none; }
+#road { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-goodbye .slab { background: rgba(10, 14, 28, .88); border-color: rgba(170, 190, 255, .14); }
+.reel-goodbye .slab.hero { background: rgba(16, 10, 18, .88); }
+
+/* ---------- el prompt, bajo una multa ---------- */
+.fine { position: relative; border-radius: 14px; overflow: hidden; --tear: 0; }
+.fine.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(3px); opacity: .5; }
+.fine .code { transition: filter .5s .3s, opacity .5s .3s; }
+.ticket {
+  position: absolute; inset: 0; z-index: 2; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
+  padding: 34px 18px 18px; border-radius: 6px; color: #1E2230;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 27px, rgba(70, 100, 170, .16) 27px 28px),
+    linear-gradient(180deg, #FBF7EE, #EFE8DA);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .45);
+  transform-origin: 100% 0;
+  transform: rotate(calc(var(--tear) * 5deg)) translateY(calc(var(--tear) * 6px));
+  transition: transform .2s;
+}
+.fine.off .ticket { transform: translate(-10%, 120%) rotate(22deg); opacity: 0; transition: transform .8s cubic-bezier(.5, 0, .7, .4), opacity .5s .3s; }
+.ticket .perf { position: absolute; left: 0; right: 0; top: 14px; height: 2px; background: repeating-linear-gradient(90deg, rgba(30, 34, 48, .55) 0 6px, transparent 6px 11px); }
+.ticket .rip { position: absolute; left: 0; top: -3px; height: 8px; width: calc(var(--tear) * 100%); background: #0A0E1C; clip-path: polygon(0 40%, 4% 0, 8% 60%, 12% 10%, 16% 70%, 20% 20%, 24% 60%, 28% 10%, 32% 70%, 36% 20%, 40% 60%, 44% 0, 48% 70%, 52% 20%, 56% 60%, 60% 10%, 64% 70%, 68% 20%, 72% 60%, 76% 0, 80% 70%, 84% 20%, 88% 60%, 92% 10%, 96% 70%, 100% 30%, 100% 100%, 0 100%); }
+.ticket .tab {
+  position: absolute; left: 10px; top: -13px; padding: 6px 10px; border-radius: 999px;
+  font: 800 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: #fff; background: var(--signal);
+  transform: translateX(calc(var(--tear) * 220px)); box-shadow: 0 0 14px rgba(255, 42, 31, .5);
+}
+.ticket .head { margin: 0 0 12px; font: 400 26px/1 var(--display); letter-spacing: .08em; color: var(--signal); }
+.ticket dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; font: 600 12px/1.45 var(--mono); }
+.ticket dt { text-transform: uppercase; letter-spacing: .12em; color: rgba(30, 34, 48, .55); }
+.ticket dd { margin: 0; font-family: var(--body); font-weight: 700; font-size: 14px; color: #1E2230; }
+.ticket .stamp {
+  position: absolute; right: 16px; bottom: 18px; padding: 8px 12px; border: 3px solid rgba(40, 80, 200, .7); border-radius: 6px;
+  font: 800 12px/1 var(--mono); letter-spacing: .16em; color: rgba(40, 80, 200, .8); transform: rotate(-8deg);
+}
+
+/* dos puños al copiar */
+.fist { position: fixed; z-index: 46; font-size: 40px; line-height: 1; pointer-events: none; margin: -20px 0 0 -20px; }
+.fist.l { animation: puno-l .55s cubic-bezier(.3, 0, .2, 1) forwards; }
+.fist.r { animation: puno-r .55s cubic-bezier(.3, 0, .2, 1) forwards; }
+@keyframes puno-l { 0% { transform: translateX(-90px); opacity: 0; } 45% { transform: translateX(-22px); opacity: 1; } 60% { transform: translateX(-28px); } 100% { transform: translateX(-40px) translateY(-10px); opacity: 0; } }
+@keyframes puno-r { 0% { transform: translateX(90px); opacity: 0; } 45% { transform: translateX(22px); opacity: 1; } 60% { transform: translateX(28px); } 100% { transform: translateX(40px) translateY(-10px); opacity: 0; } }
+.bump { position: fixed; z-index: 45; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; pointer-events: none; border: 3px solid rgba(255, 255, 255, .9); animation: bump .55s ease-out .22s both; }
+@keyframes bump { 0% { transform: scale(.3); opacity: 0; } 20% { opacity: 1; } 100% { transform: scale(3.4); opacity: 0; } }
+
+/* ---------- reglas: a oscuras, con la linterna ---------- */
+.reel-goodbye .slab.rule { cursor: pointer; overflow: hidden; }
+.slab.rule .night {
+  --fx: -20%; --fy: 40%; --fr: 70px;
+  position: absolute; inset: 0; z-index: 3; pointer-events: none; border-radius: inherit;
+  background: radial-gradient(circle var(--fr) at var(--fx) var(--fy), rgba(255, 245, 210, .08) 0, transparent 70%, rgba(4, 6, 14, .95) 100%);
+  transition: opacity .5s;
+}
+.slab.rule.lit .night { opacity: 0; }
+.slab.rule .hint { position: absolute; left: 0; right: 0; bottom: 16px; z-index: 4; text-align: center; pointer-events: none; font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: rgba(190, 205, 255, .8); }
+.slab.rule.lit .hint { visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ticket, .fine.off .ticket, .fine .code, .slab.rule .night { transition: none; }
+  .fist, .bump { animation: none; display: none; }
+}
