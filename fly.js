@@ -60,6 +60,7 @@
   //   arc    — un cuarto de vuelta hacia la derecha alrededor de un punto, como la cámara que rodea a alguien
   //   slalom — baja haciendo eses anchas, de un lado a otro, como una tabla bajando por una ladera
   //   liftoff — la primera mitad avanza en llano hacia la derecha y la segunda sube en vertical, como un coche que despega
+  //   swing — baja en arco y vuelve a subir hacia la derecha, como el asiento de un columpio de un extremo al otro
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -70,7 +71,11 @@
   const cuarto = (k, n, paso) => { const R = Math.max(1, n - 1) * paso / (Math.PI / 2), a = (n > 1 ? k / (n - 1) : 0) * Math.PI / 2; return [R * Math.sin(a), -k * 90, R * Math.cos(a) - R]; };
   // liftoff: la mitad del recorrido por la carretera y la otra mitad hacia arriba
   const despega = (k, n, px, py) => { const h = Math.floor((n - 1) / 2); return k <= h ? [k * px, 0, -k * 150] : [h * px, -(k - h) * py, -h * 150 - (k - h) * 120]; };
-  const parada = (si) => modo === "liftoff"
+  // swing: un arco en U, abajo en el centro del recorrido y arriba en los dos extremos; u va de -1 a 1
+  const columpio = (k, n, px, hondo) => { const u = n > 1 ? 2 * k / (n - 1) - 1 : 0; return [k * px, hondo * (1 - u * u), -k * 160, u]; };
+  const parada = (si) => modo === "swing"
+    ? columpio(si, stops.length, 1350, 1300).slice(0, 3)
+    : modo === "liftoff"
     ? despega(si, stops.length, 1400, 1150)
     : modo === "slalom"
     ? [si % 2 ? 560 : -560, si * 820, -si * 260]
@@ -101,7 +106,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "liftoff"
+  const suelta = (g) => modo === "swing"
+    ? ((c) => [c[0], c[1], c[2], -c[3] * 6])(columpio(g, nSueltas, 540, 900))
+    : modo === "liftoff"
     ? [...despega(g, nSueltas, 560, 820), 0]
     : modo === "slalom"
     ? [g % 2 ? 230 : -230, g * 700, -g * 200, g % 2 ? -6 : 6]

@@ -1,0 +1,80 @@
+/* SWING — el sueño de fondo: cielo azul, un mar de cúmulos con luz lima entre ellos, la ladera de hierba
+   y un columpio azul colgado del cielo que se mece de verdad (péndulo) y se empuja tocando el cielo; cada
+   prompt está tapado por una ventana de cielo con un columpio pequeño que hay que empujar hasta que se
+   suelta; al copiar suben nubecitas; las reglas tienen los ojos cerrados y se despiertan parpadeando. */
+
+.reel-swing body { background: #1D4C9E; }
+.reel-swing body::before { background: none; }
+#dream { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-swing .slab { background: rgba(9, 22, 52, .84); border-color: rgba(204, 255, 0, .14); }
+.reel-swing .slab.hero { background: rgba(9, 22, 52, .9); }
+
+/* ---------- el prompt, tapado por una ventana de cielo con un columpio ---------- */
+.perch { position: relative; border-radius: 14px; overflow: hidden; }
+.perch.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(4px); opacity: .45; }
+.perch .code { transition: filter .6s .2s, opacity .6s .2s; }
+.skywin {
+  position: absolute; inset: 0; z-index: 2; overflow: hidden; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none;
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse 30% 14% at 12% 100%, #fff 0 55%, transparent 70%),
+    radial-gradient(ellipse 26% 16% at 38% 102%, #F4F6FA 0 55%, transparent 70%),
+    radial-gradient(ellipse 30% 13% at 66% 100%, #fff 0 55%, transparent 70%),
+    radial-gradient(ellipse 26% 15% at 92% 101%, #F1F4F9 0 55%, transparent 70%),
+    radial-gradient(ellipse 70% 14% at 50% 96%, rgba(204, 255, 0, .75), transparent 75%),
+    linear-gradient(180deg, #1F56B8 0%, #4F87D6 55%, #A9CCEF 88%, #DDEBF6 100%);
+  transition: opacity .7s .35s, transform .9s .35s, filter .7s .35s;
+}
+.perch.off .skywin { opacity: 0; transform: translateY(-6%) scale(1.04); filter: blur(6px); pointer-events: none; }
+.skywin .lbl { position: absolute; left: 14px; top: 14px; font: 800 10px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: rgba(255, 255, 255, .8); }
+.skywin .hint {
+  position: absolute; left: 0; right: 0; bottom: 18%; text-align: center; pointer-events: none;
+  font: 800 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #fff;
+  text-shadow: 0 1px 2px rgba(9, 22, 52, .6), 0 0 14px rgba(9, 22, 52, .5);
+}
+.skywin .hint b { color: #CCFF00; }
+/* el columpio pequeño: las cuerdas salen de por encima de la ventana; gira alrededor de un punto fuera de cuadro */
+.skywin .mini { position: absolute; left: 50%; top: -220px; width: 0; height: calc(220px + 46%); transform-origin: 0 0; will-change: transform; }
+.skywin .mini::before, .skywin .mini::after {
+  content: ""; position: absolute; top: 0; bottom: 6px; width: 2px; border-radius: 1px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .35), rgba(255, 255, 255, .95));
+  box-shadow: 0 0 6px rgba(255, 255, 255, .55);
+}
+.skywin .mini::before { left: -44px; }
+.skywin .mini::after { left: 42px; }
+.skywin .plank {
+  position: absolute; left: -54px; bottom: -6px; width: 108px; height: 14px; border-radius: 3px;
+  background:
+    linear-gradient(90deg, transparent 33%, rgba(60, 110, 150, .5) 33% 34%, transparent 34% 66%, rgba(60, 110, 150, .5) 66% 67%, transparent 67%),
+    radial-gradient(ellipse 10px 3px at 30% 40%, rgba(240, 232, 214, .7), transparent),
+    linear-gradient(180deg, #BFE3F6, #8CC3E2 60%, #5F98BC);
+  box-shadow: 0 6px 10px rgba(9, 22, 52, .35);
+}
+.perch.off .mini { transition: transform 1.1s cubic-bezier(.3, 0, .2, 1); }
+
+/* al copiar: suben nubecitas con luz lima */
+.puff { position: fixed; z-index: 45; pointer-events: none; border-radius: 50%; background: #fff; box-shadow: 0 0 18px 4px rgba(204, 255, 0, .55); animation: sube 1.3s cubic-bezier(.2, .6, .3, 1) forwards; }
+@keyframes sube { 0% { transform: translate(0, 0) scale(.3); opacity: 0; } 18% { opacity: .95; } 100% { transform: translate(var(--dx), -120px) scale(1.15); opacity: 0; } }
+
+/* ---------- reglas: con los ojos cerrados, se despiertan parpadeando ---------- */
+.reel-swing .slab.rule { cursor: pointer; overflow: hidden; }
+.reel-swing .slab.rule > :not(.lid):not(.hint) { transition: filter .9s .5s; }
+.reel-swing .slab.rule.sleep > :not(.lid):not(.hint) { filter: blur(5px); }
+.slab.rule .lid {
+  position: absolute; left: -4%; right: -4%; z-index: 3; height: 54%; pointer-events: none;
+  background: linear-gradient(180deg, #08142F, #0D1E44);
+}
+.slab.rule .lid.up { top: 0; border-radius: 0 0 50% 50% / 0 0 26% 26%; box-shadow: 0 4px 0 rgba(204, 255, 0, .25); }
+.slab.rule .lid.dn { bottom: 0; border-radius: 50% 50% 0 0 / 26% 26% 0 0; background: linear-gradient(0deg, #08142F, #0D1E44); box-shadow: 0 -4px 0 rgba(204, 255, 0, .25); }
+.slab.rule.awake .lid.up { animation: lid-up 1.5s cubic-bezier(.4, 0, .2, 1) forwards; }
+.slab.rule.awake .lid.dn { animation: lid-dn 1.5s cubic-bezier(.4, 0, .2, 1) forwards; }
+@keyframes lid-up { 0% { transform: translateY(0); } 28% { transform: translateY(-48%); } 42% { transform: translateY(-4%); } 100% { transform: translateY(-104%); } }
+@keyframes lid-dn { 0% { transform: translateY(0); } 28% { transform: translateY(48%); } 42% { transform: translateY(4%); } 100% { transform: translateY(104%); } }
+.slab.rule .hint { position: absolute; left: 0; right: 0; top: 50%; z-index: 4; margin-top: -6px; text-align: center; pointer-events: none; font: 700 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: rgba(204, 255, 0, .85); }
+.slab.rule.awake .hint { visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .skywin, .perch .code, .perch.off .mini, .reel-swing .slab.rule > :not(.lid):not(.hint) { transition: none; }
+  .puff { animation: none; display: none; }
+  .slab.rule.awake .lid { animation: none; display: none; }
+}
