@@ -2,11 +2,11 @@
    despega al avanzar; cada prompt bajo una multa que se arranca por la línea de puntos; dos puños que
    chocan al copiar; reglas a oscuras que barre la linterna. */
 
-.reel-goodbye body { background: #0B1636; }
-.reel-goodbye body::before { background: none; }
+.reel-tesla body { background: #0B1636; }
+.reel-tesla body::before { background: none; }
 #road { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
-.reel-goodbye .slab { background: rgba(10, 14, 28, .88); border-color: rgba(170, 190, 255, .14); }
-.reel-goodbye .slab.hero { background: rgba(16, 10, 18, .88); }
+.reel-tesla .slab { background: rgba(10, 14, 28, .88); border-color: rgba(170, 190, 255, .14); }
+.reel-tesla .slab.hero { background: rgba(16, 10, 18, .88); }
 
 /* ---------- el prompt, bajo una multa ---------- */
 .fine { position: relative; border-radius: 14px; overflow: hidden; --tear: 0; }
@@ -50,7 +50,7 @@
 @keyframes bump { 0% { transform: scale(.3); opacity: 0; } 20% { opacity: 1; } 100% { transform: scale(3.4); opacity: 0; } }
 
 /* ---------- reglas: a oscuras, con la linterna ---------- */
-.reel-goodbye .slab.rule { cursor: pointer; overflow: hidden; }
+.reel-tesla .slab.rule { cursor: pointer; overflow: hidden; }
 .slab.rule .night {
   --fx: -20%; --fy: 40%; --fr: 70px;
   position: absolute; inset: 0; z-index: 3; pointer-events: none; border-radius: inherit;
