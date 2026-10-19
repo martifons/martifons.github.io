@@ -1,0 +1,57 @@
+/* BROOM — el pinar pasando por la ventanilla del copiloto (troncos en tres capas a distinta velocidad, la
+   pista de tierra, el retrovisor y el marco de la puerta) con una chica en escoba que primero va al lado del
+   coche y luego sube por encima de los pinos; cada prompt está bajo un montón de hojas que se barren con el
+   dedo; al copiar sale volando una escoba; las reglas pasan por la ventanilla y frenan. */
+
+.reel-broom body { background: #2E3527; }
+.reel-broom body::before { background: none; }
+#drive { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-broom .slab { background: rgba(20, 22, 17, .86); border-color: rgba(230, 210, 170, .14); }
+.reel-broom .slab.hero { background: rgba(16, 18, 14, .9); }
+
+/* ---------- el prompt, bajo un montón de hojas que se barren ---------- */
+.leaves { position: relative; border-radius: 14px; overflow: hidden; }
+.leaves.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(4px); opacity: .4; }
+.leaves .code { transition: filter .6s .2s, opacity .6s .2s; }
+.leafbed {
+  position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; display: block;
+  cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; border-radius: 14px;
+  transition: opacity .7s .2s;
+}
+.leaves.off .leafbed { opacity: 0; pointer-events: none; }
+.leaves .hint {
+  position: absolute; left: 0; right: 0; bottom: 16px; z-index: 3; text-align: center; pointer-events: none;
+  font: 800 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .8); transition: opacity .3s;
+}
+.leaves .hint b { color: #CCFF00; }
+.leaves.off .hint { opacity: 0; }
+
+/* al copiar: una escoba sale volando del botón */
+.flyer { position: fixed; z-index: 46; font-size: 30px; line-height: 1; pointer-events: none; margin: -15px 0 0 -15px; animation: vuela 1.2s cubic-bezier(.5, 0, .7, .3) forwards; }
+@keyframes vuela {
+  0% { transform: translate(0, 0) rotate(0) scale(.6); opacity: 0; }
+  12% { opacity: 1; transform: translate(10px, -6px) rotate(-8deg) scale(1); }
+  100% { transform: translate(var(--dx), -70vh) rotate(-24deg) scale(.5); opacity: 0; }
+}
+.trail { position: fixed; z-index: 45; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: #CCFF00; pointer-events: none; animation: rastro .9s ease-out forwards; }
+@keyframes rastro { 0% { opacity: .9; } 100% { opacity: 0; transform: translateY(14px) scale(.4); } }
+
+/* ---------- reglas: pasan por la ventanilla y frenan ---------- */
+.reel-broom .slab.rule { cursor: pointer; overflow: hidden; }
+.reel-broom .slab.rule.wait > * { opacity: 0; }
+.reel-broom .slab.rule.pass > * { animation: pasa 1.1s cubic-bezier(.15, .7, .25, 1) both; }
+.reel-broom .slab.rule.pass > *:nth-child(2) { animation-delay: .06s; }
+.reel-broom .slab.rule.pass > *:nth-child(3) { animation-delay: .12s; }
+@keyframes pasa {
+  0% { opacity: 0; transform: translateX(70%) skewX(-14deg); filter: blur(10px); }
+  45% { opacity: 1; filter: blur(3px); }
+  80% { transform: translateX(-3%) skewX(2deg); filter: blur(0); }
+  100% { opacity: 1; transform: none; filter: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leaves .code, .leafbed { transition: none; }
+  .flyer, .trail { animation: none; display: none; }
+  .reel-broom .slab.rule.pass > *, .reel-broom .slab.rule.wait > * { animation: none; opacity: 1; }
+}

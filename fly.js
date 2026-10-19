@@ -62,6 +62,7 @@
   //   liftoff — la primera mitad avanza en llano hacia la derecha y la segunda sube en vertical, como un coche que despega
   //   swing — baja en arco y vuelve a subir hacia la derecha, como el asiento de un columpio de un extremo al otro
   //   bounce — avanza a la derecha botando, cada bote más bajo que el anterior, como una piedra de granizo en el asfalto
+  //   loop — un rizo: sube, pasa por arriba hacia atrás y vuelve a bajar hacia la derecha, como una escoba haciendo una vuelta de campana
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -76,7 +77,27 @@
   const columpio = (k, n, px, hondo) => { const u = n > 1 ? 2 * k / (n - 1) - 1 : 0; return [k * px, hondo * (1 - u * u), -k * 160, u]; };
   // bounce: las paradas pares en lo alto de cada bote y las impares en el suelo; cada bote, un 28 % más bajo
   const bote = (k, px, alto) => [k * px, k % 2 ? 0 : -alto * Math.pow(.72, k / 2), 0];
-  const parada = (si) => modo === "bounce"
+  // loop: un tramo recto, un rizo completo que avanza un poco a la derecha y otro tramo recto; las paradas
+  // se reparten a la misma distancia a lo largo del camino (en unidades del radio del rizo, escaladas a px)
+  const rizo = (k, n, esc) => {
+    const a = 1.2, d = 1.2, N = 480, pts = [[0, 0, 0]];
+    const punto = (t) => {
+      if (t < .2) return [a * t / .2, 0];
+      if (t > .8) return [a + d + a * (t - .8) / .2, 0];
+      const u = (t - .2) / .6, th = -Math.PI / 2 + u * 2 * Math.PI;
+      return [a + Math.cos(th) + d * u, 1 + Math.sin(th)];
+    };
+    let L = 0, prev = punto(0);
+    for (let i = 1; i <= N; i++) { const q = punto(i / N); L += Math.hypot(q[0] - prev[0], q[1] - prev[1]); pts.push([q[0], q[1], L]); prev = q; }
+    const meta = (n > 1 ? k / (n - 1) : 0) * L;
+    let i = 1; while (i < N && pts[i][2] < meta) i++;
+    const p0 = pts[i - 1], p1 = pts[i], f = p1[2] > p0[2] ? (meta - p0[2]) / (p1[2] - p0[2]) : 0;
+    const x = p0[0] + (p1[0] - p0[0]) * f, y = p0[1] + (p1[1] - p0[1]) * f;
+    return [x * esc, -y * esc, Math.atan2(p1[1] - p0[1], p1[0] - p0[0])];
+  };
+  const parada = (si) => modo === "loop"
+    ? ((r) => [r[0], r[1], -si * 220])(rizo(si, stops.length, 900))
+    : modo === "bounce"
     ? ((b) => [b[0], b[1], -si * 300])(bote(si, 1250, 900))
     : modo === "swing"
     ? columpio(si, stops.length, 1350, 1300).slice(0, 3)
@@ -111,7 +132,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "bounce"
+  const suelta = (g) => modo === "loop"
+    ? ((r) => [r[0], r[1], -g * 160, Math.sin(r[2]) * 6])(rizo(g, nSueltas, 640))
+    : modo === "bounce"
     ? ((b) => [b[0], b[1], -g * 180, g % 2 ? 3 : -3])(bote(g, 520, 420))
     : modo === "swing"
     ? ((c) => [c[0], c[1], c[2], -c[3] * 6])(columpio(g, nSueltas, 540, 900))
