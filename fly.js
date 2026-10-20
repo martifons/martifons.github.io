@@ -63,6 +63,7 @@
   //   swing — baja en arco y vuelve a subir hacia la derecha, como el asiento de un columpio de un extremo al otro
   //   bounce — avanza a la derecha botando, cada bote más bajo que el anterior, como una piedra de granizo en el asfalto
   //   loop — un rizo: sube, pasa por arriba hacia atrás y vuelve a bajar hacia la derecha, como una escoba haciendo una vuelta de campana
+  //   curl — se enrosca en espiral hacia dentro, cada vuelta más cerrada, como un animal que se acurruca para dormir
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -95,7 +96,21 @@
     const x = p0[0] + (p1[0] - p0[0]) * f, y = p0[1] + (p1[1] - p0[1]) * f;
     return [x * esc, -y * esc, Math.atan2(p1[1] - p0[1], p1[0] - p0[0])];
   };
-  const parada = (si) => modo === "loop"
+  // curl: una espiral que se cierra hacia dentro (de radio 1 a 0,5 en vuelta y media); las paradas a la
+  // misma distancia a lo largo de la espiral, escalada a px
+  const enrosca = (k, n, esc) => {
+    const tope = 1.5 * 2 * Math.PI, N = 600, pts = [[1, 0, 0]];
+    const punto = (t) => { const th = t * tope, r = 1 - .5 * t; return [r * Math.cos(th), r * Math.sin(th) * .7]; };
+    let L = 0, prev = punto(0);
+    for (let i = 1; i <= N; i++) { const q = punto(i / N); L += Math.hypot(q[0] - prev[0], q[1] - prev[1]); pts.push([q[0], q[1], L]); prev = q; }
+    const meta = (n > 1 ? k / (n - 1) : 0) * L;
+    let i = 1; while (i < N && pts[i][2] < meta) i++;
+    const p0 = pts[i - 1], p1 = pts[i], f = p1[2] > p0[2] ? (meta - p0[2]) / (p1[2] - p0[2]) : 0;
+    return [(p0[0] + (p1[0] - p0[0]) * f - 1) * esc, (p0[1] + (p1[1] - p0[1]) * f) * esc, Math.atan2(p1[1] - p0[1], p1[0] - p0[0])];
+  };
+  const parada = (si) => modo === "curl"
+    ? ((r) => [r[0], r[1], -si * 200])(enrosca(si, stops.length, 1500))
+    : modo === "loop"
     ? ((r) => [r[0], r[1], -si * 220])(rizo(si, stops.length, 900))
     : modo === "bounce"
     ? ((b) => [b[0], b[1], -si * 300])(bote(si, 1250, 900))
@@ -132,7 +147,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "loop"
+  const suelta = (g) => modo === "curl"
+    ? ((r) => [r[0], r[1], -g * 150, Math.cos(r[2]) * 5])(enrosca(g, nSueltas, 900))
+    : modo === "loop"
     ? ((r) => [r[0], r[1], -g * 160, Math.sin(r[2]) * 6])(rizo(g, nSueltas, 640))
     : modo === "bounce"
     ? ((b) => [b[0], b[1], -g * 180, g % 2 ? 3 : -3])(bote(g, 520, 420))
