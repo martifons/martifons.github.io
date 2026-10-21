@@ -1,0 +1,60 @@
+/* SIREN — el banco de arena visto desde la puerta del helicóptero: agua turquesa con corales y destellos, la
+   arena con sus ondas, y la sirena que se arrastra hacia el agua dejando un surco y desaparece; cada prompt está
+   bajo el agua y hay que seguir una perla con el dedo hasta que el agua se abre; al copiar suben burbujas; las
+   reglas salen a la superficie temblando como vistas a través del agua. */
+
+.reel-siren body { background: #1E6E74; }
+.reel-siren body::before { background: none; }
+#shoal { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-siren .slab { background: rgba(8, 32, 38, .86); border-color: rgba(160, 235, 230, .16); }
+.reel-siren .slab.hero { background: rgba(7, 27, 32, .9); }
+
+/* ---------- el prompt, bajo el agua: seguir la perla ---------- */
+.lure { position: relative; border-radius: 14px; overflow: hidden; --x: 50%; --y: 45%; --hole: 0%; --prog: 0; }
+.lure.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(4px); opacity: .4; }
+.lure .code { transition: filter .6s .2s, opacity .6s .2s; }
+.depth {
+  position: absolute; inset: 0; z-index: 2; border-radius: 14px; cursor: crosshair; touch-action: none; user-select: none; -webkit-user-select: none;
+  background:
+    repeating-radial-gradient(ellipse 60px 26px at 30% 30%, rgba(190, 250, 245, .07) 0 2px, transparent 2px 14px),
+    repeating-radial-gradient(ellipse 50px 22px at 70% 70%, rgba(190, 250, 245, .06) 0 2px, transparent 2px 12px),
+    linear-gradient(180deg, #1C7C82, #0E4F57 60%, #0A3940);
+  -webkit-mask-image: radial-gradient(circle at var(--x) var(--y), transparent var(--hole), #000 calc(var(--hole) + 1.5%));
+          mask-image: radial-gradient(circle at var(--x) var(--y), transparent var(--hole), #000 calc(var(--hole) + 1.5%));
+  animation: brillo 6s linear infinite;
+}
+@keyframes brillo { to { background-position: 40px 20px, -30px 16px, 0 0; } }
+.depth .pearl {
+  position: absolute; left: var(--x); top: var(--y); width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle at 35% 30%, #fff, #E8F3F2 40%, #B7CCCB 75%, #8FA6A6);
+  box-shadow: 0 0 18px 4px rgba(220, 255, 250, .55);
+}
+.depth .ring { position: absolute; left: var(--x); top: var(--y); width: 64px; height: 64px; margin: -32px 0 0 -32px; pointer-events: none; transform: rotate(-90deg); }
+.depth .ring circle { fill: none; stroke-width: 3; }
+.depth .ring .bg { stroke: rgba(220, 255, 250, .25); }
+.depth .ring .fg { stroke: #CCFF00; stroke-linecap: round; stroke-dasharray: 188; stroke-dashoffset: calc(188 - var(--prog) * 188); }
+.depth .hint { position: absolute; left: 0; right: 0; bottom: 16px; margin: 0; text-align: center; pointer-events: none; font: 800 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #E9FBF8; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
+.depth .hint b { color: #CCFF00; }
+.lure.off .depth { pointer-events: none; }
+.lure.off .depth .pearl, .lure.off .depth .ring, .lure.off .depth .hint { opacity: 0; transition: opacity .3s; }
+
+/* al copiar: suben burbujas */
+.bub { position: fixed; z-index: 45; border-radius: 50%; pointer-events: none; border: 1.5px solid rgba(225, 255, 250, .9); background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, .8) 0 18%, rgba(200, 245, 240, .15) 30%, transparent 70%); animation: burbuja 1.6s ease-out forwards; }
+@keyframes burbuja {
+  0% { transform: translate(0, 0) scale(.4); opacity: 0; }
+  15% { opacity: 1; }
+  50% { transform: translate(calc(var(--dx) * .6), -80px) scale(1); }
+  100% { transform: translate(var(--dx), -170px) scale(1.15); opacity: 0; }
+}
+
+/* ---------- reglas: salen a la superficie ---------- */
+.reel-siren .slab.rule { cursor: pointer; }
+.reel-siren .slab.rule.deep > * { opacity: .55; }
+.reel-siren .slab.rule > * { transition: opacity .9s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lure .code, .reel-siren .slab.rule > * { transition: none; }
+  .depth, .bub { animation: none; }
+  .bub { display: none; }
+  .reel-siren .slab.rule.deep > * { opacity: 1; }
+}
