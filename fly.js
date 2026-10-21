@@ -66,6 +66,7 @@
   //   curl — se enrosca en espiral hacia dentro, cada vuelta más cerrada, como un animal que se acurruca para dormir
   //   barrel — avanza a la derecha girando alrededor del eje del avance, como quien atraviesa el tubo de una ola
   //   tide — retrocede hacia la izquierda subiendo y bajando con el oleaje, como la marea que se retira
+  //   steps — sube en escalera hacia la izquierda, un paso de lado y uno arriba, como una cabra de repisa en repisa
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -112,7 +113,11 @@
   };
   // barrel: un sacacorchos horizontal; el ángulo avanza 1,1 rad por parada y la profundidad nunca vuelve hacia la cámara
   const tubo = (k, px, r) => { const a = k * 1.1; return [k * px, -r * Math.sin(a), -r * (1 - Math.cos(a)) - k * 200, a]; };
-  const parada = (si) => modo === "tide"
+  // steps: las paradas pares avanzan hacia la izquierda y las impares suben, como peldaños
+  const peldano = (k, px, py) => [-Math.ceil(k / 2) * px, -Math.floor(k / 2) * py];
+  const parada = (si) => modo === "steps"
+    ? ((p) => [p[0], p[1], -si * 240])(peldano(si, 1300, 1150))
+    : modo === "tide"
     ? [-si * 1250, Math.sin(si * 1.3) * 320, -si * 260]
     : modo === "barrel"
     ? tubo(si, 1150, 650).slice(0, 3)
@@ -155,7 +160,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "tide"
+  const suelta = (g) => modo === "steps"
+    ? ((p) => [p[0], p[1], -g * 160, g % 2 ? -3 : 3])(peldano(g, 540, 860))
+    : modo === "tide"
     ? [-g * 530, Math.sin(g * 1.3) * 170, -g * 170, Math.cos(g * 1.3) * 4]
     : modo === "barrel"
     ? ((t) => [t[0], t[1], t[2], Math.sin(t[3]) * 7])(tubo(g, 520, 300))
