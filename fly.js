@@ -68,6 +68,7 @@
   //   tide — retrocede hacia la izquierda subiendo y bajando con el oleaje, como la marea que se retira
   //   steps — sube en escalera hacia la izquierda, un paso de lado y uno arriba, como una cabra de repisa en repisa
   //   lotus — en espiral áurea hacia fuera, cada parada 137,5° más allá y un poco más lejos, como los anillos de una gota en un lago
+  //   topple — un tercio en llano hacia la derecha y el resto en un cuarto de círculo hacia abajo, como un poste que se vuelca al chocar
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -118,7 +119,17 @@
   const peldano = (k, px, py) => [-Math.ceil(k / 2) * px, -Math.floor(k / 2) * py];
   // lotus: el ángulo áureo (2,4 rad) y un radio que crece con la raíz del índice; achatado en vertical
   const loto = (k, c) => { const r = c * Math.sqrt(k), a = k * 2.39996; return [r * Math.cos(a), r * Math.sin(a) * .6, a]; };
-  const parada = (si) => modo === "lotus"
+  // topple: el primer tercio de las paradas en línea recta y las demás por un cuarto de círculo que baja hacia la
+  // derecha, con el radio justo para que sigan a "paso" px unas de otras; devuelve también el ángulo de caída
+  const vuelca = (k, n, paso) => {
+    const h = Math.max(1, Math.round((n - 1) / 3)), m = Math.max(1, n - 1 - h), R = paso * m / (Math.PI / 2);
+    if (k <= h) return [k * paso, 0, 0];
+    const a = (k - h) / m * Math.PI / 2;
+    return [h * paso + R * Math.sin(a), R * (1 - Math.cos(a)), a];
+  };
+  const parada = (si) => modo === "topple"
+    ? ((v) => [v[0], v[1], -si * 220])(vuelca(si, stops.length, 1400))
+    : modo === "lotus"
     ? ((p) => [p[0], p[1], -si * 200])(loto(si, 900))
     : modo === "steps"
     ? ((p) => [p[0], p[1], -si * 240])(peldano(si, 1300, 1150))
@@ -165,7 +176,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "lotus"
+  const suelta = (g) => modo === "topple"
+    ? ((v) => [v[0], v[1], -g * 150, v[2] * 4])(vuelca(g, nSueltas, 800))
+    : modo === "lotus"
     ? ((p) => [p[0], p[1], -g * 140, Math.sin(p[2]) * 4])(loto(g, 520))
     : modo === "steps"
     ? ((p) => [p[0], p[1], -g * 160, g % 2 ? -3 : 3])(peldano(g, 540, 860))

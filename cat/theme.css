@@ -1,0 +1,86 @@
+/* CAT — una calle de pueblo a la hora dorada, con casas de teja, cables y el poste de las señales a la derecha; el gato
+   en su escoba se acerca al avanzar y en la última parada se estampa contra el poste; cada prompt está detrás de la
+   calle y hay que devolverle el saludo al gato (mover el dedo de lado a lado) hasta que, mirándote, choca con el
+   poste y lo tumba; al copiar saltan estrellitas de golpe; las reglas cuelgan torcidas como señales y se enderezan. */
+
+.reel-cat body { background: #C9D6DF; }
+.reel-cat body::before { background: none; }
+#street { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-cat .slab { background: rgba(26, 22, 18, .86); border-color: rgba(255, 236, 200, .16); }
+.reel-cat .slab.hero { background: rgba(22, 18, 15, .9); }
+
+/* el gato en su escoba (el mismo dibujo en el fondo y en cada prompt) */
+.cat svg { display: block; width: 100%; height: auto; overflow: visible; }
+.cat .bob { transform-box: fill-box; transform-origin: 50% 50%; animation: flota 2.6s ease-in-out infinite; }
+@keyframes flota { 50% { transform: translateY(-4px) rotate(-1deg); } }
+.cat .paw { transform-box: view-box; transform-origin: 60.5px 68px; }
+.cat.waving .paw { animation: saluda .9s ease-in-out; }
+.cat.waving-long .paw { animation: saluda-largo 1.2s ease-in-out forwards; }
+@keyframes saluda { 22% { transform: rotate(165deg); } 42% { transform: rotate(140deg); } 62% { transform: rotate(165deg); } 80% { transform: rotate(145deg); } }
+@keyframes saluda-largo { 15% { transform: rotate(165deg); } 30% { transform: rotate(140deg); } 45% { transform: rotate(165deg); } 60% { transform: rotate(140deg); } 75%, 100% { transform: rotate(160deg); } }
+
+/* ---------- el fondo: el gato y el poste ---------- */
+#flier { position: fixed; left: 0; top: 0; z-index: 2; width: 150px; pointer-events: none; transform-origin: 50% 50%; transition: transform 1.1s cubic-bezier(.4, 0, .2, 1); filter: drop-shadow(0 10px 8px rgba(60, 40, 20, .25)); }
+#flier.crash { transition: transform .5s cubic-bezier(.5, 0, 1, 1); }
+#flier.down { transition: transform .7s cubic-bezier(.55, 0, 1, .5); }
+#bigpost { position: fixed; right: 7vw; bottom: 7vh; z-index: 2; width: clamp(6px, .9vw, 11px); height: 50vh; pointer-events: none; transform-origin: 50% 100%; transition: transform .9s cubic-bezier(.55, 0, 1, .5); background: linear-gradient(90deg, #8E969C, #E4E8EA 40%, #9AA2A8); border-radius: 3px; }
+#bigpost.hit { animation: tiembla .2s; }
+#bigpost.down { transform: perspective(700px) rotateZ(24deg) rotateX(70deg); }
+@keyframes tiembla { 30% { transform: rotate(3deg); } 70% { transform: rotate(-2deg); } }
+.sign { position: absolute; left: 50%; height: 0; width: 0; }
+.sign::before, .sign::after { content: ""; position: absolute; top: 0; height: var(--sh); width: var(--sw); }
+.sign::before { background: #D8352A; }
+.sign::after { background: #F7F4EE; transform: scale(.88, .74); }
+.sign.l { top: 3%; }
+.sign.l::before, .sign.l::after { right: calc(var(--sw) * -.18); clip-path: polygon(0 50%, 16% 0, 100% 0, 100% 100%, 16% 100%); }
+.sign.r { top: calc(3% + var(--sh) * 1.25); }
+.sign.r::before, .sign.r::after { left: calc(var(--sw) * -.18); clip-path: polygon(0 0, 84% 0, 100% 50%, 84% 100%, 0 100%); }
+#bigpost .sign { --sw: clamp(56px, 8vw, 116px); --sh: calc(var(--sw) * .3); }
+
+/* ---------- el prompt, detrás de la calle: devuélvele el saludo ---------- */
+.lane { position: relative; border-radius: 14px; overflow: hidden; }
+.lane.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(4px); opacity: .4; }
+.lane .code { transition: filter .6s .3s, opacity .6s .3s; }
+.street {
+  position: absolute; inset: 0; z-index: 2; border-radius: 14px; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; cursor: ew-resize;
+  background: linear-gradient(180deg, #8DB3D8 0%, #D3E0E8 44%, #F1DDB6 58%);
+  transition: opacity .7s .2s;
+}
+.lane.off .street { opacity: 0; pointer-events: none; }
+.street .bk { position: absolute; inset: 0; width: 100%; height: 100%; }
+.street .post { position: absolute; left: 72%; bottom: 16%; width: 5px; height: 60%; border-radius: 2px; transform-origin: 50% 100%; background: linear-gradient(90deg, #8E969C, #E4E8EA 40%, #9AA2A8); transition: transform .8s cubic-bezier(.55, 0, 1, .5); }
+.street .post .sign { --sw: 54px; --sh: 16px; }
+.street .post.hit { animation: tiembla .2s; }
+.lane.fall .street .post { transform: perspective(500px) rotateZ(24deg) rotateX(70deg); }
+.street .cat { position: absolute; left: 8%; bottom: 24%; width: clamp(96px, 34%, 150px); transition: transform .45s cubic-bezier(.5, 0, 1, 1); filter: drop-shadow(0 8px 6px rgba(60, 40, 20, .25)); }
+.lane.go .street .cat { transform: translate(var(--gx), 0); }
+.lane.fall .street .cat { transform: translate(var(--gx), var(--gy)) rotate(-14deg); transition: transform .6s cubic-bezier(.55, 0, 1, .5); }
+.street .count { position: absolute; left: 0; right: 0; top: 12px; margin: 0; text-align: center; pointer-events: none; font: 800 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #1E2830; text-shadow: 0 1px 2px rgba(255, 255, 255, .6); }
+.street .count b { color: #FF2A1F; }
+.street .hint { position: absolute; left: 50%; bottom: 6%; margin-left: -16px; font-size: 28px; line-height: 1; pointer-events: none; animation: vaiven 1.1s ease-in-out infinite; transition: opacity .3s; }
+.street.started .hint { opacity: 0; }
+@keyframes vaiven { 0%, 100% { transform: translateX(-26px) rotate(-14deg); } 50% { transform: translateX(26px) rotate(14deg); } }
+
+/* golpe: estrellitas que salen del punto del choque (y del botón al copiar) */
+.star { position: absolute; z-index: 3; width: 0; height: 0; pointer-events: none; }
+.star.fixed { position: fixed; z-index: 46; }
+.star i { position: absolute; left: -8px; top: -10px; font: normal 900 18px/1 var(--mono); font-style: normal; color: var(--c); animation: estrella .75s cubic-bezier(.2, .7, .3, 1) forwards; transform: rotate(var(--a)) translateX(0) scale(.3); }
+@keyframes estrella { 70% { opacity: 1; } 100% { transform: rotate(var(--a)) translateX(var(--d)) scale(1); opacity: 0; } }
+
+/* ---------- reglas: cuelgan torcidas como una señal golpeada y se enderezan ---------- */
+.reel-cat .slab.rule { cursor: pointer; }
+.reel-cat .slab.rule > * { transform-origin: 0 0; transition: transform 1s cubic-bezier(.3, 1.9, .5, 1), opacity .5s; }
+.reel-cat .slab.rule.askew > * { transform: rotate(7deg); opacity: .55; }
+.reel-cat .slab.rule.askew > :nth-child(2) { transform: rotate(-5deg); transform-origin: 100% 0; }
+.reel-cat .slab.rule > :nth-child(2) { transition-delay: .12s; }
+.reel-cat .slab.rule > :nth-child(3) { transition-delay: .24s; }
+.reel-cat .slab.rule.bonk > * { animation: bambolea .8s ease-out; }
+.reel-cat .slab.rule.bonk > :nth-child(2) { animation-delay: .06s; }
+.reel-cat .slab.rule.bonk > :nth-child(3) { animation-delay: .12s; }
+@keyframes bambolea { 15% { transform: rotate(5deg); } 40% { transform: rotate(-3deg); } 65% { transform: rotate(1.5deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .lane .code, .street, .street .post, .street .cat, #flier, #bigpost, .reel-cat .slab.rule > * { transition: none; }
+  .cat .bob, .cat.waving .paw, .cat.waving-long .paw, .street .hint, .reel-cat .slab.rule.bonk > *, #bigpost.hit, .street .post.hit { animation: none; }
+  .star { display: none; }
+}
