@@ -1,0 +1,76 @@
+/* TURTLE — el lago visto con teleobjetivo desde la orilla: la orilla de árboles desenfocada, el agua gris verdosa
+   con ondas y reflejos, y la garceta sobre la tortuga, que pica cada vez que se avanza; cada prompt está bajo el
+   agua y hay que arrastrar dos peces hasta la boca de la tortuga; al copiar salta un pez; las reglas salen de su
+   reflejo. */
+
+.reel-turtle body { background: #7E8A82; }
+.reel-turtle body::before { background: none; }
+#lake { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-turtle .slab { background: rgba(20, 28, 24, .86); border-color: rgba(220, 235, 225, .16); }
+.reel-turtle .slab.hero { background: rgba(16, 23, 20, .9); }
+
+/* ---------- el prompt, bajo el agua: dos peces a la boca de la tortuga ---------- */
+.pond { position: relative; border-radius: 14px; overflow: hidden; }
+.pond.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(4px); opacity: .4; }
+.pond .code { transition: filter .6s .3s, opacity .6s .3s; }
+.water {
+  position: absolute; inset: 0; z-index: 2; border-radius: 14px; touch-action: none; user-select: none; -webkit-user-select: none;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, .05) 0 2px, transparent 2px 13px),
+    linear-gradient(180deg, #7C9088, #5A6F67 55%, #45574F);
+  transition: opacity .7s .2s, transform .8s .2s;
+}
+.pond.off .water { opacity: 0; transform: translateY(8%); pointer-events: none; }
+.water .fish {
+  position: absolute; left: 0; top: 0; width: 46px; height: 20px; margin: -10px 0 0 -23px; cursor: grab; touch-action: none;
+  background:
+    radial-gradient(circle at 78% 42%, #111 0 7%, transparent 9%),
+    radial-gradient(ellipse 60% 50% at 58% 50%, #E6ECEE 0 40%, #A9B5BA 75%, transparent 77%);
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .3));
+}
+.water .fish::after { content: ""; position: absolute; left: 0; top: 2px; width: 14px; height: 16px; background: #B7C2C6; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.water .fish.held { cursor: grabbing; filter: drop-shadow(0 6px 6px rgba(0, 0, 0, .4)); }
+.water .fish.gone { display: none; }
+/* la cabeza de la tortuga, a la derecha, con su boca */
+.water .head {
+  position: absolute; right: -6px; top: 40%; width: 92px; height: 64px; pointer-events: none;
+  border-radius: 46% 54% 50% 50% / 52% 52% 48% 48%;
+  background:
+    repeating-linear-gradient(170deg, transparent 0 9px, rgba(230, 200, 60, .55) 9px 11px),
+    radial-gradient(ellipse at 40% 40%, #6F7A44, #4B5530);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .3);
+}
+.water .head::before { content: ""; position: absolute; left: 18px; top: 18px; width: 9px; height: 9px; border-radius: 50%; background: #1A1A10; box-shadow: 0 0 0 2px #C9B95A; }
+.water .mouth {
+  position: absolute; left: 6px; top: 38px; width: 38px; height: 4px; border-radius: 4px; background: #2A2512;
+  transform-origin: 100% 50%; transition: height .18s, top .18s;
+}
+.water.near .mouth { height: 18px; top: 31px; background: radial-gradient(ellipse at 40% 50%, #8A2E25, #3A120E); }
+.water.gulp .head { animation: trago .45s ease-out; }
+@keyframes trago { 30% { transform: scale(1.08) rotate(-4deg); } 100% { transform: none; } }
+.water .count { position: absolute; left: 0; right: 0; top: 12px; margin: 0; text-align: center; pointer-events: none; font: 800 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #F2F6F3; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
+.water .count b { color: #CCFF00; }
+.ring { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; border: 2px solid rgba(240, 250, 245, .8); pointer-events: none; animation: anillo .9s ease-out forwards; }
+@keyframes anillo { to { transform: scale(7, 3); opacity: 0; } }
+
+/* al copiar: un pez salta del botón y cae */
+.jump { position: fixed; z-index: 46; font-size: 26px; line-height: 1; pointer-events: none; margin: -13px 0 0 -13px; animation: salto 1s cubic-bezier(.3, 0, .7, 1) forwards; }
+@keyframes salto {
+  0% { transform: translate(0, 0) rotate(-40deg); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translate(calc(var(--dx) * .5), -110px) rotate(10deg); }
+  100% { transform: translate(var(--dx), 0) rotate(60deg); opacity: 0; }
+}
+
+/* ---------- reglas: salen de su reflejo ---------- */
+.reel-turtle .slab.rule { cursor: pointer; }
+.reel-turtle .slab.rule.mirror > * { transform: scaleY(-1) translateY(-6px); filter: blur(2px); opacity: .45; }
+.reel-turtle .slab.rule > * { transition: transform .9s cubic-bezier(.3, 1.4, .5, 1), filter .7s, opacity .7s; }
+.reel-turtle .slab.rule.mirror > :nth-child(2) { transition-delay: .08s; }
+.reel-turtle .slab.rule.mirror > :nth-child(3) { transition-delay: .16s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pond .code, .water, .reel-turtle .slab.rule > * { transition: none; }
+  .water.gulp .head, .ring, .jump { animation: none; }
+  .jump, .ring { display: none; }
+}

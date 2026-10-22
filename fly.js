@@ -67,6 +67,7 @@
   //   barrel — avanza a la derecha girando alrededor del eje del avance, como quien atraviesa el tubo de una ola
   //   tide — retrocede hacia la izquierda subiendo y bajando con el oleaje, como la marea que se retira
   //   steps — sube en escalera hacia la izquierda, un paso de lado y uno arriba, como una cabra de repisa en repisa
+  //   lotus — en espiral áurea hacia fuera, cada parada 137,5° más allá y un poco más lejos, como los anillos de una gota en un lago
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -115,7 +116,11 @@
   const tubo = (k, px, r) => { const a = k * 1.1; return [k * px, -r * Math.sin(a), -r * (1 - Math.cos(a)) - k * 200, a]; };
   // steps: las paradas pares avanzan hacia la izquierda y las impares suben, como peldaños
   const peldano = (k, px, py) => [-Math.ceil(k / 2) * px, -Math.floor(k / 2) * py];
-  const parada = (si) => modo === "steps"
+  // lotus: el ángulo áureo (2,4 rad) y un radio que crece con la raíz del índice; achatado en vertical
+  const loto = (k, c) => { const r = c * Math.sqrt(k), a = k * 2.39996; return [r * Math.cos(a), r * Math.sin(a) * .6, a]; };
+  const parada = (si) => modo === "lotus"
+    ? ((p) => [p[0], p[1], -si * 200])(loto(si, 900))
+    : modo === "steps"
     ? ((p) => [p[0], p[1], -si * 240])(peldano(si, 1300, 1150))
     : modo === "tide"
     ? [-si * 1250, Math.sin(si * 1.3) * 320, -si * 260]
@@ -160,7 +165,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "steps"
+  const suelta = (g) => modo === "lotus"
+    ? ((p) => [p[0], p[1], -g * 140, Math.sin(p[2]) * 4])(loto(g, 520))
+    : modo === "steps"
     ? ((p) => [p[0], p[1], -g * 160, g % 2 ? -3 : 3])(peldano(g, 540, 860))
     : modo === "tide"
     ? [-g * 530, Math.sin(g * 1.3) * 170, -g * 170, Math.cos(g * 1.3) * 4]
