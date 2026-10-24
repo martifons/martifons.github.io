@@ -69,6 +69,7 @@
   //   steps — sube en escalera hacia la izquierda, un paso de lado y uno arriba, como una cabra de repisa en repisa
   //   lotus — en espiral áurea hacia fuera, cada parada 137,5° más allá y un poco más lejos, como los anillos de una gota en un lago
   //   topple — un tercio en llano hacia la derecha y el resto en un cuarto de círculo hacia abajo, como un poste que se vuelca al chocar
+  //   strike — sube meciéndose de lado a lado y al final sale disparada en recto hacia la derecha, como una serpiente que ataca
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -127,7 +128,16 @@
     const a = (k - h) / m * Math.PI / 2;
     return [h * paso + R * Math.sin(a), R * (1 - Math.cos(a)), a];
   };
-  const parada = (si) => modo === "topple"
+  // strike: el 60 % de las paradas sube en S (la cabeza que se mece) y el resto avanza en recto hacia la derecha a
+  // zancadas más largas (el ataque); devuelve también la inclinación en grados para las targetas sueltas
+  const golpe = (k, n, sx, sy, px) => {
+    const h = Math.max(1, Math.round((n - 1) * .6));
+    if (k <= h) return [Math.sin(k * 1.7) * sx, -k * sy, Math.cos(k * 1.7) * 5];
+    return [Math.sin(h * 1.7) * sx + (k - h) * px, -h * sy, -3];
+  };
+  const parada = (si) => modo === "strike"
+    ? ((v) => [v[0], v[1], -si * 220])(golpe(si, stops.length, 700, 1000, 1700))
+    : modo === "topple"
     ? ((v) => [v[0], v[1], -si * 220])(vuelca(si, stops.length, 1400))
     : modo === "lotus"
     ? ((p) => [p[0], p[1], -si * 200])(loto(si, 900))
@@ -176,7 +186,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "topple"
+  const suelta = (g) => modo === "strike"
+    ? ((v) => [v[0], v[1], -g * 150, v[2]])(golpe(g, nSueltas, 260, 880, 680))
+    : modo === "topple"
     ? ((v) => [v[0], v[1], -g * 150, v[2] * 4])(vuelca(g, nSueltas, 800))
     : modo === "lotus"
     ? ((p) => [p[0], p[1], -g * 140, Math.sin(p[2]) * 4])(loto(g, 520))
