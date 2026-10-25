@@ -1,0 +1,85 @@
+/* ROOSTER — una habitación de ratán al amanecer: la pared trenzada, el suelo de bambú y una ventana cuyo cielo pasa de
+   la noche a la mañana al avanzar; suben zetas de alguien que duerme y tocar la pared es cantar (las zetas salen
+   volando); cada prompt está detrás de la gata dormida y el gallo, que suelta notas hacia ella: hay que reventar cinco
+   antes de que la despierten, y entonces la gata salta, lo calla y se vuelve a dormir; al copiar caen plumas negras;
+   las reglas se desperezan. */
+
+.reel-rooster body { background: #8E6A42; }
+.reel-rooster body::before { background: none; }
+#room { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-rooster .slab { background: rgba(32, 22, 14, .87); border-color: rgba(255, 220, 170, .16); }
+.reel-rooster .slab.hero { background: rgba(28, 19, 12, .9); }
+
+/* ---------- el prompt, detrás de la siesta ---------- */
+.nap { position: relative; border-radius: 14px; overflow: hidden; }
+.nap.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(4px); opacity: .4; }
+.nap .code { transition: filter .6s .3s, opacity .6s .3s; }
+.coop {
+  position: absolute; inset: 0; z-index: 2; border-radius: 14px; overflow: hidden; touch-action: manipulation; user-select: none; -webkit-user-select: none; cursor: crosshair;
+  background:
+    repeating-linear-gradient(0deg, rgba(60, 36, 14, .16) 0 2px, transparent 2px 12px),
+    repeating-linear-gradient(90deg, rgba(255, 236, 200, .07) 0 2px, transparent 2px 12px),
+    linear-gradient(180deg, #B78C5B, #94703F);
+  transition: opacity .7s .2s;
+}
+.nap.off .coop { opacity: 0; pointer-events: none; }
+.coop .scene { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.coop .count { position: absolute; left: 0; right: 0; top: 12px; margin: 0; text-align: center; pointer-events: none; font: 800 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #FFF6E8; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
+.coop .count b { color: #CCFF00; }
+.coop .nt { position: absolute; left: 0; top: 0; width: 40px; height: 40px; margin: -20px 0 0 -20px; display: grid; place-items: center; border-radius: 50%; pointer-events: none; font: 900 24px/1 serif; color: #FFFFFF; text-shadow: 0 1px 0 #3A2410, 0 0 10px rgba(255, 210, 120, .7); }
+.coop .nt.pop { animation: revienta .3s ease-out forwards; }
+@keyframes revienta { to { transform: scale(2.2); opacity: 0; } }
+.coop .zz { position: absolute; pointer-events: none; font: 800 14px/1 var(--mono); color: rgba(255, 246, 232, .8); animation: zeta 2.4s ease-out infinite; }
+.coop .zz:nth-of-type(2) { animation-delay: .8s; font-size: 18px; }
+.coop .zz:nth-of-type(3) { animation-delay: 1.6s; font-size: 22px; }
+@keyframes zeta { 0% { transform: translate(0, 0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translate(18px, -46px); opacity: 0; } }
+.coop.awake .zz, .coop.leap .zz { opacity: 0; animation: none; }
+
+/* el gallo: el pico se abre al cantar, el ala aletea */
+.scene .jaw { transform-origin: 108px 53px; transition: transform .12s; }
+.coop.crow .jaw { transform: rotate(24deg); }
+.scene .roo { transform-origin: 68px 150px; transition: transform .5s cubic-bezier(.3, 1.4, .5, 1); }
+.scene .wing { transform-origin: 52px 100px; }
+.coop.leap .wing { animation: aleteo .1s 8 alternate; }
+@keyframes aleteo { to { transform: rotate(-38deg); } }
+.coop.settle .roo { transform: translateY(12px) scaleY(.88); }
+.scene .ojo2 { opacity: 0; }
+.coop.settle .ojo { opacity: 0; }
+.coop.settle .ojo2 { opacity: 1; }
+/* la gata: la oreja tiembla si le llega una nota; salta sobre el gallo y vuelve */
+.scene .ear { transform-origin: 262px 104px; }
+.coop.twitch .ear { animation: oreja .3s; }
+@keyframes oreja { 40% { transform: rotate(-22deg); } }
+.scene .cat { transition: transform .32s cubic-bezier(.4, 0, .2, 1); }
+.coop.leap .cat { transform: translate(-128px, -46px) rotate(-16deg); }
+.coop.settle .cat { transform: none; transition-duration: .7s; }
+
+/* ---------- plumas (al copiar y en la pelea) ---------- */
+.pl { position: absolute; z-index: 3; width: 7px; height: 20px; margin: -10px 0 0 -3px; pointer-events: none; border-radius: 50% 50% 45% 45%; background: linear-gradient(90deg, #111 45%, #2E4A3A 50%, #111 55%); animation: pluma 1.6s ease-in forwards; }
+.pl.fixed { position: fixed; z-index: 46; }
+@keyframes pluma {
+  0% { transform: translate(0, 0) rotate(var(--r)); opacity: 1; }
+  30% { transform: translate(calc(var(--dx) * .5), 18px) rotate(calc(var(--r) + 40deg)); }
+  60% { transform: translate(calc(var(--dx) * -.2), 40px) rotate(calc(var(--r) - 30deg)); }
+  100% { transform: translate(var(--dx), 70px) rotate(calc(var(--r) + 20deg)); opacity: 0; }
+}
+
+/* ---------- reglas: se desperezan ---------- */
+.reel-rooster .slab.rule { cursor: pointer; }
+.reel-rooster .slab.rule > * { transform-origin: 0 100%; }
+.reel-rooster .slab.rule.sleepy > * { transform: scale(.92, .35); opacity: .35; }
+.reel-rooster .slab.rule.wake > * { animation: despereza 1s cubic-bezier(.3, .7, .4, 1); }
+.reel-rooster .slab.rule.wake > :nth-child(2) { animation-delay: .1s; animation-fill-mode: backwards; }
+.reel-rooster .slab.rule.wake > :nth-child(3) { animation-delay: .2s; animation-fill-mode: backwards; }
+@keyframes despereza {
+  0% { transform: scale(.92, .35); opacity: .35; }
+  45% { transform: scale(1.07, .82); opacity: 1; }
+  72% { transform: scale(.98, 1.05); }
+  100% { transform: none; opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nap .code, .coop, .scene .cat, .scene .roo, .scene .jaw { transition: none; }
+  .coop .zz, .coop.leap .wing, .coop.twitch .ear, .reel-rooster .slab.rule.wake > * { animation: none; }
+  .coop .zz, .pl { display: none; }
+}

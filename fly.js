@@ -70,6 +70,7 @@
   //   lotus — en espiral áurea hacia fuera, cada parada 137,5° más allá y un poco más lejos, como los anillos de una gota en un lago
   //   topple — un tercio en llano hacia la derecha y el resto en un cuarto de círculo hacia abajo, como un poste que se vuelca al chocar
   //   strike — sube meciéndose de lado a lado y al final sale disparada en recto hacia la derecha, como una serpiente que ataca
+  //   zzz — dibuja zetas que suben hacia la derecha, cada una más grande, como las de alguien que duerme
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -135,7 +136,18 @@
     if (k <= h) return [Math.sin(k * 1.7) * sx, -k * sy, Math.cos(k * 1.7) * 5];
     return [Math.sin(h * 1.7) * sx + (k - h) * px, -h * sy, -3];
   };
-  const parada = (si) => modo === "strike"
+  // zzz: cuatro paradas por zeta (arriba-izquierda, arriba-derecha, abajo-izquierda, abajo-derecha); la siguiente zeta
+  // empieza más arriba y más a la derecha y es un poco más grande; devuelve también la inclinación para las sueltas
+  const zeta = (k, s0, crece) => {
+    const j = Math.floor(k / 4), c = k % 4;
+    let ox = 0, oy = 0, s = s0;
+    for (let i = 0; i < j; i++) { ox += 1.6 * s; oy -= 2.2 * s; s *= crece; }
+    const p = [[0, 0], [s, 0], [0, s], [s, s]][c];
+    return [ox + p[0], oy + p[1], c === 2 ? 5 : -3];
+  };
+  const parada = (si) => modo === "zzz"
+    ? ((v) => [v[0], v[1], -si * 200])(zeta(si, 1300, 1.2))
+    : modo === "strike"
     ? ((v) => [v[0], v[1], -si * 220])(golpe(si, stops.length, 700, 1000, 1700))
     : modo === "topple"
     ? ((v) => [v[0], v[1], -si * 220])(vuelca(si, stops.length, 1400))
@@ -186,7 +198,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "strike"
+  const suelta = (g) => modo === "zzz"
+    ? ((v) => [v[0], v[1], -g * 140, v[2]])(zeta(g, 620, 1.15))
+    : modo === "strike"
     ? ((v) => [v[0], v[1], -g * 150, v[2]])(golpe(g, nSueltas, 260, 880, 680))
     : modo === "topple"
     ? ((v) => [v[0], v[1], -g * 150, v[2] * 4])(vuelca(g, nSueltas, 800))
