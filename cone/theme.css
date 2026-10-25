@@ -1,0 +1,83 @@
+/* CONE — una heladería en colores pastel: pared a rayas menta y nata, toldo de rayas rosas, suelo de cuadros y
+   virutas de colores que caen despacio; abajo, un cucurucho gigante cuyo helado (blanco con manchas negras) crece al
+   avanzar y al final le salen dos orejas de gato; tocar la tienda echa virutas; cada prompt está detrás de una máquina
+   cuya boquilla va de lado a lado soltando gatitos-bola: hay que mover el cucurucho para coger tres; al copiar sale un
+   helado girando; las reglas caen como helado y tiemblan como gelatina. */
+
+.reel-cone body { background: #FFF4E4; }
+.reel-cone body::before { background: none; }
+#shop { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-cone .slab { background: rgba(40, 26, 30, .86); border-color: rgba(255, 200, 215, .2); }
+.reel-cone .slab.hero { background: rgba(34, 22, 26, .9); }
+
+/* ---------- el prompt, detrás de la máquina ---------- */
+.serve { position: relative; border-radius: 14px; overflow: hidden; }
+.serve.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(4px); opacity: .4; }
+.serve .code { transition: filter .6s .3s, opacity .6s .3s; }
+.machine {
+  position: absolute; inset: 0; z-index: 2; border-radius: 14px; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; cursor: ew-resize;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .5) 0 18px, transparent 18px 36px),
+    linear-gradient(180deg, #CFEFE2, #F9E1E8);
+  transition: opacity .7s .2s;
+}
+.serve.off .machine { opacity: 0; pointer-events: none; }
+.machine .steel { position: absolute; left: 0; right: 0; top: 0; height: 17%; background: linear-gradient(180deg, #E9EDF0, #AEB6BC 70%, #8E979E); box-shadow: 0 4px 10px rgba(0, 0, 0, .18); }
+.machine .noz { position: absolute; top: 17%; left: 0; width: 34px; height: 26px; margin-left: -17px; border-radius: 0 0 9px 9px; background: linear-gradient(90deg, #8E979E, #E9EDF0 45%, #9AA3AA); box-shadow: 0 3px 6px rgba(0, 0, 0, .2); }
+.machine .count { position: absolute; left: 0; right: 0; top: 8px; margin: 0; text-align: center; pointer-events: none; font: 800 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #2A2E33; }
+.machine .count b { color: #FF2A1F; }
+.machine .hint { position: absolute; left: 0; right: 0; bottom: 10%; margin: 0; text-align: center; pointer-events: none; font: 700 10px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: rgba(42, 46, 51, .6); transition: opacity .4s; }
+.machine.started .hint { opacity: 0; }
+.machine .tray { position: absolute; left: 0; right: 0; bottom: 0; height: 8%; background: repeating-linear-gradient(90deg, #9AA3AA 0 3px, #C9D0D5 3px 9px); }
+/* el cucurucho que se mueve y la pila de bolas que coge */
+.machine .cone { position: absolute; bottom: 8%; left: 0; width: 64px; height: 92px; margin-left: -32px; pointer-events: none; }
+.machine .cone::before {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 74px;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background:
+    repeating-linear-gradient(45deg, rgba(150, 90, 30, .45) 0 2px, transparent 2px 10px),
+    repeating-linear-gradient(-45deg, rgba(150, 90, 30, .45) 0 2px, transparent 2px 10px),
+    linear-gradient(90deg, #E2A55A, #F3C27E 50%, #D99A4E);
+}
+/* el gatito-bola: pelo blanco con manchas negras y dos orejas */
+.kit { position: absolute; left: 0; top: 0; width: 46px; height: 40px; margin: -20px 0 0 -23px; pointer-events: none; border-radius: 50% 50% 46% 46%;
+  background:
+    radial-gradient(circle at 30% 30%, #1B1B1D 0 22%, transparent 24%),
+    radial-gradient(circle at 74% 62%, #1B1B1D 0 18%, transparent 20%),
+    radial-gradient(circle at 50% 40%, #FFFFFF, #E9E6E2 70%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .18);
+}
+.kit::before, .kit::after { content: ""; position: absolute; top: -7px; width: 13px; height: 13px; background: #1B1B1D; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.kit::before { left: 7px; transform: rotate(-12deg); }
+.kit::after { right: 7px; transform: rotate(12deg); }
+.kit.face { background:
+    radial-gradient(circle at 36% 52%, #C88A2A 0 6%, #1B1B1D 6% 8%, transparent 9%),
+    radial-gradient(circle at 64% 52%, #C88A2A 0 6%, #1B1B1D 6% 8%, transparent 9%),
+    radial-gradient(ellipse 10% 7% at 50% 66%, #F2A0A8 0 90%, transparent 100%),
+    radial-gradient(ellipse 60% 50% at 50% 12%, #1B1B1D 0 60%, transparent 62%),
+    radial-gradient(circle at 50% 40%, #FFFFFF, #E9E6E2 70%); }
+.kit.miss { animation: puf .5s ease-out forwards; }
+@keyframes puf { to { transform: scale(1.6); opacity: 0; } }
+.machine .paw { position: absolute; width: 14px; height: 22px; margin: -11px 0 0 -7px; border-radius: 7px 7px 6px 6px; background: radial-gradient(circle at 50% 30%, #F2A0A8 0 26%, #FFFFFF 28%); pointer-events: none; transform-origin: 50% 100%; animation: hola .5s ease-in-out 3 alternate; }
+@keyframes hola { from { transform: rotate(-25deg); } to { transform: rotate(20deg); } }
+
+/* ---------- al copiar: un helado sale girando ---------- */
+.yum { position: fixed; z-index: 46; font-size: 26px; line-height: 1; pointer-events: none; margin: -13px 0 0 -13px; animation: sube 1s cubic-bezier(.2, .7, .3, 1) forwards; }
+@keyframes sube { 0% { transform: translate(0, 0) rotate(0) scale(.6); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate(var(--dx), -120px) rotate(360deg) scale(1.2); opacity: 0; } }
+
+/* ---------- reglas: caen como helado y tiemblan como gelatina ---------- */
+.reel-cone .slab.rule { cursor: pointer; }
+.reel-cone .slab.rule > * { transform-origin: 50% 0; }
+.reel-cone .slab.rule.drip > * { transform: translateY(-26px) scaleY(1.35); opacity: .3; }
+.reel-cone .slab.rule.melt > * { animation: gotea .9s cubic-bezier(.3, .8, .4, 1); }
+.reel-cone .slab.rule.melt > :nth-child(2) { animation-delay: .1s; animation-fill-mode: backwards; }
+.reel-cone .slab.rule.melt > :nth-child(3) { animation-delay: .2s; animation-fill-mode: backwards; }
+@keyframes gotea { 0% { transform: translateY(-26px) scaleY(1.35); opacity: .3; } 55% { transform: translateY(3px) scaleY(.88); opacity: 1; } 80% { transform: scaleY(1.04); } 100% { transform: none; opacity: 1; } }
+.reel-cone .slab.rule.jelly > * { animation: gelatina .6s ease-out; }
+@keyframes gelatina { 25% { transform: scale(1.04, .94); } 50% { transform: scale(.97, 1.04); } 75% { transform: scale(1.01, .99); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .serve .code, .machine { transition: none; }
+  .kit.miss, .machine .paw, .reel-cone .slab.rule.melt > *, .reel-cone .slab.rule.jelly > * { animation: none; }
+  .yum { display: none; }
+}

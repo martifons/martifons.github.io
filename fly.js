@@ -71,6 +71,7 @@
   //   topple — un tercio en llano hacia la derecha y el resto en un cuarto de círculo hacia abajo, como un poste que se vuelca al chocar
   //   strike — sube meciéndose de lado a lado y al final sale disparada en recto hacia la derecha, como una serpiente que ataca
   //   zzz — dibuja zetas que suben hacia la derecha, cada una más grande, como las de alguien que duerme
+  //   swirl — sube en hélice y cada vuelta más estrecha, como la punta de un helado de máquina
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -145,7 +146,15 @@
     const p = [[0, 0], [s, 0], [0, s], [s, s]][c];
     return [ox + p[0], oy + p[1], c === 2 ? 5 : -3];
   };
-  const parada = (si) => modo === "zzz"
+  // swirl: una hélice que sube; el radio se estrecha de R a r0 a lo largo del recorrido y el ángulo avanza 1,4 rad por
+  // parada; la profundidad sigue al giro para que se lea como un remolino; devuelve también el ángulo
+  const cucurucho = (k, n, R, r0, dy) => {
+    const t = n > 1 ? k / (n - 1) : 0, r = R + (r0 - R) * t, a = k * 1.4;
+    return [Math.cos(a) * r - R, -k * dy, Math.sin(a) * r * .15, a];
+  };
+  const parada = (si) => modo === "swirl"
+    ? ((v) => [v[0], v[1], v[2] - si * 200])(cucurucho(si, stops.length, 900, 200, 950))
+    : modo === "zzz"
     ? ((v) => [v[0], v[1], -si * 200])(zeta(si, 1300, 1.2))
     : modo === "strike"
     ? ((v) => [v[0], v[1], -si * 220])(golpe(si, stops.length, 700, 1000, 1700))
@@ -198,7 +207,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "zzz"
+  const suelta = (g) => modo === "swirl"
+    ? ((v) => [v[0], v[1], v[2] - g * 140, Math.cos(v[3]) * 5])(cucurucho(g, nSueltas, 380, 90, 820))
+    : modo === "zzz"
     ? ((v) => [v[0], v[1], -g * 140, v[2]])(zeta(g, 620, 1.15))
     : modo === "strike"
     ? ((v) => [v[0], v[1], -g * 150, v[2]])(golpe(g, nSueltas, 260, 880, 680))
