@@ -1,0 +1,59 @@
+/* PUFFER — una charca de roca vista desde arriba: arena y guijarros bajo agua clara, cáusticas de sol que se mueven,
+   rocas oscuras arriba y peces-gatito que nadan despacio; tocar la charca los atrae; cada prompt está detrás del pez
+   globo hinchado, enfadado: hay que arrastrar hacia abajo para sacarle el aire, y cuando se deshincha suspira agua y se
+   duerme; al copiar caen gotas; las reglas se hinchan como el pez. */
+
+.reel-puffer body { background: #B9A57E; }
+.reel-puffer body::before { background: none; }
+#pool { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-puffer .slab { background: rgba(14, 32, 36, .86); border-color: rgba(190, 240, 240, .16); }
+.reel-puffer .slab.hero { background: rgba(12, 28, 32, .9); }
+
+/* ---------- el prompt, detrás del pez hinchado ---------- */
+.palm { position: relative; border-radius: 14px; overflow: hidden; }
+.palm.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(4px); opacity: .4; }
+.palm .code { transition: filter .6s .3s, opacity .6s .3s; }
+.squeeze {
+  position: absolute; inset: 0; z-index: 2; border-radius: 14px; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, .18) 0 3px, transparent 4px) 0 0 / 23px 19px,
+    radial-gradient(circle at 70% 30%, rgba(80, 60, 40, .25) 0 3px, transparent 4px) 0 0 / 17px 21px,
+    linear-gradient(180deg, rgba(40, 120, 140, .55), rgba(40, 120, 140, .25)),
+    linear-gradient(180deg, #CDBB94, #AE9A72);
+  transition: opacity .7s .2s;
+}
+.squeeze.held { cursor: grabbing; }
+.palm.off .squeeze { opacity: 0; pointer-events: none; }
+.squeeze .fish { position: absolute; left: 50%; top: 48%; width: min(62%, 220px); transform: translate(-50%, -50%); pointer-events: none; overflow: visible; }
+.squeeze .fish g.cuerpo { transform-origin: 100px 110px; transition: transform .35s cubic-bezier(.3, 1.5, .5, 1); }
+.squeeze.held .fish g.cuerpo { transition: transform .06s linear; }
+.squeeze .fish .cerrados { opacity: 0; }
+.squeeze.done .fish .abiertos, .squeeze.done .fish .ceja { opacity: 0; }
+.squeeze.done .fish .cerrados { opacity: 1; }
+.squeeze .count { position: absolute; left: 0; right: 0; top: 12px; margin: 0; text-align: center; pointer-events: none; font: 800 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #F2FAF8; text-shadow: 0 1px 3px rgba(0, 0, 0, .5); }
+.squeeze .count b { color: #CCFF00; }
+.squeeze .meter { position: absolute; left: 14%; right: 14%; bottom: 14px; height: 6px; border-radius: 3px; background: rgba(0, 0, 0, .25); pointer-events: none; }
+.squeeze .meter i { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; border-radius: 3px; background: #CCFF00; }
+.squeeze .hint { position: absolute; left: 0; right: 0; bottom: 30px; margin: 0; text-align: center; pointer-events: none; font: 700 10px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: rgba(242, 250, 248, .85); animation: baja 1.2s ease-in-out infinite; }
+@keyframes baja { 50% { transform: translateY(5px); } }
+.squeeze.started .hint { opacity: 0; animation: none; }
+.gota { position: absolute; z-index: 3; width: 6px; height: 8px; margin: -4px 0 0 -3px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: rgba(200, 240, 255, .9); box-shadow: inset -1px -1px 0 rgba(60, 140, 170, .5); pointer-events: none; animation: cae .7s ease-in forwards; }
+.gota.fixed { position: fixed; z-index: 46; }
+@keyframes cae { to { transform: translate(var(--dx), 70px); opacity: 0; } }
+
+/* ---------- reglas: se hinchan como el pez ---------- */
+.reel-puffer .slab.rule { cursor: pointer; }
+.reel-puffer .slab.rule > * { transform-origin: 50% 50%; }
+.reel-puffer .slab.rule.tiny > * { transform: scale(.4); opacity: .3; }
+.reel-puffer .slab.rule.puff > * { animation: hincha .8s cubic-bezier(.3, .8, .4, 1); }
+.reel-puffer .slab.rule.puff > :nth-child(2) { animation-delay: .1s; animation-fill-mode: backwards; }
+.reel-puffer .slab.rule.puff > :nth-child(3) { animation-delay: .2s; animation-fill-mode: backwards; }
+@keyframes hincha { 0% { transform: scale(.4); opacity: .3; } 55% { transform: scale(1.12); opacity: 1; } 78% { transform: scale(.96); } 100% { transform: none; opacity: 1; } }
+.reel-puffer .slab.rule.boop > * { animation: boop .45s ease-out; }
+@keyframes boop { 35% { transform: scale(1.06); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .palm .code, .squeeze, .squeeze .fish g.cuerpo { transition: none; }
+  .squeeze .hint, .reel-puffer .slab.rule.puff > *, .reel-puffer .slab.rule.boop > * { animation: none; }
+  .gota { display: none; }
+}

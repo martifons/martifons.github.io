@@ -72,6 +72,7 @@
   //   strike — sube meciéndose de lado a lado y al final sale disparada en recto hacia la derecha, como una serpiente que ataca
   //   zzz — dibuja zetas que suben hacia la derecha, cada una más grande, como las de alguien que duerme
   //   swirl — sube en hélice y cada vuelta más estrecha, como la punta de un helado de máquina
+  //   eight — dibuja un ocho tumbado que se desplaza a la derecha, como un pez que nada en una charca
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -152,7 +153,21 @@
     const t = n > 1 ? k / (n - 1) : 0, r = R + (r0 - R) * t, a = k * 1.4;
     return [Math.cos(a) * r - R, -k * dy, Math.sin(a) * r * .15, a];
   };
-  const parada = (si) => modo === "swirl"
+  // eight: una lemniscata (ocho tumbado) que deriva a la derecha para que los dos pasos por el cruce no coincidan;
+  // las paradas a la misma distancia a lo largo del camino y sin volver al punto de partida
+  const ocho = (k, n, A) => {
+    const N = 720, punto = (t) => { const s = Math.sin(t), c = Math.cos(t), d = 1 + s * s; return [A * c / d + t / (2 * Math.PI) * A * .9, A * s * c / d * 1.2]; };
+    const pts = [[...punto(0), 0]];
+    let L = 0, prev = punto(0);
+    for (let i = 1; i <= N; i++) { const q = punto(i / N * 2 * Math.PI); L += Math.hypot(q[0] - prev[0], q[1] - prev[1]); pts.push([q[0], q[1], L]); prev = q; }
+    const meta = (n > 1 ? k / n : 0) * L;
+    let i = 1; while (i < N && pts[i][2] < meta) i++;
+    const p0 = pts[i - 1], p1 = pts[i], f = p1[2] > p0[2] ? (meta - p0[2]) / (p1[2] - p0[2]) : 0;
+    return [p0[0] + (p1[0] - p0[0]) * f - A, p0[1] + (p1[1] - p0[1]) * f, Math.atan2(p1[1] - p0[1], p1[0] - p0[0])];
+  };
+  const parada = (si) => modo === "eight"
+    ? ((v) => [v[0], v[1], -si * 240])(ocho(si, stops.length, 1250))
+    : modo === "swirl"
     ? ((v) => [v[0], v[1], v[2] - si * 200])(cucurucho(si, stops.length, 900, 200, 950))
     : modo === "zzz"
     ? ((v) => [v[0], v[1], -si * 200])(zeta(si, 1300, 1.2))
@@ -207,7 +222,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "swirl"
+  const suelta = (g) => modo === "eight"
+    ? ((v) => [v[0], v[1], -g * 150, Math.sin(v[2]) * 5])(ocho(g, nSueltas, 1700))
+    : modo === "swirl"
     ? ((v) => [v[0], v[1], v[2] - g * 140, Math.cos(v[3]) * 5])(cucurucho(g, nSueltas, 380, 90, 820))
     : modo === "zzz"
     ? ((v) => [v[0], v[1], -g * 140, v[2]])(zeta(g, 620, 1.15))
