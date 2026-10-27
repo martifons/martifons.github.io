@@ -1,0 +1,59 @@
+/* CROC — un río africano a la hora dorada visto desde la otra orilla: acacias de copa plana a lo lejos, cañizos, agua
+   parda con brillos que tiemblan y el sol que baja al avanzar; tocar el río hace asomar los ojos de un cocodrilo; cada
+   prompt está detrás de una boca de cocodrilo abierta que se va cerrando: hay que tocar los cinco restos que tiene
+   entre los dientes (el pájaro va a por cada uno) antes de que se cierre; al copiar, el botón da un bocado; las reglas
+   se limpian a picotazos. */
+
+.reel-croc body { background: #8C7A5C; }
+.reel-croc body::before { background: none; }
+#river { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-croc .slab { background: rgba(30, 28, 18, .86); border-color: rgba(240, 220, 160, .16); }
+.reel-croc .slab.hero { background: rgba(26, 24, 15, .9); }
+
+/* ---------- el prompt, detrás de la boca ---------- */
+.mouth { position: relative; border-radius: 14px; overflow: hidden; }
+.mouth.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(4px); opacity: .4; }
+.mouth .code { transition: filter .6s .3s, opacity .6s .3s; }
+.bank {
+  position: absolute; inset: 0; z-index: 2; border-radius: 14px; overflow: hidden; touch-action: manipulation; user-select: none; -webkit-user-select: none; cursor: pointer;
+  background: linear-gradient(180deg, #E9C98E 0%, #CDB07A 40%, #8C7A5C 72%, #6E5E46 100%);
+  transition: opacity .7s .2s;
+}
+.mouth.off .bank { opacity: 0; pointer-events: none; }
+.bank .head { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; overflow: visible; }
+.bank .count { position: absolute; left: 0; right: 0; top: 12px; margin: 0; text-align: center; pointer-events: none; font: 800 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #2A2416; }
+.bank .count b { color: #FF2A1F; }
+.bank .cue { position: absolute; left: 0; right: 0; top: 30px; margin: 0; text-align: center; pointer-events: none; font: 700 10px/1.3 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: rgba(42, 36, 22, .7); }
+.bank .cue.bad { color: #B3261E; }
+/* la mandíbula de arriba gira sobre la bisagra; el JS fija el ángulo; al chasquear, rápido */
+.head .upper { transform-origin: 236px 126px; }
+.bank.snap .head .upper { transition: transform .14s cubic-bezier(.6, 0, 1, .4); }
+.bank.reopen .head .upper { transition: transform .5s ease-out; }
+.head .bit { transition: transform .2s, opacity .2s; transform-box: fill-box; transform-origin: 50% 50%; }
+.head .bit.gone { transform: scale(0); opacity: 0; }
+/* el pájaro: salta al resto, picotea, huye y se posa */
+.head .plover { transition: transform .22s cubic-bezier(.3, 1.4, .5, 1); }
+.head .plover .pico { transform-box: fill-box; transform-origin: 100% 50%; }
+.head .plover.peck .pico, .head .plover.peck .cab { animation: pica .2s 2; }
+@keyframes pica { 50% { transform: translate(-3px, 3px); } }
+.bank.away .head .plover { transition: transform .35s cubic-bezier(.2, .7, .3, 1); }
+.bank .ola { position: absolute; left: 50%; bottom: 8%; width: 30px; height: 8px; margin-left: -15px; border-radius: 50%; border: 2px solid rgba(255, 245, 220, .7); pointer-events: none; animation: anillo .8s ease-out forwards; }
+@keyframes anillo { to { transform: scale(6, 3); opacity: 0; } }
+
+/* ---------- al copiar: el botón da un bocado ---------- */
+.chomp { position: fixed; z-index: 46; pointer-events: none; height: 50%; background: #5E5D3C; }
+.chomp.top { clip-path: polygon(0 0, 100% 0, 100% 70%, 92% 100%, 84% 70%, 76% 100%, 68% 70%, 60% 100%, 52% 70%, 44% 100%, 36% 70%, 28% 100%, 20% 70%, 12% 100%, 4% 70%, 0 70%); animation: muerde-a .45s ease-in-out forwards; }
+.chomp.bot { clip-path: polygon(0 30%, 8% 0, 16% 30%, 24% 0, 32% 30%, 40% 0, 48% 30%, 56% 0, 64% 30%, 72% 0, 80% 30%, 88% 0, 96% 30%, 100% 30%, 100% 100%, 0 100%); animation: muerde-b .45s ease-in-out forwards; }
+@keyframes muerde-a { 0% { transform: translateY(-110%); opacity: 0; } 40% { transform: translateY(0); opacity: 1; } 60% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-110%); opacity: 0; } }
+@keyframes muerde-b { 0% { transform: translateY(110%); opacity: 0; } 40% { transform: translateY(0); opacity: 1; } 60% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(110%); opacity: 0; } }
+
+/* ---------- reglas: se limpian a picotazos ---------- */
+.reel-croc .slab.rule { cursor: pointer; }
+.reel-croc .slab.rule .speck { position: absolute; width: 9px; height: 7px; border-radius: 50%; background: #4A3826; box-shadow: 2px 1px 0 #6B5236; pointer-events: none; transition: transform .25s cubic-bezier(.5, 1.8, .5, 1), opacity .25s; }
+.reel-croc .slab.rule .speck.pecked { transform: translateY(-14px) scale(0); opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mouth .code, .bank, .head .plover, .head .bit, .reel-croc .slab.rule .speck { transition: none; }
+  .head .plover.peck .pico, .head .plover.peck .cab, .bank .ola, .chomp { animation: none; }
+  .chomp, .bank .ola { display: none; }
+}

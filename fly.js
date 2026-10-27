@@ -73,6 +73,7 @@
   //   zzz — dibuja zetas que suben hacia la derecha, cada una más grande, como las de alguien que duerme
   //   swirl — sube en hélice y cada vuelta más estrecha, como la punta de un helado de máquina
   //   eight — dibuja un ocho tumbado que se desplaza a la derecha, como un pez que nada en una charca
+  //   jaws — avanza en zigzag entre dos rectas que se abren desde una bisagra, como los dientes de una boca abierta
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -165,7 +166,12 @@
     const p0 = pts[i - 1], p1 = pts[i], f = p1[2] > p0[2] ? (meta - p0[2]) / (p1[2] - p0[2]) : 0;
     return [p0[0] + (p1[0] - p0[0]) * f - A, p0[1] + (p1[1] - p0[1]) * f, Math.atan2(p1[1] - p0[1], p1[0] - p0[0])];
   };
-  const parada = (si) => modo === "eight"
+  // jaws: las paradas pares en la mandíbula de arriba y las impares en la de abajo; las dos rectas se separan a
+  // medida que avanzan, como una boca abierta vista de lado
+  const boca = (k, px, base, abre) => [k * px, (k % 2 ? 1 : -1) * (base + k * abre), k % 2 ? 4 : -4];
+  const parada = (si) => modo === "jaws"
+    ? ((v) => [v[0], v[1], -si * 220])(boca(si, 1200, 250, 120))
+    : modo === "eight"
     ? ((v) => [v[0], v[1], -si * 240])(ocho(si, stops.length, 1250))
     : modo === "swirl"
     ? ((v) => [v[0], v[1], v[2] - si * 200])(cucurucho(si, stops.length, 900, 200, 950))
@@ -222,7 +228,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "eight"
+  const suelta = (g) => modo === "jaws"
+    ? ((v) => [v[0], v[1], -g * 150, v[2]])(boca(g, 560, 200, 90))
+    : modo === "eight"
     ? ((v) => [v[0], v[1], -g * 150, Math.sin(v[2]) * 5])(ocho(g, nSueltas, 1700))
     : modo === "swirl"
     ? ((v) => [v[0], v[1], v[2] - g * 140, Math.cos(v[3]) * 5])(cucurucho(g, nSueltas, 380, 90, 820))
