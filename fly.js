@@ -74,6 +74,7 @@
   //   swirl — sube en hélice y cada vuelta más estrecha, como la punta de un helado de máquina
   //   eight — dibuja un ocho tumbado que se desplaza a la derecha, como un pez que nada en una charca
   //   jaws — avanza en zigzag entre dos rectas que se abren desde una bisagra, como los dientes de una boca abierta
+  //   ferry — cruza a la derecha, da la vuelta en media circunferencia y vuelve por debajo, como una barca que va y viene
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -169,7 +170,17 @@
   // jaws: las paradas pares en la mandíbula de arriba y las impares en la de abajo; las dos rectas se separan a
   // medida que avanzan, como una boca abierta vista de lado
   const boca = (k, px, base, abre) => [k * px, (k % 2 ? 1 : -1) * (base + k * abre), k % 2 ? 4 : -4];
-  const parada = (si) => modo === "jaws"
+  // ferry: una horquilla tumbada: recta de ida (0,0)→(L,0), media vuelta de radio R y recta de vuelta hasta (0,2R);
+  // las paradas a la misma distancia a lo largo de todo el camino; devuelve también la inclinación
+  const barca = (k, n, L, R) => {
+    const total = 2 * L + Math.PI * R, s = (n > 1 ? k / (n - 1) : 0) * total;
+    if (s <= L) return [s, 0, -2];
+    if (s <= L + Math.PI * R) { const a = (s - L) / R - Math.PI / 2; return [L + R * Math.cos(a), R + R * Math.sin(a), a * 180 / Math.PI / 12]; }
+    return [L - (s - L - Math.PI * R), 2 * R, 2];
+  };
+  const parada = (si) => modo === "ferry"
+    ? ((v) => [v[0], v[1], -si * 200])(barca(si, stops.length, 3000, 700))
+    : modo === "jaws"
     ? ((v) => [v[0], v[1], -si * 220])(boca(si, 1200, 250, 120))
     : modo === "eight"
     ? ((v) => [v[0], v[1], -si * 240])(ocho(si, stops.length, 1250))
@@ -228,7 +239,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "jaws"
+  const suelta = (g) => modo === "ferry"
+    ? ((v) => [v[0], v[1], -g * 140, v[2]])(barca(g, nSueltas, 2400, 500))
+    : modo === "jaws"
     ? ((v) => [v[0], v[1], -g * 150, v[2]])(boca(g, 560, 200, 90))
     : modo === "eight"
     ? ((v) => [v[0], v[1], -g * 150, Math.sin(v[2]) * 5])(ocho(g, nSueltas, 1700))

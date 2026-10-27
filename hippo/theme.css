@@ -1,0 +1,69 @@
+/* HIPPO — un río tranquilo por la mañana: la otra orilla con árboles, el agua verde parda con reflejos, cañizos en los
+   bordes y nenúfares a la deriva; un hipopótamo cruza el fondo de derecha a izquierda al avanzar, y cada toque en el río
+   manda un patito nadando hacia él que se le sube a la cabeza; cada prompt está detrás de la misma escena: hay que
+   arrastrar al hipopótamo hasta la orilla con cuidado (si vas rápido, el patito se cae al agua); al llegar, el patito
+   baja con su madre y los dos hermanos se suben; al copiar, un "quack"; las reglas llegan en fila como patitos. */
+
+.reel-hippo body { background: #7E8C6A; }
+.reel-hippo body::before { background: none; }
+#stream { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-hippo .slab { background: rgba(22, 30, 22, .86); border-color: rgba(220, 240, 200, .16); }
+.reel-hippo .slab.hero { background: rgba(18, 26, 18, .9); }
+
+/* ---------- el prompt, detrás del río ---------- */
+.crossing { position: relative; border-radius: 14px; overflow: hidden; }
+.crossing.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(4px); opacity: .4; }
+.crossing .code { transition: filter .6s .3s, opacity .6s .3s; }
+.ferry {
+  position: absolute; inset: 0; z-index: 2; border-radius: 14px; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, .06) 0 2px, transparent 2px 14px) 0 55% / 100% 45% no-repeat,
+    linear-gradient(180deg, #DCE3C4 0%, #A9B98C 34%, #8C9A74 36%, #7A8A66 55%, #5E6E50 100%);
+  transition: opacity .7s .2s;
+}
+.ferry.held { cursor: grabbing; }
+.crossing.off .ferry { opacity: 0; pointer-events: none; }
+.ferry .orilla { position: absolute; left: 0; bottom: 26%; width: 26%; height: 14%; border-radius: 0 60% 10% 0 / 0 70% 20% 0; background: linear-gradient(180deg, #7A6040, #5A4630); }
+.ferry .orilla::before { content: ""; position: absolute; left: 0; right: 30%; bottom: 100%; height: 34px; background: repeating-linear-gradient(95deg, transparent 0 5px, rgba(110, 140, 70, .9) 5px 7px); clip-path: polygon(0 100%, 0 20%, 20% 40%, 40% 0, 60% 30%, 80% 10%, 100% 100%); }
+.ferry .ave { position: absolute; pointer-events: none; transition: transform .35s cubic-bezier(.3, 1.4, .5, 1); }
+.ferry .mama { left: 6%; bottom: 36%; width: 46px; }
+.ferry .p1 { left: 15%; bottom: 36%; width: 20px; }
+.ferry .p2 { left: 19.5%; bottom: 35.5%; width: 20px; }
+.ferry .hipo { position: absolute; bottom: 19%; left: 0; width: 120px; margin-left: -60px; pointer-events: none; }
+.ferry .hipo svg { display: block; width: 100%; height: auto; }
+.ferry .hipo .pas { position: absolute; left: 52px; top: 3px; width: 20px; transition: transform .35s cubic-bezier(.3, 1.4, .5, 1); }
+.ferry .hipo .pas.wob { animation: tambalea .25s ease-in-out infinite alternate; }
+@keyframes tambalea { from { transform: rotate(-14deg); } to { transform: rotate(14deg); } }
+.ferry .hipo .pas.fall { transform: translate(-30px, 46px) rotate(-60deg); opacity: .0; transition: transform .45s ease-in, opacity .45s .2s; }
+.ferry .agua { position: absolute; left: 0; right: 0; bottom: 0; height: 24%; background: linear-gradient(180deg, rgba(94, 110, 80, .92), #4E5E42); pointer-events: none; }
+.ferry .agua::before { content: ""; position: absolute; left: 0; right: 0; top: -4px; height: 8px; background: repeating-radial-gradient(ellipse 12px 4px at 50% 100%, rgba(255, 255, 255, .25) 0 2px, transparent 3px) 0 0 / 24px 8px; }
+.ferry .count { position: absolute; left: 0; right: 0; top: 12px; margin: 0; text-align: center; pointer-events: none; font: 800 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #22301E; }
+.ferry .count b { color: #FF2A1F; }
+.ferry .cue { position: absolute; left: 0; right: 0; top: 30px; margin: 0; text-align: center; pointer-events: none; font: 700 10px/1.3 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: rgba(34, 48, 30, .75); }
+.ferry .cue.bad { color: #B3261E; }
+.ferry .splash { position: absolute; width: 26px; height: 8px; margin: -4px 0 0 -13px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .7); pointer-events: none; animation: salpica .7s ease-out forwards; }
+@keyframes salpica { to { transform: scale(4, 2.4); opacity: 0; } }
+
+/* ---------- al copiar: un "quack" ---------- */
+.quack { position: fixed; z-index: 46; pointer-events: none; padding: 6px 10px; border-radius: 14px 14px 14px 2px; background: #CCFF00; color: #0A0A0A; font: 800 13px/1 var(--mono); letter-spacing: .06em; animation: quack 1s cubic-bezier(.2, .7, .3, 1) forwards; }
+@keyframes quack { 0% { transform: translate(0, 0) scale(.4); opacity: 0; } 20% { transform: translate(0, -10px) scale(1.1); opacity: 1; } 100% { transform: translate(var(--dx), -70px) scale(1); opacity: 0; } }
+
+/* ---------- reglas: llegan en fila como patitos ---------- */
+.reel-hippo .slab.rule { cursor: pointer; }
+.reel-hippo .slab.rule.lejos > * { transform: translateX(-40px); opacity: 0; }
+.reel-hippo .slab.rule.fila > * { animation: anadea .9s ease-out backwards; }
+.reel-hippo .slab.rule.fila > :nth-child(2) { animation-delay: .15s; }
+.reel-hippo .slab.rule.fila > :nth-child(3) { animation-delay: .3s; }
+@keyframes anadea {
+  0% { transform: translateX(-40px) rotate(-4deg); opacity: 0; }
+  25% { transform: translateX(-28px) rotate(4deg); opacity: 1; }
+  50% { transform: translateX(-16px) rotate(-4deg); }
+  75% { transform: translateX(-6px) rotate(3deg); }
+  100% { transform: none; opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crossing .code, .ferry, .ferry .ave, .ferry .hipo .pas { transition: none; }
+  .ferry .hipo .pas.wob, .ferry .splash, .quack, .reel-hippo .slab.rule.fila > * { animation: none; }
+  .quack, .ferry .splash { display: none; }
+}
