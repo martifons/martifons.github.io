@@ -75,6 +75,7 @@
   //   eight — dibuja un ocho tumbado que se desplaza a la derecha, como un pez que nada en una charca
   //   jaws — avanza en zigzag entre dos rectas que se abren desde una bisagra, como los dientes de una boca abierta
   //   ferry — cruza a la derecha, da la vuelta en media circunferencia y vuelve por debajo, como una barca que va y viene
+  //   drop — avanza a la derecha y cae cada vez más deprisa, en parábola, como una flor que se suelta desde arriba
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -178,7 +179,11 @@
     if (s <= L + Math.PI * R) { const a = (s - L) / R - Math.PI / 2; return [L + R * Math.cos(a), R + R * Math.sin(a), a * 180 / Math.PI / 12]; }
     return [L - (s - L - Math.PI * R), 2 * R, 2];
   };
-  const parada = (si) => modo === "ferry"
+  // drop: x constante por parada y la caída crece con el cuadrado, como algo que se suelta; inclinación según la pendiente
+  const caida = (k, px, g) => [k * px, k * k * g, Math.min(9, Math.atan2(2 * k * g, px) * 180 / Math.PI / 8)];
+  const parada = (si) => modo === "drop"
+    ? ((v) => [v[0], v[1], -si * 220])(caida(si, 1250, 220))
+    : modo === "ferry"
     ? ((v) => [v[0], v[1], -si * 200])(barca(si, stops.length, 3000, 700))
     : modo === "jaws"
     ? ((v) => [v[0], v[1], -si * 220])(boca(si, 1200, 250, 120))
@@ -239,7 +244,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "ferry"
+  const suelta = (g) => modo === "drop"
+    ? ((v) => [v[0], v[1], -g * 140, v[2]])(caida(g, 560, 70))
+    : modo === "ferry"
     ? ((v) => [v[0], v[1], -g * 140, v[2]])(barca(g, nSueltas, 2400, 500))
     : modo === "jaws"
     ? ((v) => [v[0], v[1], -g * 150, v[2]])(boca(g, 560, 200, 90))
