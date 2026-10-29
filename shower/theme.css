@@ -1,0 +1,52 @@
+/* SHOWER — un camino de pueblo a mediodía, con el sol que aprieta: palmeras, casas de madera sobre pilotes y el polvo
+   claro del camino; la página está "caliente" (tinte naranja) y se va refrescando al avanzar, y el camino se llena de
+   manchas mojadas que se secan; tocar el camino lo salpica; cada prompt está detrás de un elefante y un perro: hay que
+   mantener pulsado y apuntar la trompa para que el chorro caiga sobre el perro hasta que se empape y se sacude; al
+   copiar, el botón se sacude como un perro; las reglas salen mojadas y se secan. */
+
+.reel-shower body { background: #E9D6B4; }
+.reel-shower body::before { background: none; }
+#road { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-shower .slab { background: rgba(40, 30, 20, .86); border-color: rgba(255, 230, 190, .16); }
+.reel-shower .slab.hero { background: rgba(34, 26, 16, .9); }
+
+/* ---------- el prompt, detrás de la ducha ---------- */
+.yard { position: relative; border-radius: 14px; overflow: hidden; }
+.yard.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(4px); opacity: .4; }
+.yard .code { transition: filter .6s .3s, opacity .6s .3s; }
+.hose {
+  position: absolute; inset: 0; z-index: 2; border-radius: 14px; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; cursor: crosshair;
+  background: linear-gradient(180deg, #E7EEF2 0%, #F2EAD8 40%, #E6CFA6 41%, #D9BC8C 100%);
+  transition: opacity .7s .2s;
+}
+.yard.off .hose { opacity: 0; pointer-events: none; }
+.hose .scene { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.hose .count { position: absolute; left: 0; right: 0; top: 12px; margin: 0; text-align: center; pointer-events: none; font: 800 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #3A2A18; }
+.hose .count b { color: #1E88C8; }
+.hose .cue { position: absolute; left: 0; right: 0; top: 30px; margin: 0; text-align: center; pointer-events: none; font: 700 10px/1.3 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: rgba(58, 42, 24, .75); }
+.hose .meter { position: absolute; left: 14%; right: 14%; bottom: 12px; height: 6px; border-radius: 3px; background: rgba(0, 0, 0, .15); pointer-events: none; }
+.hose .meter i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 3px; background: #4FB3E8; }
+.scene .chorro { stroke-dasharray: 6 8; animation: fluye .4s linear infinite; }
+@keyframes fluye { to { stroke-dashoffset: -14; } }
+.scene .perro.shake { animation: sacude .09s 8 alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes sacude { from { transform: rotate(-7deg); } to { transform: rotate(7deg); } }
+.gota { position: absolute; z-index: 3; width: 5px; height: 7px; margin: -3px 0 0 -2px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: #8FD0F2; pointer-events: none; animation: vuela .6s ease-out forwards; }
+.gota.fixed { position: fixed; z-index: 46; }
+@keyframes vuela { to { transform: translate(var(--dx), var(--dy)); opacity: 0; } }
+
+/* ---------- al copiar: el botón se sacude como un perro ---------- */
+.cp.wet { animation: perrito .5s ease-in-out; }
+@keyframes perrito { 15%, 45%, 75% { transform: rotate(-4deg); } 30%, 60%, 90% { transform: rotate(4deg); } }
+
+/* ---------- reglas: salen mojadas y se secan ---------- */
+.reel-shower .slab.rule { cursor: pointer; }
+.reel-shower .slab.rule > * { transition: filter 1.4s ease-out, color 1.4s, opacity 1.4s, transform 1.4s; }
+.reel-shower .slab.rule.mojada > * { filter: blur(3px); color: #8FD0F2; opacity: .55; transform: translateY(4px) scaleY(1.06); transition: none; }
+.reel-shower .slab.rule > :nth-child(2) { transition-delay: .2s; }
+.reel-shower .slab.rule > :nth-child(3) { transition-delay: .4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .yard .code, .hose, .reel-shower .slab.rule > * { transition: none; }
+  .scene .chorro, .scene .perro.shake, .gota, .cp.wet { animation: none; }
+  .gota { display: none; }
+}
