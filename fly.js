@@ -78,6 +78,7 @@
   //   drop — avanza a la derecha y cae cada vez más deprisa, en parábola, como una flor que se suelta desde arriba
   //   trunk — baja en recto y al final se enrosca hacia la derecha y hacia arriba, como la punta de una trompa
   //   hoist — sube en recto y al final pasa por encima hacia la derecha y baja un poco, como una trompa que sube a alguien a la cabeza
+  //   peel — baja en espiral alrededor de una esfera, de arriba abajo, como la piel de una mandarina pelada de una sola tira
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -215,7 +216,15 @@
     const p0 = pts[i - 1], p1 = pts[i], f = p1[2] > p0[2] ? (meta - p0[2]) / (p1[2] - p0[2]) : 0;
     return [(p0[0] + (p1[0] - p0[0]) * f) * esc, (p0[1] + (p1[1] - p0[1]) * f) * esc, Math.atan2(p1[1] - p0[1], p1[0] - p0[0])];
   };
-  const parada = (si) => modo === "hoist"
+  // peel: el ángulo polar va de 0,08π a 0,92π (de arriba abajo de la esfera) mientras se dan "vueltas" vueltas; empieza en
+  // (0, 0, 0), baja además "dy" px por parada para que las primeras, cerca del polo, no se monten; devuelve también el ángulo
+  const pela = (k, n, R, vueltas, dy) => {
+    const t = n > 1 ? k / (n - 1) : 0, f = (.08 + .84 * t) * Math.PI, a = t * vueltas * 2 * Math.PI, f0 = .08 * Math.PI;
+    return [R * Math.sin(f) * Math.cos(a) - R * Math.sin(f0), R * (Math.cos(f0) - Math.cos(f)) + k * dy, R * Math.sin(f) * Math.sin(a) * .15, a];
+  };
+  const parada = (si) => modo === "peel"
+    ? ((v) => [v[0], v[1], v[2] - si * 200])(pela(si, stops.length, 1800, 1.5, 700))
+    : modo === "hoist"
     ? ((v) => [v[0], v[1], -si * 200])(iza(si, stops.length, 1400))
     : modo === "trunk"
     ? ((v) => [v[0], v[1], -si * 200])(trompa(si, stops.length, 1500))
@@ -282,7 +291,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "hoist"
+  const suelta = (g) => modo === "peel"
+    ? ((v) => [v[0], v[1], v[2] - g * 140, Math.cos(v[3]) * 5])(pela(g, nSueltas, 900, 1.5, 480))
+    : modo === "hoist"
     ? ((v) => [v[0], v[1], -g * 140, Math.cos(v[2]) * 5])(iza(g, nSueltas, 850))
     : modo === "trunk"
     ? ((v) => [v[0], v[1], -g * 140, Math.cos(v[2]) * 5])(trompa(g, nSueltas, 900))
