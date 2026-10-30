@@ -1,0 +1,58 @@
+/* LIFT — el patio de un santuario de elefantes por la mañana: neblina cálida, palmeras lejanas, una valla de madera,
+   un tamarindo con la copa de lado a lado y una elefanta que, al avanzar, sube con la trompa a la cabrita hasta su
+   cabeza; tocar el patio sacude la copa; cada prompt está tapado por ramitas de hojas: manteniendo pulsado, la trompa
+   sube a la cabrita y se las come, y al soltar la baja despacio; al copiar, una cabrita sube encima del botón; las
+   reglas llegan aupadas desde abajo. */
+
+.reel-lift body { background: #EBDDC2; }
+.reel-lift body::before { background: none; }
+#yard { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-lift .slab { background: rgba(34, 36, 22, .86); border-color: rgba(220, 235, 190, .16); }
+.reel-lift .slab.hero { background: rgba(28, 30, 18, .9); }
+
+/* ---------- el prompt, tapado de hojas ---------- */
+.perch { position: relative; border-radius: 14px; overflow: hidden; }
+.perch.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(4px); opacity: .4; }
+.perch .code { transition: filter .6s .3s, opacity .6s .3s; }
+.hoist {
+  position: absolute; inset: 0; z-index: 2; border-radius: 14px; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab;
+  background: linear-gradient(180deg, #F1E4C8 0%, #F7EFDE 76%, #DEC59C 77%, #CEAF83 100%);
+  transition: opacity .7s .2s;
+}
+.hoist:active { cursor: grabbing; }
+.perch.off .hoist { opacity: 0; pointer-events: none; }
+.hoist .scene { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.hoist .count { position: absolute; left: 0; right: 0; top: 12px; margin: 0; text-align: center; pointer-events: none; font: 800 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #2E3418; }
+.hoist .count b { color: #4E7A2A; }
+.hoist .cue { position: absolute; left: 0; right: 0; top: 30px; margin: 0; text-align: center; pointer-events: none; font: 700 10px/1.3 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: rgba(46, 52, 24, .75); }
+.hoist .meter { position: absolute; left: 14%; right: 14%; bottom: 12px; height: 6px; border-radius: 3px; background: rgba(0, 0, 0, .15); pointer-events: none; }
+.hoist .meter i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 3px; background: #6A9440; }
+.scene .hoja { transform-box: fill-box; transform-origin: 50% 50%; transition: opacity .35s, transform .35s; }
+.scene .hoja.comida { opacity: 0; transform: scale(.3) translateY(10px); }
+
+/* ---------- al copiar: una cabrita sube encima del botón ---------- */
+.cabrita { position: fixed; z-index: 46; margin: -30px 0 0 -14px; font-size: 26px; line-height: 1; pointer-events: none; animation: brinca 1.6s ease-out forwards; }
+@keyframes brinca {
+  0% { transform: translate(-46px, 34px); opacity: 0; }
+  22% { transform: translate(-6px, -14px); opacity: 1; }
+  32% { transform: translate(0, 0); }
+  78% { transform: translate(0, 0); opacity: 1; }
+  100% { transform: translate(44px, 30px); opacity: 0; }
+}
+.cp.carga { animation: carga .6s ease-out .25s; }
+@keyframes carga { 20% { transform: translateY(3px) scaleY(.96); } 55% { transform: translateY(-1px); } }
+
+/* ---------- reglas: llegan aupadas desde abajo ---------- */
+.reel-lift .slab.rule { cursor: pointer; }
+.reel-lift .slab.rule > * { transition: transform .9s cubic-bezier(.3, 1.5, .5, 1), opacity .6s; }
+.reel-lift .slab.rule.abajo > * { transform: translateY(46px); opacity: .2; transition: none; }
+.reel-lift .slab.rule > :nth-child(2) { transition-delay: .15s; }
+.reel-lift .slab.rule > :nth-child(3) { transition-delay: .3s; }
+.reel-lift .slab.rule.aupa > * { animation: aupa .7s cubic-bezier(.3, 1.5, .5, 1); }
+@keyframes aupa { 40% { transform: translateY(-12px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .perch .code, .hoist, .scene .hoja, .reel-lift .slab.rule > * { transition: none; }
+  .cabrita, .cp.carga, .reel-lift .slab.rule.aupa > * { animation: none; }
+  .cabrita { display: none; }
+}

@@ -77,6 +77,7 @@
   //   ferry — cruza a la derecha, da la vuelta en media circunferencia y vuelve por debajo, como una barca que va y viene
   //   drop — avanza a la derecha y cae cada vez más deprisa, en parábola, como una flor que se suelta desde arriba
   //   trunk — baja en recto y al final se enrosca hacia la derecha y hacia arriba, como la punta de una trompa
+  //   hoist — sube en recto y al final pasa por encima hacia la derecha y baja un poco, como una trompa que sube a alguien a la cabeza
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -198,7 +199,25 @@
     const p0 = pts[i - 1], p1 = pts[i], f = p1[2] > p0[2] ? (meta - p0[2]) / (p1[2] - p0[2]) : 0;
     return [(p0[0] + (p1[0] - p0[0]) * f) * esc, (p0[1] + (p1[1] - p0[1]) * f) * esc, Math.atan2(p1[1] - p0[1], p1[0] - p0[0])];
   };
-  const parada = (si) => modo === "trunk"
+  // hoist: una recta que sube 2,2 unidades y luego un arco de radio 0,8 que pasa por encima hacia la derecha y baja
+  // un poco más allá (cinco octavos de vuelta); las paradas a la misma distancia a lo largo del camino, escalado a px
+  const iza = (k, n, esc) => {
+    const N = 600, punto = (t) => {
+      if (t < .55) return [0, -t / .55 * 2.2];
+      const u = (t - .55) / .45, a = Math.PI + u * 1.25 * Math.PI;
+      return [.8 + .8 * Math.cos(a), -2.2 + .8 * Math.sin(a)];
+    };
+    const pts = [[0, 0, 0]];
+    let L = 0, prev = punto(0);
+    for (let i = 1; i <= N; i++) { const q = punto(i / N); L += Math.hypot(q[0] - prev[0], q[1] - prev[1]); pts.push([q[0], q[1], L]); prev = q; }
+    const meta = (n > 1 ? k / (n - 1) : 0) * L;
+    let i = 1; while (i < N && pts[i][2] < meta) i++;
+    const p0 = pts[i - 1], p1 = pts[i], f = p1[2] > p0[2] ? (meta - p0[2]) / (p1[2] - p0[2]) : 0;
+    return [(p0[0] + (p1[0] - p0[0]) * f) * esc, (p0[1] + (p1[1] - p0[1]) * f) * esc, Math.atan2(p1[1] - p0[1], p1[0] - p0[0])];
+  };
+  const parada = (si) => modo === "hoist"
+    ? ((v) => [v[0], v[1], -si * 200])(iza(si, stops.length, 1400))
+    : modo === "trunk"
     ? ((v) => [v[0], v[1], -si * 200])(trompa(si, stops.length, 1500))
     : modo === "drop"
     ? ((v) => [v[0], v[1], -si * 220])(caida(si, 1250, 220))
@@ -263,7 +282,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "trunk"
+  const suelta = (g) => modo === "hoist"
+    ? ((v) => [v[0], v[1], -g * 140, Math.cos(v[2]) * 5])(iza(g, nSueltas, 850))
+    : modo === "trunk"
     ? ((v) => [v[0], v[1], -g * 140, Math.cos(v[2]) * 5])(trompa(g, nSueltas, 900))
     : modo === "drop"
     ? ((v) => [v[0], v[1], -g * 140, v[2]])(caida(g, 560, 70))
