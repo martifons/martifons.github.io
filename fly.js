@@ -79,6 +79,7 @@
   //   trunk — baja en recto y al final se enrosca hacia la derecha y hacia arriba, como la punta de una trompa
   //   hoist — sube en recto y al final pasa por encima hacia la derecha y baja un poco, como una trompa que sube a alguien a la cabeza
   //   peel — baja en espiral alrededor de una esfera, de arriba abajo, como la piel de una mandarina pelada de una sola tira
+  //   roll — avanza a la derecha en arcos de cicloide, como un punto de una manzana que rueda por la hierba
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -222,7 +223,12 @@
     const t = n > 1 ? k / (n - 1) : 0, f = (.08 + .84 * t) * Math.PI, a = t * vueltas * 2 * Math.PI, f0 = .08 * Math.PI;
     return [R * Math.sin(f) * Math.cos(a) - R * Math.sin(f0), R * (Math.cos(f0) - Math.cos(f)) + k * dy, R * Math.sin(f) * Math.sin(a) * .15, a];
   };
-  const parada = (si) => modo === "peel"
+  // roll: la cicloide de radio R, con el ángulo avanzando "paso" rad por parada; los arcos quedan por encima del suelo
+  // y las cúspides en él; devuelve también el ángulo
+  const rueda = (k, R, paso) => { const a = k * paso; return [R * (a - Math.sin(a)), -R * (1 - Math.cos(a)), a]; };
+  const parada = (si) => modo === "roll"
+    ? ((v) => [v[0], v[1], -si * 220])(rueda(si, 800, 1.3))
+    : modo === "peel"
     ? ((v) => [v[0], v[1], v[2] - si * 200])(pela(si, stops.length, 1800, 1.5, 700))
     : modo === "hoist"
     ? ((v) => [v[0], v[1], -si * 200])(iza(si, stops.length, 1400))
@@ -291,7 +297,9 @@
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
-  const suelta = (g) => modo === "peel"
+  const suelta = (g) => modo === "roll"
+    ? ((v) => [v[0], v[1], -g * 140, Math.cos(v[2]) * 5])(rueda(g, 1000, 1.3))
+    : modo === "peel"
     ? ((v) => [v[0], v[1], v[2] - g * 140, Math.cos(v[3]) * 5])(pela(g, nSueltas, 900, 1.5, 480))
     : modo === "hoist"
     ? ((v) => [v[0], v[1], -g * 140, Math.cos(v[2]) * 5])(iza(g, nSueltas, 850))

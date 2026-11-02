@@ -1,0 +1,53 @@
+/* APPLE — un manzanar a la hora dorada: cielo de miel, el sol bajo a la izquierda que se hunde al avanzar, filas de
+   manzanos desenfocados, una valla, el prado con sombras largas y motas de polvo a contraluz; tocar el prado suelta una
+   manzana; cada prompt está tapado por una rama: se tira de ella hacia abajo y se suelta, y con un tirón de verdad la
+   manzana cae delante del erizo, que la empuja rodando y se lleva la escena; al copiar, un erizo cruza empujando una
+   manzana; las reglas llegan verdes y maduran. */
+
+.reel-apple body { background: #F2D59A; }
+.reel-apple body::before { background: none; }
+#orchard { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.reel-apple .slab { background: rgba(38, 30, 16, .86); border-color: rgba(255, 225, 170, .18); }
+.reel-apple .slab.hero { background: rgba(32, 24, 12, .9); }
+
+/* ---------- el prompt, tapado por una rama ---------- */
+.bough { position: relative; border-radius: 14px; overflow: hidden; }
+.bough.on .code { overflow: hidden; user-select: none; pointer-events: none; filter: blur(4px); opacity: .4; }
+.bough .code { transition: filter .6s .3s, opacity .6s .3s; }
+.tug {
+  position: absolute; inset: 0; z-index: 2; border-radius: 14px; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; cursor: ns-resize;
+  background: radial-gradient(120% 70% at 0% 15%, #FFE7AE 0%, rgba(255, 231, 174, 0) 60%), linear-gradient(180deg, #F2BE6E 0%, #F7DCA2 70%, #B2C463 71%, #6E8A34 100%);
+  transition: opacity .6s .2s;
+}
+.bough.off .tug { opacity: 0; pointer-events: none; }
+.tug .scene { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.tug .cue { position: absolute; left: 12%; right: 4%; top: 12px; margin: 0; text-align: center; pointer-events: none; font: 800 10px/1.35 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: #4A2E10; }
+.tug .meter { position: absolute; left: 18%; right: 18%; bottom: 10px; height: 6px; border-radius: 3px; background: rgba(0, 0, 0, .2); pointer-events: none; }
+.tug .meter i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 3px; background: #B8231C; }
+.tug .meter b { position: absolute; left: 62.5%; top: -3px; bottom: -3px; width: 2px; background: #FFF4DA; }
+
+/* ---------- al copiar: un erizo cruza empujando una manzana ---------- */
+.cruza { position: fixed; z-index: 46; margin: -12px 0 0 0; font-size: 20px; line-height: 1; pointer-events: none; animation: cruza 1.5s linear forwards; }
+.cruza.rueda { animation-name: cruzaRueda; }
+@keyframes cruza { 0% { transform: translateX(0); opacity: 0; } 10%, 85% { opacity: 1; } 100% { transform: translateX(var(--w)); opacity: 0; } }
+@keyframes cruzaRueda { 0% { transform: translateX(0) rotate(0); opacity: 0; } 10%, 85% { opacity: 1; } 100% { transform: translateX(var(--w)) rotate(-540deg); opacity: 0; } }
+
+/* ---------- reglas: llegan verdes y maduran ---------- */
+.reel-apple .slab.rule { cursor: pointer; }
+.reel-apple .slab.rule .k, .reel-apple .slab.rule h3 { transition: color 2.4s ease-in-out; }
+.reel-apple .slab.rule.verde .k { color: #8DB04A; }
+.reel-apple .slab.rule.verde h3 { color: #C4DA86; }
+.reel-apple .madura {
+  position: absolute; top: 16px; right: 18px; width: 14px; height: 14px; border-radius: 50%; pointer-events: none;
+  background: #B8231C; box-shadow: inset -3px -3px 0 rgba(0, 0, 0, .2); transition: background 2.4s ease-in-out;
+}
+.reel-apple .madura::after { content: ""; position: absolute; left: 7px; top: -5px; width: 7px; height: 4px; border-radius: 50%; background: #5E8A32; transform: rotate(-25deg); }
+.reel-apple .slab.rule.verde .madura { background: #8DB04A; }
+.reel-apple .madura.cae { animation: manzanita .9s cubic-bezier(.4, 0, .6, 1); }
+@keyframes manzanita { 35% { transform: translateY(26px); } 55% { transform: translateY(16px); } 75% { transform: translateY(26px); } 100% { transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .bough .code, .tug, .reel-apple .slab.rule .k, .reel-apple .slab.rule h3, .reel-apple .madura { transition: none; }
+  .cruza, .reel-apple .madura.cae { animation: none; }
+  .cruza { display: none; }
+}
