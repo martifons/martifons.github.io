@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en" class="reel-free" style="--ar: 720 / 1280; --arn: 0.5625" data-fly="tack">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I made this video for free — prompts · @martiiifons</title>
+<meta name="description" content="Free prompt pack: every prompt behind a three-clip video made with Claude and Google Flow. The template for Claude, two first-frame photos and three full video prompts with voices.">
+<meta property="og:title" content="I made this video for free — prompts · @martiiifons">
+<meta property="og:description" content="Free prompt pack: every prompt behind a three-clip video made with Claude and Google Flow. The template for Claude, two first-frame photos and three full video prompts with voices.">
+<meta property="og:image" content="https://martifons.github.io/free/poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FF2A1F">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='%23FF2A1F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<div id="ticker" class="hud" aria-hidden="true"><span>I made this video for free · 3 clips · 2 photos · 50 credits a day · Claude + Google Flow · @martiiifons · I made this video for free · 3 clips · 2 photos · 50 credits a day · Claude + Google Flow · @martiiifons · I made this video for free · 3 clips · 2 photos · 50 credits a day · Claude + Google Flow · @martiiifons · I made this video for free · 3 clips · 2 photos · 50 credits a day · Claude + Google Flow · @martiiifons · I made this video for free · 3 clips · 2 photos · 50 credits a day · Claude + Google Flow · @martiiifons · I made this video for free · 3 clips · 2 photos · 50 credits a day · Claude + Google Flow · @martiiifons · I made this video for free · 3 clips · 2 photos · 50 credits a day · Claude + Google Flow · @martiiifons · I made this video for free · 3 clips · 2 photos · 50 credits a day · Claude + Google Flow · @martiiifons · I made this video for free · 3 clips · 2 photos · 50 credits a day · Claude + Google Flow · @martiiifons · I made this video for free · 3 clips · 2 photos · 50 credits a day · Claude + Google Flow · @martiiifons · </span></div>
+<div id="bar" class="hud"><i></i></div>
+<header id="top" class="hud">
+  <a class="mark" href="../">@martiiifons</a>
+  <b>Three clips, one bay</b>
+  <span id="now"></span>
+</header>
+<nav id="rail" class="hud" aria-label="Sections">
+  <button class="dot" type="button"><span>Intro</span><i></i></button>
+  <button class="dot" type="button"><span>Ask Claude</span><i></i></button>
+  <button class="dot" type="button"><span>Her photo</span><i></i></button>
+  <button class="dot" type="button"><span>His photo</span><i></i></button>
+  <button class="dot" type="button"><span>Clip 1</span><i></i></button>
+  <button class="dot" type="button"><span>Clip 2</span><i></i></button>
+  <button class="dot" type="button"><span>Clip 3</span><i></i></button>
+  <button class="dot" type="button"><span>How to</span><i></i></button>
+  <button class="dot" type="button"><span>Outro</span><i></i></button>
+</nav>
+<main id="stage">
+<div id="cam">
+<section class="stop" data-label="Intro">
+  <div class="slab hero">
+    <p class="k">Free prompt pack · all of it</p>
+    <h1 class="big">Three clips.<em>Zero dollars.</em></h1>
+    <p>No camera, no crew, no budget. This whole video is three 10-second clips from Google Flow, which gives you 50 free credits a day. A 10-second clip costs 15, so one day covers all three.</p>
+    <p><strong>Here's every prompt, ready to copy.</strong> Pull the rope on each step to hoist the sail and read the prompt.</p>
+    <div class="tags"><span class="tag">Claude + Google Flow</span><span class="tag">3 clips, 45 credits</span></div>
+  </div>
+  <div class="slab narrow">
+    <div class="shot"><video id="clip" src="video.mp4" poster="poster.jpg" muted loop playsinline preload="metadata"></video></div>
+    <div class="cap"><span>The finished video</span><button class="sound" type="button" data-sound="clip">Sound on</button></div>
+  </div>
+</section>
+<section class="stop" data-label="Ask Claude">
+  <div class="slab">
+    <span class="num">01 / 06</span>
+    <div class="model">Claude · template</div>
+    <h2 class="big">Start with the brief</h2>
+    <p><strong>Don't ask for a prompt. Ask for all of it.</strong> Paste this into Claude and swap in your idea. It sets out the blocks, the timing and the rules, so what comes back is ready for Flow.</p>
+    
+    <div class="watch"><p class="k soft">Watch out</p><p>The rule that matters most: repeat the shared blocks word for word. The model forgets everything between clips.</p></div>
+    
+  </div>
+  
+  <div class="slab wide">
+    <p class="k">The prompt <small>224 words</small></p>
+    <pre class="code" id="p1">You write prompts for Google Flow (Omni Flash, 10-second vertical clips with audio).
+
+My idea: [DESCRIBE YOUR VIDEO: who is in it, where, what they say]
+
+First, write one image prompt per character for the first frame: 80 to 150 words of plain prose, with skin, clothes, light and place. Use no negatives in the image prompts and keep all text and logos out of the picture.
+
+Then write one full video prompt per clip, in English, with these blocks in this order:
+FORMAT, REFERENCES, LOCATION MAP, each person, VOICES, LOOK, LOCKS, CAMERA, FIRST FRAME, ACTION TIMING, AUDIO.
+
+Rules:
+- Repeat the shared blocks word for word in every prompt. The model has no memory between clips.
+- One big thing per clip: the camera moves or the action does, never both.
+- Write ACTION TIMING second by second, with timecodes that add up to 10 seconds, and say how the clip ends.
+- Each clip has one speaker, one line, 20 words at most, quoted once in AUDIO.
+- Describe each voice in detail and repeat that description in every prompt.
+- Include: &quot;The video runs at 24 fps. No frame is repeated.&quot;
+- Include: &quot;No music, no score, no narration, no subtitles, no captions, no on-screen text.&quot;
+- Never mention the device that records the picture, and ban any camera app interface.</pre>
+    <button class="cp" type="button" data-copy="p1">Copy the template</button>
+  </div>
+</section>
+<section class="stop" data-label="Her photo">
+  <div class="slab">
+    <span class="num">02 / 06</span>
+    <div class="model">Google Flow · Nano Banana Pro · 0 credits</div>
+    <h2 class="big">Her first frame</h2>
+    <p><strong>Images cost zero credits.</strong> In Flow, choose Image, Nano Banana Pro, 9:16. Generate until you like one. It's free, so don't settle.</p>
+    
+    <div class="watch"><p class="k soft">Watch out</p><p>Her clothes, her light and the boat all come from this photo. Whatever you get here, every clip inherits.</p></div>
+    <figure class="step-img"><img src="her.jpg" alt="From the finished clip" loading="lazy"></figure>
+  </div>
+  
+  <div class="slab wide">
+    <p class="k">The prompt <small>131 words</small></p>
+    <pre class="code" id="p2">Close selfie photograph taken at arm's length on the teak deck of a small wooden sailboat anchored in a turquoise Mediterranean bay, late afternoon sun low and warm from frame-left. A woman of about twenty-eight with sun-browned skin, light freckles, loose dark-brown wavy hair moved by the wind and a thin gold chain, wearing an open white linen shirt over a rust-coloured swimsuit. Her face fills the upper half of the picture, eyes on the lens, lips parted mid-sentence, her right shoulder rising toward the lens where her arm reaches out of the picture. Behind her: a coiled rope, the varnished mast, a cream sail, and far away a steep limestone cliff with pale houses. Natural skin with pores and fine hair, warm sunlit colour, soft fine grain, crisp natural detail.</pre>
+    <button class="cp" type="button" data-copy="p2">Copy her photo prompt</button>
+  </div>
+</section>
+<section class="stop" data-label="His photo">
+  <div class="slab">
+    <span class="num">03 / 06</span>
+    <div class="model">Google Flow · Nano Banana Pro · 0 credits</div>
+    <h2 class="big">His first frame</h2>
+    <p><strong>Add her photo as a reference.</strong> Same settings, with her photo attached, so it comes out as the same boat in the same bay.</p>
+    
+    <div class="watch"><p class="k soft">Watch out</p><p>The laptop lid is plain and the screen faces away. AI writes broken text, so keep letters out of the shot.</p></div>
+    <figure class="step-img"><img src="him.jpg" alt="From the finished clip" loading="lazy"></figure>
+  </div>
+  
+  <div class="slab wide">
+    <p class="k">The prompt <small>129 words</small></p>
+    <pre class="code" id="p3">Candid cinematic film still taken from one and a half metres away on the teak stern of a small wooden sailboat anchored in a turquoise Mediterranean bay, late afternoon sun low and warm from frame-left. A man of about thirty with short dark curly hair, a short beard and sun-browned skin, wearing a faded navy linen shirt with rolled sleeves and sand-coloured shorts, sits on the side bench with a plain silver laptop open on his knees, its blank lid facing us. He looks up at the lens mid-sentence, one open hand raised. Behind him: the wooden tiller, a coiled rope, calm water with sun glitter and a steep limestone cliff with pale houses far away. Natural skin with pores, warm sunlit colour, soft fine grain, crisp natural detail.</pre>
+    <button class="cp" type="button" data-copy="p3">Copy his photo prompt</button>
+  </div>
+</section>
+<section class="stop" data-label="Clip 1">
+  <div class="slab">
+    <span class="num">04 / 06</span>
+    <div class="model">Google Flow · Omni Flash · 15 credits</div>
+    <h2 class="big">The hook</h2>
+    <p><strong>Attach her photo. Video, Ingredients, 9:16, 720p, 10 s.</strong> Listen to this one before you spend anything else. If her voice works, the rest will follow.</p>
+    <ul class="beats"><li><b>0.7 s</b>She starts talking</li><li><b>3.2 s</b>No camera, no crew, no budget</li><li><b>6.6 s</b>Just Claude and Google Flow</li><li><b>8–10 s</b>Grin, lips closed. I cut this part</li></ul>
+    <div class="watch"><p class="k soft">Watch out</p><p>Every line landed word for word, with no music, on the first try. The AUDIO block says one speaker, one line, once.</p></div>
+    
+  </div>
+  <div class="slab narrow">
+    <p class="k">Fragments</p>
+    <div class="frames"><figure><img src="c1a.jpg" alt="1.5 s" loading="lazy"><figcaption>1.5 s</figcaption></figure><figure><img src="c1b.jpg" alt="7.0 s" loading="lazy"><figcaption>7.0 s</figcaption></figure></div>
+  </div>
+  <div class="slab wide">
+    <p class="k">The prompt <small>567 words</small></p>
+    <pre class="code" id="p4">FORMAT
+Real footage seen as the finished exported video file: the full picture edge to edge, nothing on top of it. The video runs at 24 fps. No frame is repeated. Real time, 1x speed, never slow motion. One continuous take, no cuts.
+
+REFERENCES
+Use the reference images for the people, their clothing, the boat and the bay only. Do not inherit their framing or composition; the framing is described below. The faces match the references exactly: zero drift, no smoothing.
+
+LOCATION MAP
+A small wooden sailboat at anchor in a turquoise Mediterranean bay. Teak deck, varnished mast, furled cream sail, coiled rope. Far behind the boat, a steep limestone cliff with pale stacked houses. The sun is low and warm on frame-left in every shot. The boat rocks slowly and gently on the swell; the horizon tilts a little with it.
+
+THE WOMAN
+About twenty-eight, sun-browned skin, light freckles, loose dark-brown wavy hair moved by the wind, thin gold chain, open white linen shirt over a rust-coloured swimsuit.
+
+THE MAN
+About thirty, short dark curly hair, short beard, sun-browned skin, faded navy linen shirt with rolled sleeves, sand-coloured shorts.
+
+VOICES
+Her voice: warm mid-range with a little rasp, casual American English, quick and easy like a voice note to a friend, smiling through the words. His voice: low and relaxed, soft British accent, dry, unhurried. Neither of them sounds like an advert or a presenter. &quot;Claude&quot; is pronounced &quot;clawd&quot;.
+
+LOOK
+Warm sunlit natural colour, soft fine grain, real skin with pores and fine hair, gentle highlight roll-off on the water. No camera app interface: no shutter button, no gallery thumbnail, no record button, no icons, no timer, no recording dot, no frame lines. Whatever records the picture is never visible, no hand holding anything toward us, no reflection of it.
+
+LOCKS
+Only these people, this boat, this bay. No other boats nearby, no crew, no drone in the sky. No music, no score, no narration, no subtitles, no captions, no on-screen text, no watermark, no logos. No letters or numbers anywhere in the frame.
+
+CAMERA
+Held at arm's length by the woman herself, 40 cm from her face, slightly above eye level. It floats with her arm and the swell, a small natural sway, her face stays in the upper-middle of the frame the whole time. It never orbits, never cuts away, never zooms.
+
+FIRST FRAME
+Her face fills the upper half of the frame, already talking, eyes on the lens, hair blowing across her cheek. Mast, rope and the far cliff behind her.
+
+ACTION TIMING
+0–0.4 s — Lips already parting, she draws a quick breath.
+0.4–3.0 s — First sentence, eyebrows lift, a small proud tilt of the chin.
+3.0–5.4 s — Second sentence, she shakes her head once on each &quot;no&quot;, a strand of hair sticks to her lip and she blows it away.
+5.4–7.6 s — Third sentence, the corner of her mouth pulls into a grin.
+7.6–10 s — She holds the grin, says nothing, lips closed, the boat rocks, the hair keeps moving. Hold to the last frame.
+
+AUDIO
+Exactly one speaker. The woman says, once, in order: &quot;I made this entire video for free. No camera, no crew, no budget. Just Claude and Google Flow.&quot; Nobody else speaks. Under her voice, quietly: water lapping on the hull, a rope ticking against the mast, wind brushing close to the lens.</pre>
+    <button class="cp" type="button" data-copy="p4">Copy clip 1</button>
+  </div>
+</section>
+<section class="stop" data-label="Clip 2">
+  <div class="slab">
+    <span class="num">05 / 06</span>
+    <div class="model">Google Flow · Omni Flash · 15 credits</div>
+    <h2 class="big">The how-to</h2>
+    <p><strong>Attach his photo and hers.</strong> Three steps, counted on his fingers. The second voice keeps it from feeling like a monologue.</p>
+    <ul class="beats"><li><b>1 s</b>One finger: ask Claude</li><li><b>3.6 s</b>Make your first frame in Flow</li><li><b>6.5 s</b>Three fingers: paste the prompt</li><li><b>7–8 s</b>He shuts the laptop</li></ul>
+    <div class="watch"><p class="k soft">Watch out</p><p>His voice is written just as precisely as hers: low, relaxed, soft British accent. Without that, the model picks one for you.</p></div>
+    
+  </div>
+  <div class="slab narrow">
+    <p class="k">Fragments</p>
+    <div class="frames"><figure><img src="c2a.jpg" alt="1.3 s" loading="lazy"><figcaption>1.3 s</figcaption></figure><figure><img src="c2b.jpg" alt="6.5 s" loading="lazy"><figcaption>6.5 s</figcaption></figure></div>
+  </div>
+  <div class="slab wide">
+    <p class="k">The prompt <small>600 words</small></p>
+    <pre class="code" id="p5">FORMAT
+Real footage seen as the finished exported video file: the full picture edge to edge, nothing on top of it. The video runs at 24 fps. No frame is repeated. Real time, 1x speed, never slow motion. One continuous take, no cuts.
+
+REFERENCES
+Use the reference images for the people, their clothing, the boat and the bay only. Do not inherit their framing or composition; the framing is described below. The faces match the references exactly: zero drift, no smoothing.
+
+LOCATION MAP
+A small wooden sailboat at anchor in a turquoise Mediterranean bay. Teak deck, varnished mast, furled cream sail, coiled rope. Far behind the boat, a steep limestone cliff with pale stacked houses. The sun is low and warm on frame-left in every shot. The boat rocks slowly and gently on the swell; the horizon tilts a little with it.
+
+THE WOMAN
+About twenty-eight, sun-browned skin, light freckles, loose dark-brown wavy hair moved by the wind, thin gold chain, open white linen shirt over a rust-coloured swimsuit.
+
+THE MAN
+About thirty, short dark curly hair, short beard, sun-browned skin, faded navy linen shirt with rolled sleeves, sand-coloured shorts.
+
+VOICES
+Her voice: warm mid-range with a little rasp, casual American English, quick and easy like a voice note to a friend, smiling through the words. His voice: low and relaxed, soft British accent, dry, unhurried. Neither of them sounds like an advert or a presenter. &quot;Claude&quot; is pronounced &quot;clawd&quot;.
+
+LOOK
+Warm sunlit natural colour, soft fine grain, real skin with pores and fine hair, gentle highlight roll-off on the water. No camera app interface: no shutter button, no gallery thumbnail, no record button, no icons, no timer, no recording dot, no frame lines. Whatever records the picture is never visible, no hand holding anything toward us, no reflection of it.
+
+LOCKS
+Only these people, this boat, this bay. No other boats nearby, no crew, no drone in the sky. No music, no score, no narration, no subtitles, no captions, no on-screen text, no watermark, no logos. No letters or numbers anywhere in the frame.
+
+CAMERA
+Handheld by the woman, who is off screen, 1.5 m from the man at his eye level. A small natural sway with the swell. It holds on him the whole time. It never pushes in, never orbits, never shows her.
+
+FIRST FRAME
+The man fills the centre of the frame from the waist up, sitting on the side bench at the stern, a plain silver laptop open on his knees with its blank lid facing us. Already looking at the lens, right hand raised with one finger up. The tiller and the far cliff behind him. We never see the laptop's screen.
+
+ACTION TIMING
+0–0.4 s — He takes a breath, looking at the lens.
+0.4–2.6 s — First sentence, one finger up, then he taps the top edge of the laptop lid with it.
+2.6–5.4 s — Second sentence, two fingers up, a small shrug on the last words.
+5.4–7.2 s — Third sentence, three fingers up, then he presses them down on the top edge of the lid.
+7.2–10 s — He stops talking, lips closed, half smile, shuts the laptop with one hand and rests his hand on it. Hold to the last frame.
+
+AUDIO
+Exactly one speaker. The man says, once, in order: &quot;Ask Claude for the full prompt. Make your first frame in Flow, images are free. Paste the prompt.&quot; The woman is silent. Under his voice, quietly: water lapping on the hull, a rope ticking against the mast, a soft click as the laptop closes at the end.</pre>
+    <button class="cp" type="button" data-copy="p5">Copy clip 2</button>
+  </div>
+</section>
+<section class="stop" data-label="Clip 3">
+  <div class="slab">
+    <span class="num">06 / 06</span>
+    <div class="model">Google Flow · Omni Flash · 15 credits</div>
+    <h2 class="big">The payoff</h2>
+    <p><strong>Attach her photo again.</strong> The same constant blocks, word for word, and a new card. That's why she looks like the same person.</p>
+    <ul class="beats"><li><b>0.8 s</b>Fifty free credits a day</li><li><b>3.5 s</b>A thumb back at the boat</li><li><b>4.2 s</b>This video is those three clips</li><li><b>9 s</b>The wink</li></ul>
+    <div class="watch"><p class="k soft">Watch out</p><p>She ends with a held smile and a wink. Naming the ending stops the clip from drifting in its last seconds.</p></div>
+    
+  </div>
+  <div class="slab narrow">
+    <p class="k">Fragments</p>
+    <div class="frames"><figure><img src="c3a.jpg" alt="3.5 s" loading="lazy"><figcaption>3.5 s</figcaption></figure><figure><img src="c3b.jpg" alt="9.0 s" loading="lazy"><figcaption>9.0 s</figcaption></figure></div>
+  </div>
+  <div class="slab wide">
+    <p class="k">The prompt <small>562 words</small></p>
+    <pre class="code" id="p6">FORMAT
+Real footage seen as the finished exported video file: the full picture edge to edge, nothing on top of it. The video runs at 24 fps. No frame is repeated. Real time, 1x speed, never slow motion. One continuous take, no cuts.
+
+REFERENCES
+Use the reference images for the people, their clothing, the boat and the bay only. Do not inherit their framing or composition; the framing is described below. The faces match the references exactly: zero drift, no smoothing.
+
+LOCATION MAP
+A small wooden sailboat at anchor in a turquoise Mediterranean bay. Teak deck, varnished mast, furled cream sail, coiled rope. Far behind the boat, a steep limestone cliff with pale stacked houses. The sun is low and warm on frame-left in every shot. The boat rocks slowly and gently on the swell; the horizon tilts a little with it.
+
+THE WOMAN
+About twenty-eight, sun-browned skin, light freckles, loose dark-brown wavy hair moved by the wind, thin gold chain, open white linen shirt over a rust-coloured swimsuit.
+
+THE MAN
+About thirty, short dark curly hair, short beard, sun-browned skin, faded navy linen shirt with rolled sleeves, sand-coloured shorts.
+
+VOICES
+Her voice: warm mid-range with a little rasp, casual American English, quick and easy like a voice note to a friend, smiling through the words. His voice: low and relaxed, soft British accent, dry, unhurried. Neither of them sounds like an advert or a presenter. &quot;Claude&quot; is pronounced &quot;clawd&quot;.
+
+LOOK
+Warm sunlit natural colour, soft fine grain, real skin with pores and fine hair, gentle highlight roll-off on the water. No camera app interface: no shutter button, no gallery thumbnail, no record button, no icons, no timer, no recording dot, no frame lines. Whatever records the picture is never visible, no hand holding anything toward us, no reflection of it.
+
+LOCKS
+Only these people, this boat, this bay. No other boats nearby, no crew, no drone in the sky. No music, no score, no narration, no subtitles, no captions, no on-screen text, no watermark, no logos. No letters or numbers anywhere in the frame.
+
+CAMERA
+Held at arm's length by the woman herself, 40 cm from her face, slightly above eye level. It floats with her arm and the swell, a small natural sway, her face stays in the upper-middle of the frame the whole time. It never orbits, never cuts away, never zooms.
+
+FIRST FRAME
+Her face fills the upper half of the frame, already talking, eyes on the lens, hair blowing across her cheek. Mast, rope and the far cliff behind her.
+
+ACTION TIMING
+0–0.4 s — She draws a quick breath.
+0.4–3.0 s — First sentence, eyebrows up, she shrugs one shoulder as if it is nothing.
+3.0–5.4 s — Second sentence, she points back over her shoulder at the boat with her free thumb, then starts to smile.
+5.4–7.6 s — Third sentence, eyes on the lens, a laugh inside the last word.
+7.6–10 s — She stops talking, lips closed, grinning, she winks once, the hair keeps moving. Hold to the last frame.
+
+AUDIO
+Exactly one speaker. The woman says, once, in order: &quot;Fifty free credits a day is three clips. This video is those three clips. Comment free for every prompt.&quot; Nobody else speaks. Under her voice, quietly: water lapping on the hull, a rope ticking against the mast, wind brushing close to the lens.</pre>
+    <button class="cp" type="button" data-copy="p6">Copy clip 3</button>
+  </div>
+</section>
+<section class="stop rules" data-label="How to">
+  <div class="slab rule">
+    <p class="k">Rule 01</p>
+    <h3>Photos first</h3>
+    <p>Images cost 0 credits in Flow and clips cost 15. Get the photo right before you spend anything on video.</p>
+  </div>
+  <div class="slab rule">
+    <p class="k">Rule 02</p>
+    <h3>20 words in 10 seconds</h3>
+    <p>My three lines ran 18 to 19 words and came out exact. Leave the last two seconds silent, so you can cut clean.</p>
+  </div>
+  <div class="slab rule">
+    <p class="k">Rule 03</p>
+    <h3>Cut the pauses</h3>
+    <p>Generated speech leaves gaps between sentences. Cut them in the edit and cover the jumps with cards or screens.</p>
+  </div>
+</section>
+<section class="stop" data-label="Outro">
+  <div class="slab hero">
+    <p class="k">That's every prompt</p>
+    <h2 class="big">Your turn.<em>Three clips a day.</em></h2>
+    <p>Tomorrow the credits come back, whether you used them or not. Make something with today's. If yours works, send it over. I read every DM.</p>
+    <a class="handle" href="https://www.instagram.com/martiiifons/">@martiiifons</a>
+    <div class="tags"><span class="tag">New prompts every week</span></div>
+  </div>
+  <div class="slab">
+    <p class="k">More prompts</p>
+    <p>Every prompt from my reels, image and video, in one place.</p>
+    <a class="cp link-btn" href="../">See all prompts</a>
+    <div class="tags"><span class="tag">The boat made it across</span></div>
+  </div>
+</section>
+</div>
+</main>
+<div id="nav" class="hud"><button id="prev" type="button">Back</button><button id="next" type="button">Next</button></div>
+<div id="foot" class="hud">
+  <span id="count"></span>
+  <span><span class="on-desk"><kbd>Scroll</kbd> fly <kbd>Drag</kbd> look</span><span class="on-phone"><kbd>Swipe</kbd> or <kbd>tap</kbd> to fly</span></span>
+</div>
+<script src="../fly.js"></script>
+<script src="theme.js"></script>
+</body>
+</html>

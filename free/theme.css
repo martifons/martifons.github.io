@@ -1,0 +1,72 @@
+/* FREE (reel92) — "I made this video for free". Detrás, la cala de la hora dorada: cielo, sol que baja, penya-segat y
+   mar con destellos en canvas. Un velero la cruza a medida que avanzas y su vela sube con cada prompt que destapas.
+   Cada prompt está tapado por una vela plegada: se tira de la cuerda hacia abajo y la vela se iza. Arriba, el
+   contador real de créditos del día: las fotos cuestan 0 y cada clip 15, y al final queda un recibo de 0 dólares.
+   Al copiar, una gaviota cruza el botón. Las reglas suben como banderas por un mástil. */
+
+.reel-free body { background: #0E3A44; }
+.reel-free body::before { background: none; }
+
+/* ---------- la cala ---------- */
+#bay { position: fixed; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; background: linear-gradient(180deg, #F6C98A 0%, #F4B98C 26%, #F2D4A6 46%, #F7E3BD 52%); }
+#bay .sun { position: absolute; left: 68%; top: 12%; width: 22vmin; height: 22vmin; margin: -11vmin; border-radius: 50%; background: radial-gradient(circle, #FFF6DC 0 44%, rgba(255, 226, 160, .55) 58%, rgba(255, 210, 140, 0) 72%); transition: top 1.4s cubic-bezier(.3, .7, .2, 1); }
+#bay svg.cliff { filter: blur(1.2px); position: absolute; left: 0; bottom: 48%; width: 100%; height: 26%; }
+#bay .sea { position: absolute; left: 0; right: 0; top: 52%; bottom: 0; background: linear-gradient(180deg, #4FB3B0 0%, #1E8C97 26%, #0F6673 62%, #0B4551 100%); }
+#bay canvas { position: absolute; left: 0; top: 52%; width: 100%; height: 48%; }
+#bay .boat { position: absolute; left: 0; top: 52%; width: 150px; height: 170px; margin: -140px 0 0 -75px; transition: transform 1.6s cubic-bezier(.35, .05, .25, 1); }
+#bay .boat svg { width: 100%; height: 100%; overflow: visible; animation: rock 4.2s ease-in-out infinite; transform-origin: 50% 84%; }
+#bay .boat .mainsail { transform-box: fill-box; transform-origin: 50% 100%; transition: transform 1s cubic-bezier(.3, 1.3, .5, 1); }
+@keyframes rock { 0%, 100% { transform: rotate(-2.2deg) translateY(0); } 50% { transform: rotate(2.2deg) translateY(3px); } }
+
+.reel-free .slab { background: rgba(7, 30, 36, .9); border-color: rgba(214, 240, 236, .16); box-shadow: 0 30px 70px rgba(2, 24, 30, .5); }
+.reel-free .slab.hero { border-color: rgba(246, 201, 138, .6); box-shadow: 0 0 60px rgba(246, 201, 138, .16), 0 40px 90px rgba(2, 24, 30, .6); }
+
+/* ---------- los créditos del día ---------- */
+#credits { position: fixed; z-index: 40; left: 50%; bottom: 112px; transform: translateX(-50%); display: flex; align-items: center; gap: 9px; padding: 7px 13px; border-radius: 22px; background: rgba(7, 30, 36, .9); border: 1px solid rgba(214, 240, 236, .18); color: #F3EEEB; font: 700 12px/1 var(--mono); white-space: nowrap; pointer-events: none; }
+#credits .val { color: #F8E08A; font-size: 15px; min-width: 2ch; text-align: right; }
+#credits .track { width: 62px; height: 7px; border-radius: 4px; background: rgba(243, 238, 235, .16); overflow: hidden; }
+#credits .track i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #F8E08A, #F6C98A); transition: width .7s cubic-bezier(.2, .9, .3, 1); }
+#credits.hit { animation: creditHit .5s ease; }
+@keyframes creditHit { 30% { transform: translateX(-50%) scale(1.1); } }
+
+/* ---------- la vela que tapa el prompt ---------- */
+.sailbox { position: relative; overflow: hidden; border-radius: 12px; touch-action: none; }
+.sailbox.open { touch-action: auto; }
+.sailbox .sail { position: absolute; inset: 0; z-index: 2; background: repeating-linear-gradient(180deg, #F0E6D2 0 46px, #E4D7BE 46px 48px); box-shadow: 0 6px 18px rgba(0, 0, 0, .35); will-change: transform; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 0 64px 0 16px; text-align: center; color: #33444A; }
+.sailbox .sail b { font: 800 19px/1.15 var(--body); letter-spacing: -.01em; }
+.sailbox .sail span { font: 600 12px/1.3 var(--mono); opacity: .75; }
+.sailbox .rope { position: absolute; z-index: 3; right: 0; top: 0; width: 56px; bottom: 0; background: none; border: 0; padding: 0; cursor: grab; touch-action: none; -webkit-tap-highlight-color: transparent; }
+.sailbox .rope::before { content: ""; position: absolute; left: 26px; top: 0; bottom: 0; width: 4px; background: repeating-linear-gradient(170deg, #B98C52 0 5px, #8F6A3A 5px 10px); }
+.sailbox .rope i { position: absolute; left: 11px; top: 14px; width: 34px; height: 46px; border-radius: 17px; background: #FF2A1F; box-shadow: 0 5px 12px rgba(0, 0, 0, .4); }
+.sailbox .rope i::after { content: "↓"; position: absolute; inset: 0; color: #fff; font: 800 20px/46px var(--body); text-align: center; }
+.sailbox:not(.open):not(.pull) .rope i { animation: tug 1.9s ease-in-out infinite; }
+@keyframes tug { 0%, 60%, 100% { translate: 0 0; } 78% { translate: 0 14px; } }
+.sailbox.open .sail, .sailbox.open .rope { display: none; }
+
+/* ---------- gaviota y créditos al copiar ---------- */
+.gull { position: fixed; z-index: 60; width: 54px; height: 24px; pointer-events: none; animation: gull 1s cubic-bezier(.3, .1, .6, 1) forwards; }
+@keyframes gull { from { transform: translate(-90px, 16px); opacity: 0; } 15% { opacity: 1; } 80% { opacity: 1; } to { transform: translate(330px, -70px); opacity: 0; } }
+.gull path { animation: flap .22s ease-in-out infinite alternate; transform-origin: 50% 60%; }
+@keyframes flap { to { transform: scaleY(.45); } }
+.spent { position: fixed; z-index: 60; font: 800 18px/1 var(--mono); color: #F8E08A; pointer-events: none; text-shadow: 0 2px 6px rgba(0, 0, 0, .6); animation: spent 1s ease-out forwards; }
+@keyframes spent { to { transform: translateY(-46px); opacity: 0; } }
+
+/* ---------- reglas: banderas que suben por el mástil ---------- */
+.reel-free .slab.rule { padding-top: 64px; overflow: hidden; }
+.reel-free .slab.rule::before { content: ""; position: absolute; left: 24px; top: 0; height: 62px; width: 3px; background: #B98C52; }
+.reel-free .slab.rule .flag { position: absolute; left: 27px; top: 8px; width: 50px; height: 32px; transform-origin: 0 50%; transform: translateY(70px) scaleX(.2); transition: transform .9s cubic-bezier(.2, 1.3, .4, 1) .15s; }
+.reel-free .slab.rule.on .flag { transform: translateY(0) scaleX(1); }
+.reel-free .slab.rule .flag svg { width: 100%; height: 100%; animation: wave 1.1s ease-in-out infinite alternate; transform-origin: 0 50%; }
+@keyframes wave { to { transform: skewY(5deg) scaleX(.94); } }
+
+/* ---------- el recibo del final ---------- */
+.receipt { margin: 4px 0 16px; padding: 14px 16px; border-radius: 6px; background: #F3EEE1; color: #1C2A2E; font: 600 13px/1.5 var(--mono); }
+.receipt div { display: flex; justify-content: space-between; gap: 12px; }
+.receipt .tot { margin-top: 8px; padding-top: 8px; border-top: 2px dashed #8D9A9B; font-weight: 800; font-size: 16px; }
+
+@media (max-width: 760px) {
+  #bay .boat { width: 104px; height: 118px; margin: -96px 0 0 -52px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #bay .boat svg, .sailbox .rope i, .reel-free .slab.rule .flag svg { animation: none !important; }
+}
