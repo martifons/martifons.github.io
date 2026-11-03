@@ -1,224 +1,113 @@
-// TURTLE — el fondo es el lago visto con teleobjetivo desde la orilla: la orilla de árboles desenfocada y su
-// reflejo, el agua gris verdosa con ondas, y en el centro la garceta de pie sobre la tortuga, las dos mirando a la
-// derecha, con su reflejo debajo. Cada vez que se avanza, la garceta pica delante de la cara de la tortuga y deja
-// un anillo. Tocar el lago hace saltar un pez. Cada prompt está bajo el agua: hay que arrastrar dos de los peces
-// que nadan hasta la boca de la tortuga, que se abre cuando el pez se acerca. Al copiar salta un pez del botón.
-// Las reglas salen de su reflejo. Cámara "lotus".
+// TURTLE (v1 → v2, reel91) — "the photo beats the prompt". El fondo es la foto de inicio de la versión que se
+// está leyendo, desenfocada, con una flecha gigante hacia donde mira la garceta: ← roja en la v1, → verde al
+// llegar al arreglo (gira). La intro compara la v1 y la v2 con una línea que se arrastra. En los prompts se marcan
+// las frases que deciden la dirección y el traspaso del pez. Al copiar, una flecha cruza el botón.
 (() => {
   const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const rnd = (a, b) => a + Math.random() * (b - a);
-  const zum = (p) => { try { if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return; navigator.vibrate && navigator.vibrate(p); } catch {} };
-  const stage = document.getElementById("stage");
 
-  // ---------- el lago ----------
-  const cv = document.createElement("canvas");
-  cv.id = "lake"; cv.setAttribute("aria-hidden", "true");
-  document.body.prepend(cv);
-  const cx = cv.getContext("2d");
-  let W, H, dpr, fondo = null, rizos = [];
-  const anillos = [], saltos = [];
+  // ---------- fondo: la foto de inicio y la flecha ----------
+  const fondo = document.createElement("div");
+  fondo.id = "facing"; fondo.setAttribute("aria-hidden", "true");
+  fondo.innerHTML = `<div class="ph" style="background-image:url(v1-start.jpg)"></div><div class="ph" style="background-image:url(v2-start.jpg)"></div><div class="arrow none">←</div>`;
+  document.body.prepend(fondo);
+  const [ph1, ph2] = fondo.querySelectorAll(".ph");
+  const flecha = fondo.querySelector(".arrow");
 
-  const pintaFondo = () => {
-    fondo = document.createElement("canvas"); fondo.width = W; fondo.height = H;
-    const c = fondo.getContext("2d");
-    let g = c.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0, "#C9D2CC"); g.addColorStop(.12, "#9AAAA1"); g.addColorStop(1, "#56695F");
-    c.fillStyle = g; c.fillRect(0, 0, W, H);
-    // la orilla de árboles, desenfocada, y su reflejo
-    c.filter = `blur(${6 * dpr}px)`;
-    for (const [y0, al] of [[H * .02, .95], [H * .2, .35]]) {
-      for (let k = 0; k < 26; k++) {
-        const x = rnd(-.05, 1.05) * W, r = rnd(.04, .09) * W;
-        c.fillStyle = `rgba(${Math.round(rnd(50, 75))},${Math.round(rnd(80, 100))},${Math.round(rnd(55, 70))},${al})`;
-        c.beginPath(); c.ellipse(x, y0 + H * .06, r, r * .8, 0, 0, 6.283); c.fill();
-      }
-    }
-    c.filter = "none";
-    c.fillStyle = "rgba(220,228,222,.55)"; c.fillRect(0, H * .13, W, H * .012);
+  // qué versión es cada parada, por su etiqueta
+  const version = (label) => (/^V1/.test(label) ? 1 : /^(V2|The fix)/.test(label) ? 2 : 0);
+  const pon = (v) => {
+    ph1.classList.toggle("on", v === 1);
+    ph2.classList.toggle("on", v === 2 || v === 0);
+    flecha.classList.toggle("right", v === 2);
+    flecha.classList.toggle("none", v === 0);
   };
-
-  const tam = () => {
-    dpr = Math.min(2, devicePixelRatio || 1);
-    W = cv.width = Math.round(innerWidth * dpr); H = cv.height = Math.round(innerHeight * dpr);
-    cv.style.width = innerWidth + "px"; cv.style.height = innerHeight + "px";
-    pintaFondo();
-    rizos = []; for (let k = 0; k < 60; k++) rizos.push({ x: rnd(0, 1), y: rnd(.16, 1), w: rnd(.03, .1), f: rnd(0, 6.283) });
-    anillos.length = 0; saltos.length = 0;
-  };
-  tam();
-  addEventListener("resize", tam);
-
-  // la garceta sobre la tortuga, mirando a la derecha; "pica" de 0 (de pie) a 1 (pico en el agua)
-  const pareja = (x, y, s, pica, alfa) => {
-    cx.save(); cx.translate(x, y); cx.scale(s, s); cx.globalAlpha = alfa;
-    // la tortuga: caparazón abombado y la cabeza a la derecha
-    cx.fillStyle = "#3E4430"; cx.beginPath(); cx.ellipse(0, 0, 42, 16, 0, Math.PI, 0); cx.fill();
-    cx.fillStyle = "#5C6638"; cx.beginPath(); cx.ellipse(48, -4, 10, 7, -.2, 0, 6.283); cx.fill();
-    // la garceta: patas, cuerpo, cuello en S y pico naranja
-    cx.strokeStyle = "#141414"; cx.lineWidth = 2.2;
-    cx.beginPath(); cx.moveTo(-8, -15); cx.lineTo(-10, -52); cx.moveTo(4, -15); cx.lineTo(2, -52); cx.stroke();
-    cx.fillStyle = "#F7F7F3"; cx.beginPath(); cx.ellipse(-4, -62, 22, 12, -.15, 0, 6.283); cx.fill();
-    const hx = 22 + 26 * pica, hy = -98 + 92 * pica;
-    cx.strokeStyle = "#F7F7F3"; cx.lineWidth = 7; cx.lineCap = "round";
-    cx.beginPath(); cx.moveTo(12, -66); cx.quadraticCurveTo(26 - 10 * pica, -84 + 20 * pica, hx, hy); cx.stroke();
-    cx.fillStyle = "#F7F7F3"; cx.beginPath(); cx.arc(hx, hy, 5, 0, 6.283); cx.fill();
-    cx.strokeStyle = "#E39A2A"; cx.lineWidth = 2.5;
-    const ang = -.15 + 1.25 * pica;
-    cx.beginPath(); cx.moveTo(hx + 3, hy); cx.lineTo(hx + 3 + Math.cos(ang) * 26, hy + Math.sin(ang) * 26); cx.stroke();
-    cx.restore();
-  };
-
-  let p = 0, objP = 0, ultimo = 0, picaT = -1e9;
-  const pica = () => { picaT = performance.now(); };
-  const pinta = (t) => {
-    const dt = Math.min(50, t - (ultimo || t)); ultimo = t;
-    p += (objP - p) * (quieto ? 1 : Math.min(1, dt / 900));
-    cx.drawImage(fondo, 0, 0);
-    // las ondas del agua
-    cx.strokeStyle = "rgba(235,242,238,.22)"; cx.lineWidth = 1.2 * dpr;
-    for (const r of rizos) {
-      const y = H * r.y, x = ((r.x + t * .000008 * (1 + r.y)) % 1.1) * W, w = r.w * W * (.4 + r.y);
-      cx.beginPath(); cx.moveTo(x, y + Math.sin(t * .002 + r.f) * dpr); cx.lineTo(x + w, y + Math.sin(t * .002 + r.f + 1) * dpr); cx.stroke();
-    }
-    // la pareja, y su reflejo
-    const s = dpr * Math.min(1.6, W / dpr / 300), x0 = W * .42, y0 = H * .56;
-    const e = Math.min(1, (t - picaT) / 700), golpe = quieto ? 0 : (e < 1 ? Math.sin(e * Math.PI) : 0);
-    pareja(x0, y0, s, golpe, 1);
-    cx.save(); cx.translate(0, y0 * 2 + 4 * dpr); cx.scale(1, -1); pareja(x0, y0, s, golpe, .22); cx.restore();
-    if (e > .45 && e < .5 && !quieto) anillos.push({ x: x0 + 58 * s, y: y0, r: 4 * dpr, v: 1 });
-    // los peces que saltan al tocar
-    cx.fillStyle = "#DDE4E6";
-    for (let k = saltos.length - 1; k >= 0; k--) {
-      const f = saltos[k]; f.vy += .0016 * dt * dpr; f.x += f.vx * dt; f.y += f.vy * dt;
-      if (f.y > f.y0 && f.vy > 0) { anillos.push({ x: f.x, y: f.y0, r: 4 * dpr, v: 1 }); saltos.splice(k, 1); continue; }
-      cx.save(); cx.translate(f.x, f.y); cx.rotate(Math.atan2(f.vy, f.vx)); cx.beginPath(); cx.ellipse(0, 0, 9 * dpr, 3.5 * dpr, 0, 0, 6.283); cx.fill();
-      cx.beginPath(); cx.moveTo(-8 * dpr, 0); cx.lineTo(-14 * dpr, -4 * dpr); cx.lineTo(-14 * dpr, 4 * dpr); cx.fill(); cx.restore();
-    }
-    // los anillos
-    cx.lineWidth = 1.6 * dpr;
-    for (let k = anillos.length - 1; k >= 0; k--) {
-      const a = anillos[k]; a.r += .04 * dt * dpr; a.v -= dt / 1800;
-      if (a.v <= 0) { anillos.splice(k, 1); continue; }
-      cx.strokeStyle = `rgba(240,248,244,${.6 * a.v})`;
-      cx.beginPath(); cx.ellipse(a.x, a.y, a.r, a.r * .3, 0, 0, 6.283); cx.stroke();
-    }
-  };
-  const bucle = (t) => { requestAnimationFrame(bucle); pinta(t); };
-  if (quieto) pinta(0); else requestAnimationFrame(bucle);
-  addEventListener("resize", () => { if (quieto) pinta(0); });
-
+  pon(0);
+  const paradas = [...document.querySelectorAll(".stop")];
   addEventListener("flyview", (e) => {
-    const { index, total, dir } = e.detail;
-    objP = total > 1 ? index / (total - 1) : 0;
-    if (dir > 0) pica();
-    if (dir) zum(dir > 0 ? [10, 30, 6] : 6);
-    if (quieto) pinta(0);
+    const el = e.detail.els && e.detail.els[0];
+    const stop = el ? el.closest(".stop") : paradas[e.detail.index];
+    pon(stop ? version(stop.dataset.label || "") : 0);
   });
 
-  // tocar el lago: salta un pez
-  stage.addEventListener("click", (e) => {
-    if (e.target.closest(".slab, button, a")) return;
-    zum(10);
-    if (quieto) return;
-    const y0 = e.clientY * dpr;
-    anillos.push({ x: e.clientX * dpr, y: y0, r: 4 * dpr, v: 1 });
-    saltos.push({ x: e.clientX * dpr, y: y0, y0, vx: rnd(-.15, .15) * dpr, vy: -rnd(.5, .7) * dpr });
+  // ---------- sello de versión en cada paso ----------
+  paradas.forEach((s) => {
+    const v = version(s.dataset.label || "");
+    const num = s.querySelector(".num");
+    if (!v || !num) return;
+    const b = document.createElement("span");
+    b.className = "vstamp " + (v === 1 ? "bad" : "good");
+    b.textContent = v === 1 ? "✕ V1 · FAILED" : "✓ V2 · WORKED";
+    num.after(b);
   });
 
-  // ---------- cada prompt, bajo el agua: dos peces a la boca de la tortuga ----------
-  const HACEN = 2;
-  document.querySelectorAll(".code").forEach((code, n) => {
-    const caja = document.createElement("div");
-    caja.className = "pond on";
-    code.replaceWith(caja); caja.appendChild(code);
-    caja.insertAdjacentHTML("beforeend", `<div class="water" data-nofly role="button" tabindex="0" aria-label="Drag two fish into the turtle's mouth to reveal the prompt"><p class="count">Feed the turtle: <b>0</b> / ${HACEN}</p><span class="head"><i class="mouth"></i></span>${'<i class="fish"></i>'.repeat(3)}</div>`);
-    const agua = caja.querySelector(".water"), boca = agua.querySelector(".mouth"), cuenta = agua.querySelector(".count b");
-    const peces = [...agua.querySelectorAll(".fish")].map((el, k) => ({ el, f: k * 2.1 + n, x: .3, y: .5, suelto: true, fuera: false, vx: 1 }));
-    let comidos = 0, hecho = false, cogido = null, antes = 0;
-    const anillo = (x, y) => { if (quieto) return; const r = document.createElement("i"); r.className = "ring"; r.style.left = x + "px"; r.style.top = y + "px"; agua.appendChild(r); r.addEventListener("animationend", () => r.remove()); };
-    const centroBoca = () => { const a = agua.getBoundingClientRect(), b = boca.getBoundingClientRect(); return [b.left + b.width / 2 - a.left, b.top + b.height / 2 - a.top]; };
-    const coloca = (q, w, h) => { q.el.style.transform = `translate(${(q.x * w).toFixed(1)}px,${(q.y * h).toFixed(1)}px) scaleX(${q.vx < 0 ? -1 : 1})`; };
-    const abre = () => {
-      if (hecho) return;
-      hecho = true; caja.classList.remove("on"); caja.classList.add("off");
-      zum([15, 30, 50]);
-      setTimeout(() => agua.remove(), quieto ? 0 : 1100);
+  // ---------- comparador v1 | v2 en la intro ----------
+  const clip = document.getElementById("clip");
+  if (clip) {
+    const shot = clip.closest(".shot");
+    shot.classList.add("cmp");
+    const v1 = document.createElement("video");
+    Object.assign(v1, { src: "v1.mp4", muted: true, loop: true, playsInline: true, preload: "metadata" });
+    v1.className = "v1"; v1.setAttribute("playsinline", ""); v1.poster = "v1-f1.jpg";
+    shot.append(v1);
+    shot.insertAdjacentHTML("beforeend", `<div class="line"></div><span class="tagv l">V1 ✕</span><span class="tagv r">V2 ✓</span>`);
+    // los dos a la vez, en el mismo segundo
+    const sync = () => { if (Math.abs(v1.currentTime - clip.currentTime) > .15) v1.currentTime = clip.currentTime; };
+    clip.addEventListener("play", () => { v1.play().catch(() => {}); });
+    clip.addEventListener("pause", () => v1.pause());
+    clip.addEventListener("timeupdate", sync);
+    const mueve = (x) => {
+      const r = shot.getBoundingClientRect();
+      const p = Math.max(0, Math.min(100, ((x - r.left) / r.width) * 100));
+      shot.style.setProperty("--x", p.toFixed(1) + "%");
     };
-    const come = (q) => {
-      q.fuera = true; q.el.classList.add("gone"); agua.classList.remove("near");
-      agua.classList.remove("gulp"); void agua.offsetWidth; agua.classList.add("gulp");
-      comidos++; cuenta.textContent = comidos; zum([10, 40, 10]);
-      if (comidos >= HACEN) setTimeout(abre, quieto ? 0 : 500);
-    };
-    const nada = (t) => {
-      if (hecho) return;
-      const dt = Math.min(50, t - (antes || t)); antes = t;
-      const r = agua.getBoundingClientRect();
-      for (const q of peces) {
-        if (q.fuera || q === cogido) continue;
-        // nadan en ochos lentos por la mitad izquierda del agua
-        const nx = .34 + .24 * Math.sin(t * .0006 + q.f), ny = .3 + .45 * (.5 + .5 * Math.sin(t * .0009 + q.f * 1.7));
-        q.vx = nx - q.x || q.vx; q.x += (nx - q.x) * Math.min(1, dt / 400); q.y += (ny - q.y) * Math.min(1, dt / 400);
-        coloca(q, r.width, r.height);
-      }
-      requestAnimationFrame(nada);
-    };
-    agua.addEventListener("pointerdown", (e) => {
-      if (hecho) return;
-      const q = peces.find((p) => p.el === e.target && !p.fuera);
-      if (!q) return;
-      cogido = q; q.el.classList.add("held"); zum(8);
-      try { agua.setPointerCapture(e.pointerId); } catch {}
-    });
-    agua.addEventListener("pointermove", (e) => {
-      if (!cogido) return;
-      const r = agua.getBoundingClientRect();
-      cogido.x = (e.clientX - r.left) / r.width; cogido.y = (e.clientY - r.top) / r.height; cogido.vx = 1;
-      coloca(cogido, r.width, r.height);
-      const [bx, by] = centroBoca();
-      agua.classList.toggle("near", Math.hypot(e.clientX - r.left - bx, e.clientY - r.top - by) < 60);
-    });
-    const suelta = (e) => {
-      if (!cogido) return;
-      const q = cogido; cogido = null; q.el.classList.remove("held");
-      const r = agua.getBoundingClientRect(), [bx, by] = centroBoca();
-      if (Math.hypot(e.clientX - r.left - bx, e.clientY - r.top - by) < 60) come(q);
-      else { anillo(e.clientX - r.left, e.clientY - r.top); agua.classList.remove("near"); }
-    };
-    agua.addEventListener("pointerup", suelta);
-    agua.addEventListener("pointercancel", (e) => suelta(e));
-    agua.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); const q = peces.find((p) => !p.fuera); if (q) come(q); } });
-    caja.parentElement.querySelector(".cp")?.addEventListener("click", abre);
-    if (quieto) { peces.forEach((q, k) => { q.x = .25 + .15 * k; q.y = .5; }); requestAnimationFrame(() => { const r = agua.getBoundingClientRect(); peces.forEach((q) => coloca(q, r.width, r.height)); }); }
-    else requestAnimationFrame(nada);
-  });
+    let arrastra = false;
+    shot.addEventListener("pointerdown", (e) => { arrastra = true; mueve(e.clientX); e.stopPropagation(); try { shot.setPointerCapture(e.pointerId); } catch {} });
+    shot.addEventListener("pointermove", (e) => { if (arrastra) { mueve(e.clientX); e.stopPropagation(); } });
+    const suelta = () => { arrastra = false; };
+    shot.addEventListener("pointerup", suelta); shot.addEventListener("pointercancel", suelta);
+    // que no lo confunda con deslizar entre targetas
+    ["touchstart", "touchmove", "mousedown", "wheel"].forEach((t) => shot.addEventListener(t, (e) => e.stopPropagation(), { passive: true }));
+    // un vaivén al principio para que se vea que se arrastra
+    if (!quieto) {
+      let t0 = null;
+      const vaiven = (t) => {
+        if (arrastra) return;
+        t0 ??= t; const k = (t - t0) / 1800;
+        if (k > 1) { shot.style.setProperty("--x", "50%"); return; }
+        shot.style.setProperty("--x", (50 + 22 * Math.sin(k * Math.PI * 2)).toFixed(1) + "%");
+        requestAnimationFrame(vaiven);
+      };
+      setTimeout(() => requestAnimationFrame(vaiven), 900);
+    }
+  }
 
-  // al copiar: un pez salta del botón
-  document.querySelectorAll(".cp[data-copy]").forEach((b) => b.addEventListener("click", () => {
-    zum([8, 20, 8]);
-    if (quieto) return;
-    const r = b.getBoundingClientRect(), f = document.createElement("span");
-    f.className = "jump"; f.textContent = "🐟";
-    f.style.cssText = `left:${r.left + r.width / 2}px;top:${r.top}px;--dx:${rnd(-90, 90).toFixed(0)}px`;
-    document.body.appendChild(f); f.addEventListener("animationend", () => f.remove());
+  // ---------- frases marcadas en los prompts ----------
+  const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const marca = (pre, reglas) => {
+    let html = esc(pre.textContent);
+    for (const [re, cls, why] of reglas) html = html.replace(re, (m) => `<mark class="${cls}" title="${why}">${m}</mark>`);
+    pre.innerHTML = html; // textContent queda igual: copiar sigue dando el prompt limpio
+  };
+  const leyenda = (pre, items) => {
+    const d = document.createElement("div"); d.className = "legend";
+    d.innerHTML = items.map(([c, t]) => `<span class="${c}">${t}</span>`).join("");
+    pre.before(d);
+  };
+  const porEtiqueta = (l) => paradas.find((s) => s.dataset.label === l)?.querySelector(".code");
+  const i1 = porEtiqueta("V1 frame"), v1p = porEtiqueta("V1 take"), i2 = porEtiqueta("The fix"), v2p = porEtiqueta("V2 take");
+  if (i1) { marca(i1, [[/its head lowered as it looks at the water/, "vague", "No direction: Soul 2 picked left"]]); leyenda(i1, [["vague", "no direction: the model picks one"]]); }
+  if (v1p) {
+    marca(v1p, [[/facing right/g, "lie", "The photo said left"], [/the egret lets the fish drop into it/, "vague", "One line for the handoff"]]);
+    leyenda(v1p, [["lie", "the photo said left"], ["vague", "handoff in one line"]]);
+  }
+  if (i2) { marca(i2, [[/facing right/g, "truth", "Direction in the photo"], [/a hand's width in front of the turtle's face/, "truth", "The action, posed"]]); leyenda(i2, [["truth", "direction and action, in the photo"]]); }
+  if (v2p) { marca(v2p, [[/facing right/g, "truth", "Matches the photo"], [/never in the water/g, "truth", "Where it ends"]]); leyenda(v2p, [["truth", "matches the photo · says where it ends"]]); }
+
+  // ---------- copiar: una flecha cruza el botón ----------
+  if (!quieto) document.querySelectorAll(".cp[data-copy]").forEach((b) => b.addEventListener("click", () => {
+    setTimeout(() => {
+      const s = document.createElement("span"); s.className = "shoot"; s.textContent = "→";
+      b.append(s); setTimeout(() => s.remove(), 800);
+    }, 20);
   }));
-
-  // ---------- reglas: salen de su reflejo ----------
-  const reglas = [...document.querySelectorAll(".slab.rule")];
-  reglas.forEach((s) => {
-    if (!quieto) s.classList.add("mirror");
-    s.setAttribute("role", "button"); s.tabIndex = 0;
-    s._sale = () => {
-      if (quieto) return;
-      s.classList.add("mirror"); void s.offsetWidth;
-      setTimeout(() => s.classList.remove("mirror"), 60);
-      zum([6, 30, 6]);
-    };
-    s.addEventListener("click", s._sale);
-    s.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); s._sale(); } });
-  });
-  addEventListener("flyview", (e) => {
-    reglas.filter((s) => e.detail.els.includes(s) && !s._vista)
-      .forEach((s, n) => { s._vista = true; setTimeout(() => { s.classList.remove("mirror"); zum([6, 30, 6]); }, (quieto ? 0 : 500) + n * 350); });
-  });
 })();
