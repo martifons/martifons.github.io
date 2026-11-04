@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en" class="reel-review" style="--ar: 720 / 1280; --arn: 0.5625" data-fly="scrub">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claude found four mistakes in this AI clip — prompts · @martiifons</title>
+<meta name="description" content="Free prompt pack: the prompt that makes Claude review an AI video frame by frame, the rewritten video prompt that fixed three of four mistakes, and the prompt behind the AI avatar.">
+<meta property="og:title" content="Claude found four mistakes in this AI clip — prompts · @martiifons">
+<meta property="og:description" content="Free prompt pack: the prompt that makes Claude review an AI video frame by frame, the rewritten video prompt that fixed three of four mistakes, and the prompt behind the AI avatar.">
+<meta property="og:image" content="https://martifons.github.io/review/poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FF2A1F">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='%23FF2A1F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<div id="ticker" class="hud" aria-hidden="true"><span>Four mistakes · 3 prompts · Frame by frame · Three fixed · The dog still won't shake · @martiifons · Four mistakes · 3 prompts · Frame by frame · Three fixed · The dog still won't shake · @martiifons · Four mistakes · 3 prompts · Frame by frame · Three fixed · The dog still won't shake · @martiifons · Four mistakes · 3 prompts · Frame by frame · Three fixed · The dog still won't shake · @martiifons · Four mistakes · 3 prompts · Frame by frame · Three fixed · The dog still won't shake · @martiifons · Four mistakes · 3 prompts · Frame by frame · Three fixed · The dog still won't shake · @martiifons · Four mistakes · 3 prompts · Frame by frame · Three fixed · The dog still won't shake · @martiifons · Four mistakes · 3 prompts · Frame by frame · Three fixed · The dog still won't shake · @martiifons · Four mistakes · 3 prompts · Frame by frame · Three fixed · The dog still won't shake · @martiifons · Four mistakes · 3 prompts · Frame by frame · Three fixed · The dog still won't shake · @martiifons · </span></div>
+<div id="bar" class="hud"><i></i></div>
+<header id="top" class="hud">
+  <a class="mark" href="../">@martiifons</a>
+  <b>Frame by frame</b>
+  <span id="now"></span>
+</header>
+<nav id="rail" class="hud" aria-label="Sections">
+  <button class="dot" type="button"><span>Intro</span><i></i></button>
+  <button class="dot" type="button"><span>The review</span><i></i></button>
+  <button class="dot" type="button"><span>The rewrite</span><i></i></button>
+  <button class="dot" type="button"><span>The avatar</span><i></i></button>
+  <button class="dot" type="button"><span>How to</span><i></i></button>
+  <button class="dot" type="button"><span>Outro</span><i></i></button>
+</nav>
+<main id="stage">
+<div id="cam">
+<section class="stop" data-label="Intro">
+  <div class="slab hero">
+    <p class="k">Free prompt pack</p>
+    <h1 class="big">It looked fine.<em>It had four mistakes.</em></h1>
+    <p>I sent an AI clip of an elephant and a dog to Claude and asked it to check every frame. The water missed the dog. Water came from nowhere. The dog never shook. The camera slid 12%. Then it rewrote the prompt: three fixed, and the dog still won't shake.</p>
+    <p><strong>The review prompt, the rewrite and the avatar.</strong> Find the four mistakes yourself to unlock the first prompt. Tap anywhere on the light table to mark it in red.</p>
+    <div class="tags"><span class="tag">Claude + Google Flow</span><span class="tag">Omni Flash</span></div>
+  </div>
+  <div class="slab narrow">
+    <div class="shot"><video id="clip" src="video.mp4" poster="poster.jpg" muted loop playsinline preload="metadata"></video></div>
+    <div class="cap"><span>The reel</span><button class="sound" type="button" data-sound="clip">Sound on</button></div>
+  </div>
+</section>
+<section class="stop" data-label="The review">
+  <div class="slab">
+    <span class="num">01 / 03</span>
+    <div class="model">Claude</div>
+    <h2 class="big">The review prompt</h2>
+    <p><strong>Paste it with your clip and your prompt.</strong> It makes Claude look at the clip frame by frame and prove every mistake with a crop. Claude Code can pull the frames itself with ffmpeg; in the chat, it asks you for screenshots.</p>
+    
+    <div class="watch"><p class="k soft">Watch out</p><p>Claude sees frames, not the clip playing, and it can't hear the audio. Listen to the voice yourself.</p></div>
+    
+  </div>
+  
+  <div class="slab wide">
+    <p class="k">The prompt <small>358 words</small></p>
+    <pre class="code" id="p1">You are reviewing an AI-generated video clip before I post it. Be strict: assume something is wrong until a frame proves otherwise. Watching it once at full speed proves nothing.
+
+WHAT I'M GIVING YOU
+The clip, and the prompt I used to generate it. The prompt is below.
+
+HOW TO LOOK AT IT
+If you can run commands, use ffmpeg:
+1. Extract the whole clip at 8 frames per second and build contact sheets, with the timestamp on every frame.
+2. Measure the change from one frame to the next at the clip's own frame rate, to find cuts and repeated frames.
+3. Crop and enlarge every moment where something happens: a contact, a splash, a hand, a mouth. Small mistakes only show up in a crop.
+If you can't run commands, don't guess. Ask me for screenshots: one every half second, then closer ones around anything that looks wrong.
+
+WHAT TO CHECK
+- Cause: everything that appears comes from somewhere. Where does it come from, and in which frame?
+- Contact: the exact point where things touch or land. Does it land where the prompt says?
+- The whole action: if the prompt asks for a full-body movement, does the whole body move, or only one part?
+- The camera: pick one object that never moves and measure its position in the first and last frame. Report any drift as a percentage of the frame width.
+- The prompt against the picture: go through the prompt line by line and mark each line as done or not done.
+- The usual failures: cuts, repeated frames, morphing, extra limbs, letters or logos in the frame, anything that wasn't asked for.
+
+WHAT TO GIVE ME
+1. A table: second, what happens, pass or fail.
+2. For each fail: the exact second, the cropped frame as proof, why the prompt allowed it, and the one line to change.
+3. The full rewritten prompt, changing only the lines that caused the failures. Leave everything that worked word for word.
+
+Don't report anything you can't point to in a frame. If you aren't sure, say so.
+
+MY PROMPT
+[paste your prompt here]</pre>
+    <button class="cp" type="button" data-copy="p1">Copy prompt</button>
+  </div>
+</section>
+<section class="stop" data-label="The rewrite">
+  <div class="slab">
+    <span class="num">02 / 03</span>
+    <div class="model">Google Flow · Omni Flash</div>
+    <h2 class="big">The prompt it fixed</h2>
+    <p><strong>Same photo, new prompt.</strong> Add your first frame as the reference, set 10 s, 9:16, 720p and audio on, and paste it whole. The line that mattered most says where the water lands.</p>
+    <ul class="beats"><li><b>Before</b>like a garden hose on a low setting</li><li><b>After</b>strong enough to fly 1.5 m and land on the dog</li></ul>
+    <div class="watch"><p class="k soft">Watch out</p><p>Three fixed, one not. The water hits the dog, nothing comes from nowhere and the camera holds still, but the dog still only moves its head. The prompt asks for a full shake and the model doesn't do it.</p></div>
+    
+  </div>
+  
+  <div class="slab wide">
+    <p class="k">The prompt <small>1188 words</small></p>
+    <pre class="code" id="p2">FORMAT
+Real video filmed with a long lens from a village road, seen as the finished exported video file: the full picture edge to edge, nothing on top of it. Whatever records the picture is never in frame. One continuous take in real time, no cuts. Vertical frame. The video runs at 24 fps. No frame is repeated. Real time, 1x speed, never slow motion.
+
+SCENE
+On a hot dusty road, a stray dog lies panting in the sun in front of an elephant's water trough. The elephant sucks water from the trough, lifts its trunk and sprays the dog: an arc of water flies over the trough and soaks the dog's back and head; the dog closes its eyes and thumps its tail. Then the dog stands up and shakes itself dry, right at the elephant, and the water flies all over the elephant's face. The elephant blinks and flaps its ears. The elephant's trunk is already in the trough in the first frame. The take ends with the dog sitting in front of the trough, wagging, and drops running down the elephant's face.
+
+REFERENCE IMAGE
+Use it for the elephant, the dog, the trough, the road, the houses, the palm trees and the light, and for where each of them is: the elephant faces us, the trough lies across the road in front of its front feet, and the dog lies in the dust in front of the trough, closer to us, exactly as in the image. Everything matches it exactly, zero drift, no smoothing. The movement is described below.
+
+THE ELEPHANT
+One real Asian elephant, facing us: grey wrinkled skin with pink freckles on its trunk and ears, small ears, a few coarse hairs on its head, an amber eye with long lashes. It stands in the same spot behind the trough the whole take; only its trunk, ears, eyes and head move. It moves like a real elephant: slow, heavy, careful; its trunk curls and points precisely.
+
+THE DOG
+One real tan short-haired street dog, medium size, with a curled tail, upright ears and a dark muzzle. It moves like a real dog: panting, tail thumping, then a full-body shake that starts at the head and rolls down to the tail.
+
+THE WATER
+The elephant sucks up water from the trough: the trunk swells slightly. It blows it out of the tip of its trunk as one steady arc of water, like a garden hose held up high, strong enough to fly 1.5 m forward over the trough and land on the dog. The water from the trunk lands on the dog, never on the ground beside it, never back in the trough. It is never a burst and never a mist that hides anything. The dog's tan fur turns dark and wet where it lands, and the water runs off it into the dust. The dog's shake throws off a spray of droplets that flies about one metre, onto the elephant's face.
+
+LOCATION MAP
+We stand on the road 10 m in front of the elephant, at standing height. The elephant stands in the middle of the frame, facing us. A battered metal trough lies across the road right in front of its front feet. The dog lies in the dust just in front of the trough, between the trough and us, about 1.5 m from the elephant's trunk, its head toward frame-right. Behind: palm trees, wooden houses on stilts, a pale hazy sky.
+
+FIRST FRAME
+The elephant's head at x 45-95%, y 15-45%, its body behind it to the right edge; the tip of its trunk in the trough at x 50-60%, y 52-62%; the trough across x 36-88%, y 60-70%; the dog lying at x 10-78%, y 73-92%, its head at x 55-68%, y 73-83%, tongue out; the houses and palms at y 20-45% on the left. Instant read: an elephant at its trough with a hot, panting dog lying in front of it. No delayed reveal.
+
+CAMERA
+Locked off: a still frame with only the faintest natural movement of a long lens. It never pans, never zooms, never cuts, never moves closer.
+
+ACTION TIMING
+0–1.5 s — The elephant sucks water from the trough, its trunk swelling slightly, then lifts its trunk out, dripping, raises it and curls the tip forward over the trough, pointing it at the dog; the dog pants in the sun.
+1.5–4.5 s — The elephant blows a steady arc of water from the tip of its trunk; the arc flies over the trough and lands on the dog's back, then moves slowly along to its neck and head; the dog's fur turns dark and wet, water runs off into the dust; the dog closes its eyes and its tail thumps the ground.
+4.5–5.5 s — The water stops; the elephant curls the tip of its trunk up.
+5.5–7.5 s — The dog stands up, steps to the edge of the trough facing the elephant and shakes itself hard from head to tail; a spray of droplets flies up off its fur onto the elephant's face and trunk.
+7.5–10 s — The elephant blinks slowly and flaps its ears once, drops running down its face; the dog sits down in front of the trough and looks up at it, wagging. Hold to the last frame.
+
+PHYSICS AND SCALE
+Real size: the elephant is about 2.7 m tall at the shoulder, the dog about 50 cm, the trough about 1.5 m long. The arc of water is narrow and falls in a real curve onto the dog; the drops fall at real speed and the wet fur clumps. One elephant, one dog, one trough. Nothing morphs.
+
+NO FULL-FRAME EVENTS
+Nothing fills the frame: the water is one thin arc and one small spray; the elephant, the dog and the road stay visible in every frame. The picture never goes white or misty.
+
+LIGHTING
+Harsh midday sun from above and slightly from frame-right: short shadows, bright dust, glistening wet fur and wet elephant skin; sunlight sparkling in the water.
+
+AUDIO
+No music, no score, no narration, no subtitles. Village midday sounds: insects, distant birds, the slurp of the trunk in the trough, the hiss of the arc of water and its patter on the dog's fur, the dog's panting, the flap of the dog's ears as it shakes, a soft low rumble from the elephant. No words.
+
+LOOK
+Real documentary footage shot on a long lens, seen as the finished exported file: crisp skin and fur detail, natural colour, no film grain, no lens flare, no slow motion, never CGI, never a cartoon. No camera app interface: no shutter button, no gallery thumbnail, no record button, no icons, no timer, no recording dot, no frame lines.
+
+POSITIVE LOCKS
+One elephant, one dog, one trough. The elephant never leaves its spot. The water from the trunk lands on the dog. No people, no vehicles. No captions, no subtitles, no on-screen text, no watermark, no logos, nothing on top of the picture.
+ONE ELEPHANT. ONE DOG. THE WATER HITS THE DOG. NO CUTS. NO ZOOM. NO SLOW MOTION. NO MUSIC.</pre>
+    <button class="cp" type="button" data-copy="p2">Copy prompt</button>
+  </div>
+</section>
+<section class="stop" data-label="The avatar">
+  <div class="slab">
+    <span class="num">03 / 03</span>
+    <div class="model">Google Flow · Omni Flash</div>
+    <h2 class="big">Yes, it's AI too</h2>
+    <p><strong>The guy talking isn't me.</strong> Add a photo of your avatar as the reference, set 8 s, 9:16, 720p and audio on. Swap the line he says for yours and leave the rest. The reel is three of these clips, with the pauses cut out in the edit.</p>
+    
+    <div class="watch"><p class="k soft">Watch out</p><p>Don't time his sentences or his gestures. With a timecode per sentence he waits between them, and his hands run ahead of his voice.</p></div>
+    
+  </div>
+  
+  <div class="slab wide">
+    <p class="k">The prompt <small>742 words</small></p>
+    <pre class="code" id="p3">FORMAT
+Real footage seen as the finished exported video file: the full picture edge to edge, nothing on top of it. The video runs at 24 fps. No frame is repeated. Real time, 1x speed, never slow motion. One continuous take, no cuts.
+
+REFERENCES
+Use the reference image for the man, his clothing and the room. Keep its framing: he stays where he is in the image. The face matches the reference exactly: zero drift, no smoothing.
+
+LOCATION MAP
+A plain room at home in the daytime. Behind him, 2 m away, a bare off-white painted wall, slightly uneven. On frame-left, a tall window with a white linen curtain, closed and still. On frame-right, a simple pale wooden shelf with three plain old books and a small green plant. The shelf, the books, the plant and the curtain stay exactly where they are the whole take.
+
+THE MAN
+One man with two hands. Navy cotton cap worn backwards, its plastic strap across his forehead; short dark-brown curly hair showing at the sides; brown eyes; light freckles on his nose and cheeks; faint stubble on his jaw; dark navy ribbed crew-neck sweater. He talks with his whole body, like someone telling a friend something he can't wait to say: his head and shoulders move with the words, his eyebrows stay busy. His open relaxed hands move loosely in front of his chest, and each small movement lands exactly on a stressed word, in time with his voice. He never counts on his fingers, never makes a finger sign, never points, never holds a pose.
+
+VOICE
+Bright male voice in the upper-mid tenor register, forward and light in the mask; quick conversational tempo with a clean push on numbers; European accent with a light Spanish inflection; warm, confident, talking to a friend. He never shouts and never drops into a whisper. Clean and close on the mic. He never sounds like an advert or a presenter. &quot;Claude&quot; is pronounced &quot;clawd&quot;. &quot;AI&quot; is spoken as two letters, &quot;ay-eye&quot;. He talks in one quick unbroken flow: each sentence starts the instant the last one ends, with no pause and no breath between sentences.
+
+LOOK
+Soft overcast daylight from the window on frame-left, one light logic, gentle shadow on the frame-right side of his face. Natural true-to-life colour, gentle background blur. Real skin with pores and fine hair, wet living eyes with a clear catch-light in both pupils. No colour grade, no lens flare. No camera app interface: no shutter button, no gallery thumbnail, no record button, no icons, no timer, no recording dot, no frame lines. Whatever records the picture is never visible, no reflection of it.
+
+LOCKS
+Exactly one person, this room. Each hand has five fingers. No music, no score, no narration, no subtitles, no captions, no on-screen text, no watermark, no logos. No letters or numbers anywhere in the frame, including the spines of the books.
+
+CAMERA
+Fixed at his eye level, 1.5 m from him, with only the faintest natural sway. It holds on him the whole take. It never pushes in, never pulls back, never pans, never orbits, never zooms, never cuts away.
+
+FIRST FRAME
+The framing of the reference image. He is seated in the centre, seen from the chest up, bare wall above his cap, window and curtain on frame-left, shelf on frame-right. He is already talking on the very first frame: mouth open on the first word, eyes on the lens, one open hand already in front of his chest. He stays seated; his hands stay in the lower half of the frame, never covering his face.
+
+ACTION TIMING
+0–5.2 s — He speaks the whole line in one unbroken flow, already talking on frame one. His eyebrows lift on the question at the start, then he leans a little toward the lens and his voice pushes on the number at the end.
+5.2–8 s — He stops talking, lips closed, a half smile, eyes on the lens, his hands settling down below the bottom edge of the frame, breathing. Hold to the last frame.
+
+AUDIO
+Exactly one speaker. The man says, once, in order, without stopping between sentences: &quot;This AI clip looks fine, right? I sent it to Claude, and it found four mistakes.&quot; He says nothing else, no extra word before or after. Under his voice, very quietly: the soft tone of a still room, and the faint rustle of his sweater as his arms move.</pre>
+    <button class="cp" type="button" data-copy="p3">Copy prompt</button>
+  </div>
+</section>
+<section class="stop rules" data-label="How to">
+  <div class="slab rule">
+    <p class="k">Rule 01</p>
+    <h3>Full speed lies</h3>
+    <p>Every one of these mistakes passes at full speed. They only show up in single frames, so check it frame by frame before you post.</p>
+  </div>
+  <div class="slab rule">
+    <p class="k">Rule 02</p>
+    <h3>Ask for proof</h3>
+    <p>A second and a crop for every mistake. A review without a frame to point at is just an opinion.</p>
+  </div>
+  <div class="slab rule">
+    <p class="k">Rule 03</p>
+    <h3>Change only what failed</h3>
+    <p>Rewrite one line per mistake and leave the rest word for word. Rewriting everything destroys what already worked.</p>
+  </div>
+</section>
+<section class="stop" data-label="Outro">
+  <div class="slab hero">
+    <p class="k">That's the whole review</p>
+    <h2 class="big">Now go check<em>your last clip.</em></h2>
+    <p>If Claude finds something good in yours, send it over. I read every DM. And if you get the dog to shake, I really want to see it.</p>
+    <a class="handle" href="https://www.instagram.com/martiifons/">@martiifons</a>
+    <div class="tags"><span class="tag">New prompts every week</span></div>
+  </div>
+  <div class="slab">
+    <p class="k">More prompts</p>
+    <p>Every prompt from my reels, image and video, in one place.</p>
+    <a class="cp link-btn" href="../">See all prompts</a>
+    <div class="tags"><span class="tag">The dog still won't shake</span></div>
+  </div>
+</section>
+</div>
+</main>
+<div id="nav" class="hud"><button id="prev" type="button">Back</button><button id="next" type="button">Next</button></div>
+<div id="foot" class="hud">
+  <span id="count"></span>
+  <span><span class="on-desk"><kbd>Scroll</kbd> fly <kbd>Drag</kbd> look</span><span class="on-phone"><kbd>Swipe</kbd> or <kbd>tap</kbd> to fly</span></span>
+</div>
+<script src="../fly.js"></script>
+<script src="theme.js"></script>
+</body>
+</html>

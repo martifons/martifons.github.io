@@ -1,0 +1,88 @@
+/* REVIEW (reel93) — "Claude found four mistakes". Behind: an editor's light table, warm and bright, with the real strip
+   of the failed clip and a playhead that advances frame by frame (fly: scrub). Tap the table and a red grease pencil
+   circles the spot. The first prompt is locked under a spot-the-mistake game on the real frames, the second under a
+   before/after you drag, the third under a stamp. Copying draws a red tick. Rules get corrected in red pen. */
+
+.reel-review body { background: #EFE9DC; }
+.reel-review body::before { background: none; }
+
+#table { position: fixed; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; background: radial-gradient(ellipse 90% 70% at 50% 45%, #FFFDF6 0%, #F5EFE2 55%, #DDD3BF 100%); }
+#table::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(70, 55, 35, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(70, 55, 35, .07) 1px, transparent 1px); background-size: 48px 48px; }
+#table .film { position: absolute; left: 0; right: 0; top: 13%; height: 172px; background: #141210; padding: 16px 0; transition: transform 1.2s cubic-bezier(.3, .8, .2, 1); will-change: transform; width: 400vw; box-shadow: 0 12px 30px rgba(50, 35, 15, .3); }
+#table .film::before, #table .film::after { content: ""; position: absolute; left: 0; right: 0; height: 10px; background: repeating-linear-gradient(90deg, #EFE9DC 0 9px, transparent 9px 22px); }
+#table .film::before { top: 3px; } #table .film::after { bottom: 3px; }
+#table .film i { display: block; height: 100%; background-repeat: repeat-x; background-size: auto 100%; opacity: .92; }
+#table .head { position: absolute; left: 50%; top: calc(13% - 18px); width: 4px; height: 208px; margin-left: -2px; background: #FF2A1F; box-shadow: 0 0 12px rgba(255, 42, 31, .5); }
+#table .head::before { content: ""; position: absolute; left: -9px; top: -2px; border: 11px solid transparent; border-top: 15px solid #FF2A1F; }
+#table svg.pen { position: absolute; inset: 0; width: 100%; height: 100%; }
+#table svg.pen path { fill: none; stroke: #FF2A1F; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: drawn .34s ease-out forwards; }
+@keyframes drawn { to { stroke-dashoffset: 0; } }
+
+/* the chrome sits on a bright table, so it goes dark */
+.reel-review #top, .reel-review #rail, .reel-review #nav, .reel-review #bar { color: #141210; }
+.reel-review #top *, .reel-review #nav button:not(:last-child) { color: #141210; }
+.reel-review #foot { color: #5E5447; }
+
+.reel-review .slab { background: rgba(18, 15, 13, .98); border-color: rgba(255, 255, 255, .1); box-shadow: 0 26px 60px rgba(60, 42, 20, .38); }
+.reel-review .slab.hero { border-color: rgba(255, 42, 31, .6); }
+
+/* ---------- the lid over each prompt ---------- */
+.lidbox { position: relative; overflow: hidden; border-radius: 12px; }
+.lidbox:not(.open) .code { overflow: hidden; }
+.lid { position: absolute; inset: 0; z-index: 3; background: #F7F2E6; color: #141210; display: flex; flex-direction: column; font-family: var(--body); touch-action: manipulation; transition: transform .55s cubic-bezier(.6, 0, .2, 1); }
+.lidbox.open .lid { transform: translateY(-104%); pointer-events: none; }
+.lid .q { padding: 14px 16px 10px; font-weight: 800; font-size: 20px; line-height: 1.12; letter-spacing: -.045em; }
+.lid .q small { display: block; font: 700 12px/1.3 var(--mono); letter-spacing: 0; color: #FF2A1F; margin-bottom: 5px; }
+.lid .pic { position: relative; width: 100%; aspect-ratio: 4 / 3; flex: none; background: #000; overflow: hidden; cursor: crosshair; }
+.lid .pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; -webkit-user-drag: none; user-select: none; pointer-events: none; }
+.lid .pic svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.lid .ring { fill: none; stroke: #FF2A1F; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: drawn .4s ease-out forwards; }
+.lid .miss { position: absolute; width: 26px; height: 26px; margin: -13px; color: #fff; font: 800 22px/26px var(--body); text-align: center; text-shadow: 0 1px 4px #000; animation: missOut .7s ease-out forwards; pointer-events: none; }
+@keyframes missOut { to { opacity: 0; transform: scale(1.5); } }
+.lid .hint { position: absolute; border-radius: 50%; border: 3px dashed rgba(255, 255, 255, .95); animation: hint 1s ease-in-out infinite alternate; pointer-events: none; }
+@keyframes hint { to { transform: scale(1.1); } }
+.lid .ans { position: absolute; left: 10px; bottom: 10px; padding: 8px 14px; border-radius: 22px; background: #fff; font-weight: 700; font-size: 16px; letter-spacing: -.05em; box-shadow: 0 6px 16px rgba(0, 0, 0, .3); animation: ansIn .3s cubic-bezier(.3, 1.6, .5, 1); white-space: nowrap; }
+.lid .ans b { color: #FF2A1F; margin-right: 6px; }
+@keyframes ansIn { from { transform: translateY(12px) scale(.8); opacity: 0; } }
+.lid .ticks { display: flex; gap: 8px; padding: 12px 16px; align-items: center; }
+.lid .ticks i { flex: none; width: 26px; height: 26px; border-radius: 13px; border: 3px solid rgba(20, 18, 16, .25); display: block; transition: all .25s; }
+.lid .ticks i.on { background: #FF2A1F; border-color: #FF2A1F; transform: scale(1.08); }
+.lid .skip { margin-left: auto; min-height: 44px; padding: 0 4px; white-space: nowrap; background: none; border: 0; font: 600 14px/1 var(--body); color: #6F665A; text-decoration: underline; cursor: pointer; }
+
+.lid .tip { margin: 0; padding: 0 16px 14px; font-weight: 500; font-size: 15px; line-height: 1.25; letter-spacing: -.04em; color: #5E5447; }
+
+/* before / after */
+.lid.ba .pic { cursor: ew-resize; touch-action: none; }
+.lid.ba .top { clip-path: inset(0 0 0 var(--x, 26%)); }
+.lid.ba .bar { position: absolute; top: 0; bottom: 0; left: var(--x, 26%); width: 4px; margin-left: -2px; background: #fff; box-shadow: 0 0 10px rgba(0, 0, 0, .5); }
+.lid.ba .bar::after { content: "↔"; position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px; border-radius: 26px; background: #FF2A1F; color: #fff; font: 800 24px/52px var(--body); text-align: center; box-shadow: 0 6px 16px rgba(0, 0, 0, .4); }
+.lid:not(.moved).ba .bar { animation: nudge 1.6s ease-in-out infinite; }
+@keyframes nudge { 50% { transform: translateX(16px); } }
+.lid.ba .tag { position: absolute; top: 10px; padding: 5px 11px; border-radius: 14px; font-weight: 700; font-size: 15px; letter-spacing: -.05em; background: #fff; }
+.lid.ba .tag.l { left: 10px; color: #17803D; } .lid.ba .tag.r { right: 10px; color: #FF2A1F; }
+
+/* the stamp */
+.lid.st { align-items: center; justify-content: center; text-align: center; gap: 22px; padding: 18px; }
+.lid.st .q { padding: 0; }
+.lid.st button.pad { min-width: 250px; min-height: 130px; border-radius: 22px; border: 3px dashed rgba(20, 18, 16, .35); background: none; cursor: pointer; font: 700 16px/1.2 var(--body); color: #6F665A; position: relative; }
+.stampmark { position: absolute; inset: 8px; display: grid; place-items: center; border: 8px solid #B82830; border-radius: 16px; color: #B82830; font: 900 50px/1 var(--body); letter-spacing: -.07em; transform: rotate(-8deg); animation: slam .22s cubic-bezier(.5, 0, .9, .6) both; background: #F7F2E6; }
+@keyframes slam { from { transform: rotate(-8deg) scale(2.8); opacity: 0; } }
+
+/* ---------- red tick when copying ---------- */
+.ticked { position: fixed; z-index: 60; width: 72px; height: 62px; pointer-events: none; animation: tickOut 1s ease-in forwards; }
+.ticked path { fill: none; stroke: #FF2A1F; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: drawn .26s ease-out forwards; }
+@keyframes tickOut { 75% { opacity: 1; } to { opacity: 0; } }
+
+/* ---------- rules: corrected in red pen ---------- */
+.reel-review .slab.rule h3, .reel-review .slab.rule h2 { position: relative; width: fit-content; }
+.reel-review .slab.rule h3::after, .reel-review .slab.rule h2::after { content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 5px; border-radius: 3px; background: #FF2A1F; transform: scaleX(0) rotate(-.7deg); transform-origin: 0 50%; transition: transform .55s cubic-bezier(.3, .8, .2, 1) .25s; }
+.reel-review .slab.rule.on h3::after, .reel-review .slab.rule.on h2::after { transform: scaleX(1) rotate(-.7deg); }
+
+@media (max-width: 760px) {
+  #table .film { height: 128px; top: 9%; }
+  #table .head { top: calc(9% - 14px); height: 156px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lid .hint, .lid.ba .bar { animation: none !important; }
+  #table .film { transition: none; }
+}
