@@ -82,6 +82,7 @@
   //   roll — avanza a la derecha en arcos de cicloide, como un punto de una manzana que rueda por la hierba
   //   scrub — avanza a la derecha a saltos iguales, casi recto, como un cabezal que recorre una tira de fotogramas
   //   tack — bordadas: cruza de un lado a otro mientras avanza hacia el fondo, como un velero que navega contra el viento
+  //   float — sube despacio y el viento la empuja a la derecha meciéndola de lado, como un globo aerostático al amanecer
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
   // ess: la x sigue una S de arriba abajo a lo largo de todo el recorrido
@@ -300,6 +301,8 @@
     ? [Math.sin(si * 1.3) * 420, si * 1300, -si * 260 - Math.cos(si * 1.3) * 200]
     : modo === "meteor"
     ? [si * 760, si * 1150, -si * 480]
+    : modo === "float"
+    ? [Math.sin(si * .9) * 520 + si * 260, -si * 1100, -si * 240]
     : modo === "climb"
     ? [si % 2 ? -420 : 420, -si * 880, -si * 90]
     : [si * 1500, si % 2 ? -150 : 130, -si * 640];
@@ -375,6 +378,8 @@
     ? [Math.sin(g * 1.1) * 220, g * 1000, -g * 200, Math.sin(g * 1.1) * 6]
     : modo === "meteor"
     ? [g * 460, g * 820, -g * 320, 4]
+    : modo === "float"
+    ? [Math.sin(g * .8) * 240 + g * 120, -g * 900, -g * 200, Math.sin(g * .8) * 3]
     : modo === "climb"
     ? [g % 2 ? -60 : 60, -g * 760, -g * 80, g % 2 ? 4 : -4]
     : [g * 900, g % 2 ? -110 : 110, -g * 480, g % 2 ? 6 : -6];

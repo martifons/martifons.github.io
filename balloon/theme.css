@@ -1,0 +1,74 @@
+/* BALLOON (reel99) — "She's not real. Neither is the balloon." Detrás, el valle de agujas de roca al amanecer: el
+   cielo pasa de rosa a oro y el valle se queda abajo a medida que subes (cámara "float"). Una docena de globos lejanos
+   en canvas; tocar el cielo suelta uno. Cada prompt va dentro de un globo deshinchado: se mantiene pulsado el
+   quemador, el globo se llena y se va hacia arriba. Al copiar cae un saco de arena. Las reglas van atadas a un globo
+   y el final es el cuaderno de vuelo con los créditos de verdad. */
+
+.reel-balloon body { background: #2A1E2A; }
+.reel-balloon body::before { background: none; }
+
+/* ---------- el valle ---------- */
+#valley { position: fixed; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; background: linear-gradient(180deg, #7FA6C9 0%, #E9C9A4 52%, #F7D9A0 78%, #F4C27E 100%); }
+#valley .dawn { position: absolute; inset: 0; background: linear-gradient(180deg, #3B2D4E 0%, #9A6383 36%, #E79A86 62%, #F6C18F 86%); transition: opacity 1.6s ease; }
+#valley .sun { position: absolute; left: 30%; top: 70%; width: 26vmin; height: 26vmin; margin: -13vmin; border-radius: 50%; background: radial-gradient(circle, #FFF4D8 0 40%, rgba(255, 220, 160, .55) 56%, rgba(255, 200, 140, 0) 72%); transition: top 1.6s cubic-bezier(.3, .7, .2, 1); }
+#valley canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+#valley .spires { position: absolute; left: -2%; width: 104%; transition: transform 1.6s cubic-bezier(.3, .7, .2, 1); }
+#valley .spires.far { bottom: 12%; height: 24%; fill: #C69A8E; filter: blur(1.4px); opacity: .85; }
+#valley .spires.near { bottom: -2%; height: 26%; fill: #8E5F57; }
+
+.reel-balloon .slab { background: rgba(32, 20, 28, .9); border-color: rgba(255, 228, 200, .16); box-shadow: 0 30px 70px rgba(30, 12, 24, .45); }
+.reel-balloon .slab.hero { border-color: rgba(247, 205, 140, .6); box-shadow: 0 0 60px rgba(247, 205, 140, .18), 0 40px 90px rgba(30, 12, 24, .55); }
+
+/* ---------- los globos soltados ---------- */
+#aloft { position: fixed; z-index: 40; left: 50%; bottom: 112px; transform: translateX(-50%); display: flex; align-items: center; gap: 9px; padding: 7px 13px; border-radius: 22px; background: rgba(32, 20, 28, .9); border: 1px solid rgba(255, 228, 200, .18); color: #F3EEEB; font: 700 12px/1 var(--mono); white-space: nowrap; pointer-events: none; }
+#aloft .dots { display: flex; gap: 5px; }
+#aloft .dots i { width: 11px; height: 13px; border-radius: 50% 50% 45% 45%; background: rgba(243, 238, 235, .18); transition: background .4s, transform .6s cubic-bezier(.2, 1.6, .4, 1); }
+#aloft .dots i.up { background: var(--c); transform: translateY(-3px); }
+#aloft .val { color: #F7CD8C; font-size: 15px; }
+
+/* ---------- el globo deshinchado sobre el prompt ---------- */
+.envbox { position: relative; overflow: hidden; border-radius: 12px; touch-action: none; --fill: 0; }
+.envbox.open { touch-action: auto; overflow: visible; }
+.envbox .env { position: absolute; inset: 0; z-index: 2; background: linear-gradient(180deg, #3A2533, #2A1A26); border-radius: 12px; will-change: transform; transition: transform 1s cubic-bezier(.5, 0, .7, .4), opacity .9s ease .1s; }
+.envbox .rig { position: absolute; left: 0; right: 0; top: 16px; bottom: 74px; display: flex; flex-direction: column; align-items: center; }
+.envbox .bag { flex: 1 1 0; min-height: 0; aspect-ratio: 1 / 1.12; max-width: 60%; border-radius: 50% 50% 42% 42% / 58% 58% 42% 42%;
+  background: repeating-linear-gradient(90deg, var(--a) 0 12.5%, var(--b) 12.5% 25%);
+  transform-origin: 50% 100%; transform: scaleX(calc(.82 + var(--fill) * .18)) scaleY(calc(.14 + var(--fill) * .86)); box-shadow: inset -18px -10px 30px rgba(0, 0, 0, .28), 0 10px 30px rgba(0, 0, 0, .3); }
+.envbox .lines { flex: none; width: 70px; height: 20px; margin-top: -2px; overflow: visible; }
+.envbox .basket { flex: none; width: 40px; height: 26px; border-radius: 3px 3px 7px 7px; background: repeating-linear-gradient(90deg, #A2794D 0 4px, #7A5534 4px 8px); box-shadow: inset 0 3px 0 #5A3D24; }
+.envbox .env p { position: absolute; left: 16px; right: 80px; bottom: 16px; margin: 0; display: flex; flex-direction: column; gap: 4px; color: #F3EEEB; }
+.envbox .env p b { font: 800 19px/1.15 var(--body); letter-spacing: -.01em; }
+.envbox .env p span { font: 600 12px/1.3 var(--mono); opacity: .7; }
+.envbox .burner { position: absolute; z-index: 3; right: 12px; bottom: 12px; width: 60px; height: 60px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; background: #FF2A1F; box-shadow: 0 6px 16px rgba(0, 0, 0, .45), inset 0 -4px 0 rgba(0, 0, 0, .2); }
+.envbox .burner i { position: absolute; inset: 8px; border-radius: 50%; background: conic-gradient(#F7CD8C calc(var(--fill) * 360deg), rgba(255, 255, 255, .18) 0); -webkit-mask: radial-gradient(circle, transparent 62%, #000 64%); mask: radial-gradient(circle, transparent 62%, #000 64%); }
+.envbox .burner em { position: absolute; left: 50%; top: 50%; width: 18px; height: 26px; margin: -15px 0 0 -9px; border-radius: 50% 50% 45% 45% / 62% 62% 38% 38%; background: radial-gradient(circle at 50% 70%, #FFF4C8 0 30%, #FFB13B 55%, #FF6A1F 80%); transform-origin: 50% 90%; transform: scale(.6); transition: transform .15s; }
+.envbox.fire .burner em { transform: scale(1.15); animation: flicker .12s ease-in-out infinite alternate; }
+@keyframes flicker { to { transform: scale(1.3, 1.05) skewX(4deg); } }
+.envbox:not(.fire):not(.lift) .burner { animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%, 70%, 100% { box-shadow: 0 6px 16px rgba(0, 0, 0, .45), 0 0 0 0 rgba(255, 42, 31, .5); } 85% { box-shadow: 0 6px 16px rgba(0, 0, 0, .45), 0 0 0 12px rgba(255, 42, 31, 0); } }
+.envbox.fire .bag { animation: breathe .5s ease-in-out infinite alternate; }
+@keyframes breathe { to { filter: brightness(1.08); } }
+.envbox.lift .env { transform: translateY(-115%); opacity: 0; }
+.envbox.lift .burner { opacity: 0; transition: opacity .3s; }
+.envbox.open .env, .envbox.open .burner { display: none; }
+
+/* ---------- saco de arena al copiar ---------- */
+.sandbag { position: fixed; z-index: 60; width: 30px; height: 36px; pointer-events: none; animation: sand 1.1s cubic-bezier(.55, 0, 1, .45) forwards; }
+@keyframes sand { from { transform: translateY(-10px) rotate(0); opacity: 1; } 85% { opacity: 1; } to { transform: translateY(70vh) rotate(28deg); opacity: 0; } }
+
+/* ---------- reglas: un globo atado ---------- */
+.reel-balloon .slab.rule { padding-top: 84px; overflow: hidden; }
+.reel-balloon .slab.rule .tether { position: absolute; left: 22px; top: 8px; width: 40px; height: 70px; transform: translateY(90px) scale(.4); opacity: 0; transition: transform 1.1s cubic-bezier(.2, 1.2, .4, 1) .15s, opacity .4s .15s; }
+.reel-balloon .slab.rule.on .tether { transform: none; opacity: 1; }
+.reel-balloon .slab.rule .tether svg { width: 100%; height: 100%; animation: bob 3.4s ease-in-out infinite; transform-origin: 50% 100%; }
+@keyframes bob { 0%, 100% { transform: rotate(-4deg) translateY(0); } 50% { transform: rotate(4deg) translateY(-4px); } }
+
+/* ---------- cuaderno de vuelo ---------- */
+.flightlog { margin: 4px 0 16px; padding: 14px 16px; border-radius: 6px; background: #F6ECDC; color: #2A1A26; font: 600 13px/1.5 var(--mono); }
+.flightlog .h { font-weight: 800; letter-spacing: .12em; font-size: 11px; color: #B4436C; margin-bottom: 6px; }
+.flightlog div:not(.h) { display: flex; justify-content: space-between; gap: 12px; }
+.flightlog .tot { margin-top: 8px; padding-top: 8px; border-top: 2px dashed #A48C86; font-weight: 800; font-size: 16px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .envbox .burner, .envbox .bag, .envbox .burner em, .reel-balloon .slab.rule .tether svg { animation: none !important; }
+}
