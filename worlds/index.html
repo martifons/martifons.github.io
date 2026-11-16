@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en" class="reel-worlds" style="--ar: 720 / 1280; --arn: 0.5625" data-fly="quad">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>One snap. Four worlds. — prompts · @martiifons</title>
+<meta name="description" content="Free prompt pack: the three world photos and the four video prompts behind a talking avatar that snaps from his room to a dune, a rainy street and a glacier. Made with Claude and Google Flow, 48 credits.">
+<meta property="og:title" content="One snap. Four worlds. — prompts · @martiifons">
+<meta property="og:description" content="Free prompt pack: the three world photos and the four video prompts behind a talking avatar that snaps from his room to a dune, a rainy street and a glacier. Made with Claude and Google Flow, 48 credits.">
+<meta property="og:image" content="https://martifons.github.io/worlds/poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FF2A1F">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='%23FF2A1F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<div id="ticker" class="hud" aria-hidden="true"><span>Not my room · Not me either · 4 worlds · 4 clips × 12 credits · Claude + Google Flow · @martiifons · Not my room · Not me either · 4 worlds · 4 clips × 12 credits · Claude + Google Flow · @martiifons · Not my room · Not me either · 4 worlds · 4 clips × 12 credits · Claude + Google Flow · @martiifons · Not my room · Not me either · 4 worlds · 4 clips × 12 credits · Claude + Google Flow · @martiifons · Not my room · Not me either · 4 worlds · 4 clips × 12 credits · Claude + Google Flow · @martiifons · Not my room · Not me either · 4 worlds · 4 clips × 12 credits · Claude + Google Flow · @martiifons · Not my room · Not me either · 4 worlds · 4 clips × 12 credits · Claude + Google Flow · @martiifons · Not my room · Not me either · 4 worlds · 4 clips × 12 credits · Claude + Google Flow · @martiifons · Not my room · Not me either · 4 worlds · 4 clips × 12 credits · Claude + Google Flow · @martiifons · Not my room · Not me either · 4 worlds · 4 clips × 12 credits · Claude + Google Flow · @martiifons · </span></div>
+<div id="bar" class="hud"><i></i></div>
+<header id="top" class="hud">
+  <a class="mark" href="../">@martiifons</a>
+  <b>Snap to change worlds</b>
+  <span id="now"></span>
+</header>
+<nav id="rail" class="hud" aria-label="Sections">
+  <button class="dot" type="button"><span>Intro</span><i></i></button>
+  <button class="dot" type="button"><span>The worlds</span><i></i></button>
+  <button class="dot" type="button"><span>Clip 1 · Room</span><i></i></button>
+  <button class="dot" type="button"><span>Clip 2 · Dune</span><i></i></button>
+  <button class="dot" type="button"><span>Clip 3 · Street</span><i></i></button>
+  <button class="dot" type="button"><span>Clip 4 · Glacier</span><i></i></button>
+  <button class="dot" type="button"><span>How to</span><i></i></button>
+  <button class="dot" type="button"><span>Outro</span><i></i></button>
+</nav>
+<main id="stage">
+<div id="cam">
+<section class="stop" data-label="Intro">
+  <div class="slab hero">
+    <p class="k">Free prompt pack · all of it</p>
+    <h1 class="big">One snap.<em>Four worlds.</em></h1>
+    <p>That's not my room, and that's not me. It's my avatar, made from one photo, and four 8-second clips from Google Flow. 48 of the 50 credits Flow gives you free every day. Claude wrote every prompt, second by second.</p>
+    <p><strong>Here's every prompt, ready to copy.</strong> Each prompt is behind a raised hand. Snap it: flick the thumb down, fast. Tap the background to snap to the next world.</p>
+    <div class="tags"><span class="tag">Claude + Google Flow</span><span class="tag">1 photo, 4 clips</span></div>
+  </div>
+  <div class="slab narrow">
+    <div class="shot"><video id="clip" src="video.mp4" poster="poster.jpg" muted loop playsinline preload="metadata"></video></div>
+    <div class="cap"><span>The finished video</span><button class="sound" type="button" data-sound="clip">Sound on</button></div>
+  </div>
+</section>
+<section class="stop" data-label="The worlds">
+  <div class="slab">
+    <span class="num">01 / 05</span>
+    <div class="model">Google Flow · Nano Banana Pro · 0 credits</div>
+    <h2 class="big">Three new places, one pose</h2>
+    <p><strong>Images cost zero credits.</strong> Start from one photo of your avatar in a room. Attach it and make the other worlds: the same man, the same framing, and his right hand already up at his cheek, as if he has just snapped.</p>
+    
+    <div class="watch"><p class="k soft">Watch out</p><p>The dune came out with the wrong hand up. The fix: attach the glacier photo instead and change only the place. The photo that already matches is the best reference.</p></div>
+    <figure class="step-img"><img src="worlds.jpg" alt="The first frame of each clip" loading="lazy"></figure>
+  </div>
+  
+  <div class="slab wide">
+    <p class="k">The prompt <small>424 words</small></p>
+    <pre class="code" id="p1">STREET AT NIGHT (attach the room photo)
+
+Use the reference photo for the man: the same face, light freckles, brown eyes, curly chestnut-brown hair, the navy-blue baseball cap worn backwards with its plastic strap across his forehead, and the same dark knit jumper. Same framing as the reference: chest-up, centred, eyes straight into the lens at eye level. His right hand is raised at the height of his right cheek, fifteen centimetres out from his face, palm toward the lens, thumb and middle finger pressed together as if he has just snapped them. He now stands in a narrow city side street at night in steady rain, raindrops beading on his cap and shoulders, the wet street behind him melted into soft round bokeh of pink, cyan and amber light. Cool neon glow from frame-left on his cheek. Natural skin with pores, real knit texture, crisp candid photograph.
+
+GLACIER (attach the room photo)
+
+Use the reference photo for the man: the same face, light freckles, brown eyes, curly chestnut-brown hair, the navy-blue baseball cap worn backwards with its plastic strap across his forehead, and the same dark knit jumper. Same framing as the reference: chest-up, centred, eyes straight into the lens at eye level. His right hand is raised at the height of his right cheek, fifteen centimetres out from his face, palm toward the lens, thumb and middle finger pressed together as if he has just snapped them. He now stands on a wide glacier on a clear morning, blue-white ice ridges and fresh snow stretching behind him under a cloudless pale blue sky, a few snow crystals on his cap and jumper. Bright cold sunlight from frame-left. Natural skin with pores, real knit texture, crisp candid photograph.
+
+DUNE (attach the glacier photo, so the pose and framing stay identical)
+
+Keep everything in the reference photo exactly as it is: the same man, the same face and freckles, the navy-blue cap worn backwards with its strap across his forehead, the same dark knit jumper, the same pose with his right hand raised at his cheek in the snap, the same chest-up framing, eye level and distance. Change only the place and the light. He now stands on the crest of a vast sand dune at golden hour, rippled orange sand falling away behind him to a pale hazy horizon under a deep blue sky. Low warm sun from frame-left lights his cheek and the cap. His cap and jumper are clean and dry. Natural skin with pores, real knit texture, crisp candid photograph.</pre>
+    <button class="cp" type="button" data-copy="p1">Copy the world prompts</button>
+  </div>
+</section>
+<section class="stop" data-label="Clip 1 · Room">
+  <div class="slab">
+    <span class="num">02 / 05</span>
+    <div class="model">Google Flow · Omni Flash · 12 credits</div>
+    <h2 class="big">The hook</h2>
+    <p><strong>Attach the room photo. Video, Ingredients, 9:16, 720p, 8 s.</strong> He talks from 0.4 to 6.4 seconds and snaps at 7.0. Every gesture is tied to a word.</p>
+    <ul class="beats"><li><b>0.4 s</b>A glance at the room</li><li><b>1.6 s</b>Points at his chest on &quot;me&quot;</li><li><b>3.6 s</b>One finger on &quot;one&quot;</li><li><b>6.4 s</b>The hand rises</li><li><b>7.0 s</b>The snap</li></ul>
+    <div class="watch"><p class="k soft">Watch out</p><p>Twenty-one words in six seconds is the limit. More than that and the snap gets pushed out of the clip.</p></div>
+    
+  </div>
+  <div class="slab narrow">
+    <p class="k">Fragments</p>
+    <div class="frames"><figure><img src="c1a.jpg" alt="2.4 s" loading="lazy"><figcaption>2.4 s</figcaption></figure><figure><img src="c1b.jpg" alt="7.2 s" loading="lazy"><figcaption>7.2 s</figcaption></figure></div>
+  </div>
+  <div class="slab wide">
+    <p class="k">The prompt <small>582 words</small></p>
+    <pre class="code" id="p2">FORMAT
+Real footage seen as the finished exported video file: the full picture edge to edge, nothing on top of it. The video runs at 24 fps. No frame is repeated. Real time, 1x speed, never slow motion. One continuous take, no cuts, no transitions, no change of place.
+
+REFERENCE
+Use the reference image for the man, his clothing, his raised hand and the place. His face matches the reference exactly: zero drift, no smoothing.
+
+THE MAN
+Early twenties, curly chestnut-brown hair, light freckles across the nose and cheeks, brown eyes, faint stubble on the jaw, a navy-blue baseball cap worn backwards with its plastic strap across his forehead, a dark knit jumper.
+
+VOICE
+Bright male voice in the upper-mid tenor register, forward and light; quick, casual conversational tempo; European accent with a light Spanish inflection; warm and confident, like a voice note to a friend. He never shouts and never whispers. Close and clean.
+
+THE SNAP
+His right hand, on frame-left, rises to the height of his right cheek, fifteen centimetres out from his face, palm toward the lens. Thumb and middle finger press together and he snaps them once: one sharp dry click, the middle finger landing on the base of the thumb. After the snap the hand stays exactly there, still, fingers relaxed.
+
+CAMERA
+Locked off at his eye level, 80 cm in front of him, chest-up framing, his face in the upper-middle of the frame. The camera does not move at all: it never pushes in, never pulls back, never pans, never orbits, never zooms, never cuts away.
+
+LOCATION
+His room, as in the reference: warm lamp light, the wall 1.5 m behind him soft and out of focus.
+
+FIRST FRAME
+Exactly the reference: chest-up, centred, eyes on the lens, both hands down out of the frame, lips just parting.
+
+ACTION TIMING
+0-0.4 s: a quick breath in, eyebrows up, already looking into the lens.
+0.4-1.6 s: first sentence; a small glance to frame-right at the room and straight back to the lens.
+1.6-3.6 s: second sentence; a slow shake of the head, then he points at his own chest with his left index finger on the word me, and lowers the hand.
+3.6-5.8 s: third sentence; eyebrows up on the word avatar, he lifts one finger of his left hand on the word one.
+5.8-6.4 s: he says the last word, leaning five centimetres toward the lens.
+6.4-7.0 s: his right hand rises into the snap position.
+7.0-7.2 s: THE SNAP, once.
+7.2-8 s: the hand stays raised and still; small closed-mouth grin, eyes on the lens. Hold to the last frame.
+
+LOOK
+Natural colour, real skin with pores and fine stubble, real knit texture, soft fine grain, sharp on the eyes. No camera app interface: no record button, no icons, no timer, no frame lines.
+
+LOCKS
+Only this one man in the frame, nobody behind him. Both hands have five fingers and keep their shape. No music, no score, no narration, no subtitles, no captions, no on-screen text, no watermark, no logos. No letters or numbers anywhere in the frame.
+
+AUDIO
+Exactly one speaker. He says, once, in order: &quot;Okay, this is my room. Except it isn't, and this isn't me either. It's my avatar, made from one photo. Watch.&quot; He says nothing else before or after the line; short natural pauses only at the full stops. Then one sharp dry finger snap at 7.0 seconds. Nobody else speaks. Under his voice, quietly: soft room tone.</pre>
+    <button class="cp" type="button" data-copy="p2">Copy clip 1</button>
+  </div>
+</section>
+<section class="stop" data-label="Clip 2 · Dune">
+  <div class="slab">
+    <span class="num">03 / 05</span>
+    <div class="model">Google Flow · Omni Flash · 12 credits</div>
+    <h2 class="big">Same face, new world</h2>
+    <p><strong>Attach the dune photo. Same settings.</strong> It starts with the hand still up and lowers it. The last clip ended on that exact pose, so the cut lands on the snap.</p>
+    <ul class="beats"><li><b>0 s</b>The hand lowers</li><li><b>0.4 s</b>Open palm on &quot;image&quot;</li><li><b>2.4 s</b>Touches the cap on &quot;cap&quot;</li><li><b>4.8 s</b>A shrug on &quot;trick&quot;</li><li><b>7.0 s</b>The snap</li></ul>
+    <div class="watch"><p class="k soft">Watch out</p><p>On the word &quot;image&quot; Omni wrote the word on his jumper for half a second. Tie a gesture to a word and it may print the word.</p></div>
+    
+  </div>
+  <div class="slab narrow">
+    <p class="k">Fragments</p>
+    <div class="frames"><figure><img src="c2a.jpg" alt="1.0 s" loading="lazy"><figcaption>1.0 s</figcaption></figure><figure><img src="c2b.jpg" alt="3.9 s" loading="lazy"><figcaption>3.9 s</figcaption></figure></div>
+  </div>
+  <div class="slab wide">
+    <p class="k">The prompt <small>624 words</small></p>
+    <pre class="code" id="p3">FORMAT
+Real footage seen as the finished exported video file: the full picture edge to edge, nothing on top of it. The video runs at 24 fps. No frame is repeated. Real time, 1x speed, never slow motion. One continuous take, no cuts, no transitions, no change of place.
+
+REFERENCE
+Use the reference image for the man, his clothing, his raised hand and the place. His face matches the reference exactly: zero drift, no smoothing.
+
+THE MAN
+Early twenties, curly chestnut-brown hair, light freckles across the nose and cheeks, brown eyes, faint stubble on the jaw, a navy-blue baseball cap worn backwards with its plastic strap across his forehead, a dark knit jumper.
+
+VOICE
+Bright male voice in the upper-mid tenor register, forward and light; quick, casual conversational tempo; European accent with a light Spanish inflection; warm and confident, like a voice note to a friend. He never shouts and never whispers. Close and clean.
+
+THE SNAP
+His right hand, on frame-left, rises to the height of his right cheek, fifteen centimetres out from his face, palm toward the lens. Thumb and middle finger press together and he snaps them once: one sharp dry click, the middle finger landing on the base of the thumb. After the snap the hand stays exactly there, still, fingers relaxed.
+
+CAMERA
+Locked off at his eye level, 80 cm in front of him, chest-up framing, his face in the upper-middle of the frame. The camera does not move at all: it never pushes in, never pulls back, never pans, never orbits, never zooms, never cuts away.
+
+LOCATION
+The crest of a vast sand dune at golden hour, as in the reference: rippled orange sand falling away behind him to a pale hazy horizon and a deep blue sky. Low warm sun from frame-left. A light steady wind lifts a few grains off the ripples behind him and moves the loose curls under the cap.
+
+FIRST FRAME
+Exactly the reference: chest-up, centred, eyes on the lens, his right hand already raised at the height of his right cheek, thumb and middle finger just snapped together.
+
+ACTION TIMING
+0-0.4 s: his raised right hand lowers smoothly and leaves the bottom of the frame.
+0.4-2.4 s: first sentence; he opens his left palm toward the lens on the word image.
+2.4-4.8 s: second sentence; a small nod on each &quot;same&quot;, then he touches the brim of the cap at the back of his head once with his left hand on the word cap, and lowers it.
+4.8-6.6 s: third sentence; a short half-smile and a small shrug on the word trick.
+6.6-7.0 s: lips close; his right hand rises back into the snap position.
+7.0-7.2 s: THE SNAP, once.
+7.2-8 s: the hand stays raised and still; small closed-mouth grin, eyes on the lens. Hold to the last frame.
+
+LOOK
+Natural colour, real skin with pores and fine stubble, real knit texture, soft fine grain, sharp on the eyes. No camera app interface: no record button, no icons, no timer, no frame lines.
+
+LOCKS
+Only this one man in the frame, nobody behind him. Both hands have five fingers and keep their shape. No music, no score, no narration, no subtitles, no captions, no on-screen text, no watermark, no logos. No letters or numbers anywhere in the frame.
+
+AUDIO
+Exactly one speaker. He says, once, in order: &quot;Every world starts as one still image. Same face, same cap, and my hand already up. That's the whole trick.&quot; He says nothing else before or after the line; short natural pauses only at the full stops. Then one sharp dry finger snap at 7.0 seconds. Nobody else speaks. Under his voice, quietly: steady desert wind hissing over the sand, a few grains ticking.</pre>
+    <button class="cp" type="button" data-copy="p3">Copy clip 2</button>
+  </div>
+</section>
+<section class="stop" data-label="Clip 3 · Street">
+  <div class="slab">
+    <span class="num">04 / 05</span>
+    <div class="model">Google Flow · Omni Flash · 12 credits</div>
+    <h2 class="big">Second by second</h2>
+    <p><strong>Attach the street photo. Same settings.</strong> The same blocks, word for word: the man, the voice, the snap, the camera. Only the place, the first frame, the timing and the sound change.</p>
+    <ul class="beats"><li><b>0.4 s</b>Two taps in the air</li><li><b>2.4 s</b>Two fingers to his lips</li><li><b>3.8 s</b>Eyebrows up on &quot;eyebrows&quot;</li><li><b>5.4 s</b>Eyes narrow, half a smile</li><li><b>7.0 s</b>The snap</li></ul>
+    <div class="watch"><p class="k soft">Watch out</p><p>No music and no extra words: the AUDIO block says one speaker, one line, once.</p></div>
+    
+  </div>
+  <div class="slab narrow">
+    <p class="k">Fragments</p>
+    <div class="frames"><figure><img src="c3a.jpg" alt="1.0 s" loading="lazy"><figcaption>1.0 s</figcaption></figure><figure><img src="c3b.jpg" alt="4.6 s" loading="lazy"><figcaption>4.6 s</figcaption></figure></div>
+  </div>
+  <div class="slab wide">
+    <p class="k">The prompt <small>636 words</small></p>
+    <pre class="code" id="p4">FORMAT
+Real footage seen as the finished exported video file: the full picture edge to edge, nothing on top of it. The video runs at 24 fps. No frame is repeated. Real time, 1x speed, never slow motion. One continuous take, no cuts, no transitions, no change of place.
+
+REFERENCE
+Use the reference image for the man, his clothing, his raised hand and the place. His face matches the reference exactly: zero drift, no smoothing.
+
+THE MAN
+Early twenties, curly chestnut-brown hair, light freckles across the nose and cheeks, brown eyes, faint stubble on the jaw, a navy-blue baseball cap worn backwards with its plastic strap across his forehead, a dark knit jumper.
+
+VOICE
+Bright male voice in the upper-mid tenor register, forward and light; quick, casual conversational tempo; European accent with a light Spanish inflection; warm and confident, like a voice note to a friend. He never shouts and never whispers. Close and clean.
+
+THE SNAP
+His right hand, on frame-left, rises to the height of his right cheek, fifteen centimetres out from his face, palm toward the lens. Thumb and middle finger press together and he snaps them once: one sharp dry click, the middle finger landing on the base of the thumb. After the snap the hand stays exactly there, still, fingers relaxed.
+
+CAMERA
+Locked off at his eye level, 80 cm in front of him, chest-up framing, his face in the upper-middle of the frame. The camera does not move at all: it never pushes in, never pulls back, never pans, never orbits, never zooms, never cuts away.
+
+LOCATION
+A narrow city side street at night in steady rain, as in the reference: raindrops beading and running on his cap and shoulders, the wet street behind him melted into soft round bokeh of pink, cyan and amber light. Cool neon glow from frame-left. The rain falls straight down the whole time.
+
+FIRST FRAME
+Exactly the reference: chest-up, centred, eyes on the lens, his right hand already raised at the height of his right cheek, thumb and middle finger just snapped together.
+
+ACTION TIMING
+0-0.4 s: his raised right hand lowers smoothly and leaves the bottom of the frame.
+0.4-2.4 s: the first part of the line; he taps his left index finger in the air twice, once on each repeated word.
+2.4-3.8 s: the second part; he touches his lips once with two fingers of his left hand.
+3.8-5.4 s: the third part; he lifts both eyebrows high on the word eyebrows and lets them drop.
+5.4-6.6 s: the last part; his eyes narrow slightly, a half-smile.
+6.6-7.0 s: lips close; his right hand rises back into the snap position.
+7.0-7.2 s: THE SNAP, once.
+7.2-8 s: the hand stays raised and still; small closed-mouth grin, eyes on the lens, rain dripping off the peak of the cap at the back. Hold to the last frame.
+
+LOOK
+Natural colour, real skin with pores and fine stubble, real knit texture, soft fine grain, sharp on the eyes. No camera app interface: no record button, no icons, no timer, no frame lines.
+
+LOCKS
+Only this one man in the frame, nobody behind him. Both hands have five fingers and keep their shape. No music, no score, no narration, no subtitles, no captions, no on-screen text, no watermark, no logos. No letters or numbers anywhere in the frame.
+
+AUDIO
+Exactly one speaker. He says, once, in order: &quot;Then one prompt, second by second: every word I say, when my eyebrows move, and the exact moment I snap.&quot; He says nothing else before or after the line; short natural pauses only at the commas. Then one sharp dry finger snap at 7.0 seconds. Nobody else speaks. Under his voice, quietly: steady rain hissing on wet asphalt, drops tapping on the cap, a car passing far away.</pre>
+    <button class="cp" type="button" data-copy="p4">Copy clip 3</button>
+  </div>
+</section>
+<section class="stop" data-label="Clip 4 · Glacier">
+  <div class="slab">
+    <span class="num">05 / 05</span>
+    <div class="model">Google Flow · Omni Flash · 12 credits</div>
+    <h2 class="big">The last snap</h2>
+    <p><strong>Attach the glacier photo. Same settings.</strong> The last snap cuts back to the room. Whoever doesn't scroll watches it again from the start.</p>
+    <ul class="beats"><li><b>0.4 s</b>Counts four fingers</li><li><b>2.0 s</b>Shakes his head on &quot;no camera&quot;</li><li><b>3.4 s</b>Points at you on &quot;comment&quot;</li><li><b>7.0 s</b>The snap</li></ul>
+    <div class="watch"><p class="k soft">Watch out</p><p>The snap you hear in the reel is real, from the room and the dune clips. The street and the glacier didn't make the sound, so I laid it in.</p></div>
+    
+  </div>
+  <div class="slab narrow">
+    <p class="k">Fragments</p>
+    <div class="frames"><figure><img src="c4a.jpg" alt="1.6 s" loading="lazy"><figcaption>1.6 s</figcaption></figure><figure><img src="c4b.jpg" alt="4.3 s" loading="lazy"><figcaption>4.3 s</figcaption></figure></div>
+  </div>
+  <div class="slab wide">
+    <p class="k">The prompt <small>609 words</small></p>
+    <pre class="code" id="p5">FORMAT
+Real footage seen as the finished exported video file: the full picture edge to edge, nothing on top of it. The video runs at 24 fps. No frame is repeated. Real time, 1x speed, never slow motion. One continuous take, no cuts, no transitions, no change of place.
+
+REFERENCE
+Use the reference image for the man, his clothing, his raised hand and the place. His face matches the reference exactly: zero drift, no smoothing.
+
+THE MAN
+Early twenties, curly chestnut-brown hair, light freckles across the nose and cheeks, brown eyes, faint stubble on the jaw, a navy-blue baseball cap worn backwards with its plastic strap across his forehead, a dark knit jumper.
+
+VOICE
+Bright male voice in the upper-mid tenor register, forward and light; quick, casual conversational tempo; European accent with a light Spanish inflection; warm and confident, like a voice note to a friend. He never shouts and never whispers. Close and clean.
+
+THE SNAP
+His right hand, on frame-left, rises to the height of his right cheek, fifteen centimetres out from his face, palm toward the lens. Thumb and middle finger press together and he snaps them once: one sharp dry click, the middle finger landing on the base of the thumb. After the snap the hand stays exactly there, still, fingers relaxed.
+
+CAMERA
+Locked off at his eye level, 80 cm in front of him, chest-up framing, his face in the upper-middle of the frame. The camera does not move at all: it never pushes in, never pulls back, never pans, never orbits, never zooms, never cuts away.
+
+LOCATION
+A wide glacier on a clear morning, as in the reference: blue-white ice ridges and fresh snow stretching behind him under a cloudless pale blue sky, a few snow crystals on his cap and jumper. Bright cold sunlight from frame-left. A faint puff of breath shows in the cold air each time he speaks.
+
+FIRST FRAME
+Exactly the reference: chest-up, centred, eyes on the lens, his right hand already raised at the height of his right cheek, thumb and middle finger just snapped together.
+
+ACTION TIMING
+0-0.4 s: his raised right hand lowers smoothly and leaves the bottom of the frame.
+0.4-3.4 s: first sentence; he counts on his left hand, four fingers up on the word four, then a small shake of the head on the words no camera.
+3.4-6.6 s: second sentence; he points one finger of his left hand at the lens on the word comment, then lowers it, eyebrows up on the word every.
+6.6-7.0 s: lips close; his right hand rises back into the snap position.
+7.0-7.2 s: THE SNAP, once.
+7.2-8 s: the hand stays raised and still; small closed-mouth grin, eyes on the lens. Hold to the last frame.
+
+LOOK
+Natural colour, real skin with pores and fine stubble, real knit texture, soft fine grain, sharp on the eyes. No camera app interface: no record button, no icons, no timer, no frame lines.
+
+LOCKS
+Only this one man in the frame, nobody behind him. Both hands have five fingers and keep their shape. No music, no score, no narration, no subtitles, no captions, no on-screen text, no watermark, no logos. No letters or numbers anywhere in the frame.
+
+AUDIO
+Exactly one speaker. He says, once, in order: &quot;Four worlds, twelve credits each, and no camera at all. Comment worlds and I'll send you every prompt.&quot; He says nothing else before or after the line; short natural pauses only at the full stops. Then one sharp dry finger snap at 7.0 seconds. Nobody else speaks. Under his voice, quietly: cold wind brushing across the ice, snow creaking under his feet.</pre>
+    <button class="cp" type="button" data-copy="p5">Copy clip 4</button>
+  </div>
+</section>
+<section class="stop rules" data-label="How to">
+  <div class="slab rule">
+    <p class="k">Rule 01</p>
+    <h3>End where the next one starts</h3>
+    <p>AI didn't make the transition. Every world starts with the hand already up, the pose the last clip ends on. That's a cut on action.</p>
+  </div>
+  <div class="slab rule">
+    <p class="k">Rule 02</p>
+    <h3>Count the words</h3>
+    <p>About 2.8 words a second, and leave a second and a half free for the snap. If the line eats the time, the snap never happens.</p>
+  </div>
+  <div class="slab rule">
+    <p class="k">Rule 03</p>
+    <h3>Same blocks, every clip</h3>
+    <p>The man, the voice, the snap and the camera are written the same, word for word, in all four. The model has no memory: repeat it, don't refer to it.</p>
+  </div>
+</section>
+<section class="stop" data-label="Outro">
+  <div class="slab hero">
+    <p class="k">That's every prompt</p>
+    <h2 class="big">Your turn.<em>Snap somewhere.</em></h2>
+    <p>Tomorrow the credits come back, whether you used them or not. Make something with today's. If yours works, send it over. I read every DM.</p>
+    <a class="handle" href="https://www.instagram.com/martiifons/">@martiifons</a>
+    <div class="tags"><span class="tag">New prompts every week</span></div>
+  </div>
+  <div class="slab">
+    <p class="k">More prompts</p>
+    <p>Every prompt from my reels, image and video, in one place.</p>
+    <a class="cp link-btn" href="../">See all prompts</a>
+    <div class="tags"><span class="tag">Back in the room</span></div>
+  </div>
+</section>
+</div>
+</main>
+<div id="nav" class="hud"><button id="prev" type="button">Back</button><button id="next" type="button">Next</button></div>
+<div id="foot" class="hud">
+  <span id="count"></span>
+  <span><span class="on-desk"><kbd>Scroll</kbd> fly <kbd>Drag</kbd> look</span><span class="on-phone"><kbd>Swipe</kbd> or <kbd>tap</kbd> to fly</span></span>
+</div>
+<script src="../fly.js"></script>
+<script src="theme.js"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+/* WORLDS (reel100) — "One snap. Four worlds." El fondo es uno de los cuatro mundos del reel (su habitación, la duna,
+   la calle con lluvia y neones, la glaciar) y cambia en SECO, sin fundido, como el corte por acción del vídeo: al
+   avanzar, al tocar el fondo (cada toque es un chasquido) y al abrir un prompt. Cada prompt está detrás de una mano
+   levantada en pose de chasquido: se arrastra el pulgar hacia abajo, rápido, y suena. Al copiar, una manita chasquea
+   sobre el botón. Las reglas llevan un contador de tiempo de línea de montaje y el final es el recibo de créditos. */
+
+.reel-worlds body { background: #1A1714; }
+.reel-worlds body::before { background: none; }
+
+/* ---------- los cuatro mundos ---------- */
+#worlds { position: fixed; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+#worlds .w { position: absolute; inset: 0; visibility: hidden; }
+#worlds .w.on { visibility: visible; }
+#worlds canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* una sombra arriba: el logo blanco y la cinta se leen también sobre la habitación y la glaciar */
+#worlds::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 140px; background: linear-gradient(rgba(14, 12, 10, .55), rgba(14, 12, 10, 0)); }
+#worlds svg { position: absolute; left: -2%; width: 104%; bottom: 0; }
+
+/* la habitación: pared clara, ventana con cortina a la izquierda, estantería a la derecha */
+#worlds .room { background: linear-gradient(180deg, #ECE6DC 0%, #DDD3C4 70%, #C9BCA8 100%); }
+#worlds .room .window { position: absolute; left: 4%; top: 14%; width: 22%; height: 70%; background: linear-gradient(180deg, #FBFAF7, #E9EEF1); box-shadow: 0 0 80px 30px rgba(255, 255, 255, .55); }
+#worlds .room .curtain { position: absolute; left: 1%; top: 11%; width: 12%; height: 86%; background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .85) 0 14px, rgba(236, 232, 226, .85) 14px 26px); filter: blur(.6px); }
+#worlds .room .shelf { position: absolute; right: 6%; bottom: 18%; width: 18%; height: 34%; border-left: 6px solid #C9A97C; border-right: 6px solid #C9A97C; }
+#worlds .room .shelf::before, #worlds .room .shelf::after { content: ""; position: absolute; left: 0; right: 0; height: 6px; background: #C9A97C; }
+#worlds .room .shelf::before { top: 34%; } #worlds .room .shelf::after { top: 72%; }
+#worlds .room .books { position: absolute; right: 9%; bottom: calc(18% + 34% * .66 + 6px); width: 9%; height: 9%; background: linear-gradient(90deg, #BFA98A 0 30%, #D9C9AE 30% 62%, #A99377 62% 100%); }
+
+/* la duna: cielo azul hondo, arena naranja en capas, sol bajo a la izquierda */
+#worlds .dune { background: linear-gradient(180deg, #1F5FAE 0%, #5E95CC 46%, #E9D7B8 64%, #F2C58C 70%); }
+#worlds .dune .sun { position: absolute; left: 8%; top: 56%; width: 30vmin; height: 30vmin; margin: -15vmin; border-radius: 50%; background: radial-gradient(circle, rgba(255, 236, 196, .95) 0 18%, rgba(255, 196, 120, .45) 40%, rgba(255, 180, 100, 0) 70%); }
+#worlds .dune .far { height: 30%; fill: #D9945A; }
+#worlds .dune .near { height: 22%; fill: #C86E2C; }
+
+/* la calle de noche: oscuro, bokeh de neón, suelo mojado que refleja */
+#worlds .street { background: linear-gradient(180deg, #07080F 0%, #121428 55%, #1B1530 72%, #0C0D18 100%); }
+#worlds .street .bokeh i { position: absolute; border-radius: 50%; filter: blur(6px); opacity: .75; }
+#worlds .street .wet { position: absolute; left: 0; right: 0; bottom: 0; height: 26%; background: linear-gradient(180deg, rgba(255, 79, 163, .14), rgba(56, 225, 255, .10) 40%, rgba(0, 0, 0, 0)); }
+
+/* la glaciar: cielo pálido, crestas de hielo azulado */
+#worlds .ice { background: linear-gradient(180deg, #7FB4E3 0%, #BFDDF5 48%, #EAF4FC 62%); }
+#worlds .ice .far { height: 34%; fill: #D3E6F6; }
+#worlds .ice .near { height: 24%; fill: #F4FAFF; filter: drop-shadow(0 -6px 10px rgba(110, 160, 205, .35)); }
+
+/* el chasquido: un anillo pequeño donde suena, nunca un destello a pantalla completa */
+.snapring { position: fixed; z-index: 70; width: 18px; height: 18px; margin: -9px; border-radius: 50%; border: 3px solid #FF2A1F; pointer-events: none; animation: ring .45s ease-out forwards; }
+@keyframes ring { to { transform: scale(5.5); opacity: 0; border-width: 1px; } }
+
+/* ---------- el contador de mundos ---------- */
+#worldhud { position: fixed; z-index: 40; left: 50%; bottom: 112px; transform: translateX(-50%); display: flex; align-items: center; gap: 9px; padding: 7px 13px; border-radius: 22px; background: rgba(18, 16, 14, .9); border: 1px solid rgba(243, 238, 235, .18); color: #F3EEEB; font: 700 12px/1 var(--mono); white-space: nowrap; pointer-events: none; }
+#worldhud .sq { display: flex; gap: 4px; }
+#worldhud .sq i { width: 10px; height: 10px; border-radius: 2px; background: rgba(243, 238, 235, .2); }
+#worldhud .sq i.on { background: #FF2A1F; }
+#worldhud .val { color: #F8F8B0; font-size: 13px; letter-spacing: .06em; }
+
+.reel-worlds .slab { background: rgba(20, 17, 15, .9); border-color: rgba(243, 238, 235, .16); box-shadow: 0 30px 70px rgba(0, 0, 0, .4); }
+.reel-worlds .slab.hero { border-color: rgba(248, 248, 176, .55); box-shadow: 0 0 60px rgba(248, 248, 176, .14), 0 40px 90px rgba(0, 0, 0, .5); }
+
+/* ---------- la mano sobre cada prompt ---------- */
+.snapbox { position: relative; overflow: hidden; border-radius: 12px; touch-action: none; }
+.snapbox.open { touch-action: auto; overflow: visible; }
+.snapbox .still { position: absolute; inset: 0; z-index: 2; border-radius: 12px; background: var(--still, #2A2420); display: flex; align-items: center; gap: 14px; padding: 12px 16px; }
+.snapbox.open .still { display: none; }
+.snapbox .hand { position: relative; flex: none; width: 104px; height: 140px; touch-action: none; }
+.snapbox .hand svg { width: 100%; height: 100%; overflow: visible; }
+.snapbox .thumb { position: absolute; left: 6px; top: 34px; width: 54px; height: 54px; margin: 0; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 42, 31, .16); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; transform: translateY(var(--dy, 0px)); }
+.snapbox .thumb::after { content: ""; position: absolute; inset: 10px; border-radius: 50%; border: 2px dashed #FF2A1F; animation: nudge 1.6s ease-in-out infinite; }
+@keyframes nudge { 0%, 60%, 100% { transform: translateY(0); } 75% { transform: translateY(9px); } }
+.snapbox.drag .thumb::after { animation: none; }
+.snapbox .say { display: flex; flex-direction: column; gap: 5px; color: #F3EEEB; min-width: 0; }
+.snapbox .say b { font: 800 19px/1.15 var(--body); letter-spacing: -.01em; }
+.snapbox .say span { font: 600 12px/1.35 var(--mono); opacity: .72; }
+.snapbox .say em { font: 700 12px/1.3 var(--mono); font-style: normal; color: #F8F8B0; min-height: 16px; }
+.snapbox .tc { position: absolute; right: 10px; top: 9px; font: 700 11px/1 var(--mono); color: rgba(243, 238, 235, .55); letter-spacing: .08em; }
+
+/* ---------- la manita que chasquea al copiar ---------- */
+.minisnap { position: fixed; z-index: 60; width: 34px; height: 44px; pointer-events: none; animation: pop .7s cubic-bezier(.2, 1.4, .4, 1) forwards; }
+@keyframes pop { 0% { transform: translateY(8px) scale(.4); opacity: 0; } 30% { transform: translateY(-22px) scale(1.05); opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-34px) scale(1); opacity: 0; } }
+
+/* ---------- reglas: un contador de línea de tiempo ---------- */
+.reel-worlds .slab.rule .clock { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 5px 9px; border-radius: 6px; background: #0E0C0B; color: #F8F8B0; font: 700 12px/1 var(--mono); letter-spacing: .08em; }
+.reel-worlds .slab.rule .clock i { width: 8px; height: 8px; border-radius: 50%; background: #FF2A1F; }
+.reel-worlds .slab.rule:not(.on) .clock i { background: #5A524C; }
+
+/* ---------- recibo ---------- */
+.receipt { margin: 4px 0 16px; padding: 14px 16px; border-radius: 6px; background: #F3EEEB; color: #1A1714; font: 600 13px/1.5 var(--mono); }
+.receipt .h { font-weight: 800; letter-spacing: .12em; font-size: 11px; color: #FF2A1F; margin-bottom: 6px; }
+.receipt div:not(.h) { display: flex; justify-content: space-between; gap: 12px; }
+.receipt .tot { margin-top: 8px; padding-top: 8px; border-top: 2px dashed #A8A09A; font-weight: 800; font-size: 16px; }
+
+@media (max-width: 600px) {
+  .snapbox .hand { width: 86px; height: 118px; }
+  .snapbox .thumb { left: 4px; top: 27px; width: 48px; height: 48px; }
+  .snapbox .say b { font-size: 17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .snapbox .thumb::after, .snapring, .minisnap { animation: none !important; }
+  .snapring, .minisnap { display: none; }
+}
