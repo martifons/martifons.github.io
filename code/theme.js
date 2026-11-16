@@ -190,5 +190,5 @@
   // ---------- el recompte del final ----------
   const fora = [...document.querySelectorAll(".stop")].find((s) => /outro/i.test(s.dataset.label || ""));
   const txt = fora && fora.querySelector(".slab p:not(.k)");
-  if (txt) txt.insertAdjacentHTML("beforebegin", `<div class="frames-receipt"><div class="h">RENDER LOG</div><div><span>Frames, 30 fps</span><span>484</span></div><div><span>Cameras, AI video models</span><span>0</span></div><div class="tot"><span>Credits spent</span><span>0</span></div></div>`);
+  if (txt) txt.insertAdjacentHTML("beforebegin", `<div class="frames-receipt"><div class="h">RENDER LOG</div><div><span>Frames, 30 fps</span><span>459</span></div><div><span>Cameras, AI video models</span><span>0</span></div><div class="tot"><span>Credits spent</span><span>0</span></div></div>`);
 })();
