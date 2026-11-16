@@ -1,0 +1,70 @@
+/* CODE (reel101) — "240 dominoes. Zero cameras." Al fons, l'espiral de 240 dòminos vista des de dalt, dibuixada en
+   canvas, que va caient a mesura que avances (i quan toques el terra) fins que l'última s'estira dins el rectangle crema.
+   Cada prompt és darrere d'una filera de dòminos: s'empeny el primer i cauen un darrere l'altre destapant-lo. Al copiar,
+   un dominó petit cau sobre el botó. Les regles s'escriuen com codi, amb números de línia. */
+
+.reel-code body { background: #0E0C0B; }
+.reel-code body::before { background: none; }
+
+#floor { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+#floor canvas { width: 100%; height: 100%; display: block; }
+#floor::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(14, 12, 11, 0) 40%, rgba(8, 7, 6, .7) 100%); }
+
+/* contador */
+#chainhud { position: fixed; z-index: 40; left: 50%; bottom: 112px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 7px 14px; border-radius: 22px; background: rgba(14, 12, 11, .92); border: 1px solid rgba(248, 248, 176, .2); color: #F3EEEB; font: 700 12px/1 var(--mono); white-space: nowrap; pointer-events: none; }
+#chainhud .bar { width: 72px; height: 6px; border-radius: 3px; background: rgba(243, 238, 235, .15); overflow: hidden; }
+#chainhud .bar i { display: block; height: 100%; width: var(--p, 0%); background: #FF2A1F; }
+#chainhud .val { color: #F8F8B0; letter-spacing: .04em; min-width: 54px; text-align: right; }
+
+.reel-code .slab { background: rgba(18, 16, 14, .9); border-color: rgba(248, 248, 176, .14); box-shadow: 0 30px 70px rgba(0, 0, 0, .45); }
+.reel-code .slab.hero { border-color: rgba(255, 42, 31, .55); box-shadow: 0 0 60px rgba(255, 42, 31, .14), 0 40px 90px rgba(0, 0, 0, .5); }
+
+/* ---------- la filera de dòminos sobre cada prompt ---------- */
+.dbox { position: relative; overflow: hidden; border-radius: 12px; }
+.dbox.open { overflow: visible; }
+.dbox .cover { position: absolute; inset: 0; z-index: 2; border-radius: 12px; background: #15120F; display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 14px 16px; touch-action: none; }
+.dbox.open .cover { display: none; }
+.dbox .row { position: relative; display: flex; align-items: flex-end; gap: 12px; height: 92px; padding-left: 6px; border-bottom: 2px solid rgba(248, 248, 176, .22); }
+.dbox .dm { flex: none; width: 15px; height: 76px; border-radius: 3px; background: linear-gradient(90deg, #C9150C, #FF2A1F 40%, #FF5A4C 55%, #D81B10); box-shadow: 2px 0 0 rgba(0, 0, 0, .35); transform-origin: 100% 100%; transition: transform .16s cubic-bezier(.55, 0, 1, .45); }
+.dbox .dm.down { transform: rotate(73deg); }
+.dbox .dm:last-child.down { transform: rotate(90deg); }
+/* el primer és el botó: 44 px d'àrea tàctil al voltant */
+.dbox .push { position: absolute; left: -10px; bottom: 0; width: 44px; height: 100px; margin: 0; padding: 0; border: 0; background: none; cursor: pointer; touch-action: none; -webkit-tap-highlight-color: transparent; }
+.dbox .push::after { content: ""; position: absolute; left: 16px; top: -2px; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 10px solid #F8F8B0; animation: tip 1.4s ease-in-out infinite; }
+@keyframes tip { 0%, 100% { transform: translate(0, 0); opacity: .9; } 50% { transform: translate(6px, 4px); opacity: .5; } }
+.dbox.going .push::after { display: none; }
+.dbox .say { display: flex; flex-direction: column; gap: 4px; color: #F3EEEB; }
+.dbox .say b { font: 800 19px/1.15 var(--body); letter-spacing: -.01em; }
+.dbox .say span { font: 600 12px/1.35 var(--mono); opacity: .7; }
+.dbox .say em { font: 700 12px/1.3 var(--mono); font-style: normal; color: #F8F8B0; min-height: 15px; }
+
+/* ---------- el dominó que cau sobre el botó en copiar ---------- */
+.minidom { position: fixed; z-index: 60; width: 9px; height: 30px; border-radius: 2px; background: #FF2A1F; transform-origin: 100% 100%; pointer-events: none; animation: tumba .55s cubic-bezier(.55, 0, 1, .45) forwards; }
+@keyframes tumba { 0% { transform: rotate(0); opacity: 1; } 70% { transform: rotate(90deg); opacity: 1; } 100% { transform: rotate(90deg); opacity: 0; } }
+
+/* ---------- regles com codi ---------- */
+.reel-code .slab.rule { font-variant-ligatures: none; }
+.reel-code .slab.rule .k { font-family: var(--mono); color: rgba(243, 238, 235, .45); }
+.reel-code .slab.rule .k::before { content: "// "; }
+.reel-code .slab.rule h3 { font-family: var(--mono); font-size: 19px; letter-spacing: -.01em; }
+.reel-code .slab.rule h3::before { content: "const "; color: #F8F8B0; }
+.reel-code .slab.rule p:last-child { position: relative; padding-left: 30px; font-family: var(--mono); font-size: 13px; line-height: 1.55; }
+.reel-code .slab.rule p:last-child::before { content: attr(data-ln); position: absolute; left: 0; top: 0; bottom: 0; overflow: hidden; width: 22px; white-space: pre; text-align: right; color: rgba(243, 238, 235, .3); }
+.reel-code .slab.rule .caret { display: inline-block; width: .55em; height: 1.1em; margin-left: 2px; vertical-align: -.15em; background: #FF2A1F; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ---------- recompte final ---------- */
+.frames-receipt { margin: 4px 0 16px; padding: 14px 16px; border-radius: 6px; background: #F3EEEB; color: #1A1714; font: 600 13px/1.5 var(--mono); }
+.frames-receipt .h { font-weight: 800; letter-spacing: .12em; font-size: 11px; color: #FF2A1F; margin-bottom: 6px; }
+.frames-receipt div:not(.h) { display: flex; justify-content: space-between; gap: 12px; }
+.frames-receipt .tot { margin-top: 8px; padding-top: 8px; border-top: 2px dashed #A8A09A; font-weight: 800; font-size: 16px; }
+
+@media (max-width: 600px) {
+  .dbox .row { gap: 9px; height: 80px; }
+  .dbox .dm { width: 13px; height: 64px; }
+  .dbox .say b { font-size: 17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dbox .dm, .minidom, .dbox .push::after, .reel-code .slab.rule .caret { animation: none !important; transition: none !important; }
+  .minidom { display: none; }
+}

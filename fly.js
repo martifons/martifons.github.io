@@ -83,6 +83,7 @@
   //   scrub — avanza a la derecha a saltos iguales, casi recto, como un cabezal que recorre una tira de fotogramas
   //   tack — bordadas: cruza de un lado a otro mientras avanza hacia el fondo, como un velero que navega contra el viento
   //   float — sube despacio y el viento la empuja a la derecha meciéndola de lado, como un globo aerostático al amanecer
+  //   chain — una espiral d'Arquímedes cap a dins, com la cadena de dòmino del reel101: cada parada una mica més a prop del centre i més avall
   //   quad — salta por las cuatro esquinas de un cuadrado (los cuatro mundos) y cada vuelta baja y se aleja, como cortes secos entre mundos
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
@@ -231,6 +232,8 @@
   // y las cúspides en él; devuelve también el ángulo
   // quad: las cuatro esquinas de un cuadrado de lado "lado"; cada vuelta de cuatro baja "baja" px y avanza a la derecha
   const esquina = (k, lado, baja) => { const j = Math.floor(k / 4), c = [[0, 0], [1, 0], [1, 1], [0, 1]][k % 4]; return [c[0] * lado + j * lado * .35, c[1] * lado * .78 + j * baja, [-3, 3, -2, 2][k % 4]]; };
+  // chain: espiral d'Arquímedes que es tanca; "R" el radi de la primera, "tanca" el que perd per parada, "pas" l'angle per parada
+  const cadena = (k, R, tanca, pas, baixa) => { const a = k * pas, r = Math.max(R * .25, R - k * tanca); return [r * Math.sin(a), k * baixa, r * Math.cos(a) - R, Math.sin(a) * 4]; };
   const rueda = (k, R, paso) => { const a = k * paso; return [R * (a - Math.sin(a)), -R * (1 - Math.cos(a)), a]; };
   const parada = (si) => modo === "scrub"
     ? [si * 1450, si % 2 ? -46 : 46, -si * 120]
@@ -304,6 +307,8 @@
     ? [Math.sin(si * 1.3) * 420, si * 1300, -si * 260 - Math.cos(si * 1.3) * 200]
     : modo === "meteor"
     ? [si * 760, si * 1150, -si * 480]
+    : modo === "chain"
+    ? ((v) => [v[0], v[1], v[2] - si * 200])(cadena(si, 2600, 200, 1.05, 260))
     : modo === "quad"
     ? ((v) => [v[0], v[1], -si * 240])(esquina(si, 1500, 2300))
     : modo === "float"
@@ -383,6 +388,8 @@
     ? [Math.sin(g * 1.1) * 220, g * 1000, -g * 200, Math.sin(g * 1.1) * 6]
     : modo === "meteor"
     ? [g * 460, g * 820, -g * 320, 4]
+    : modo === "chain"
+    ? ((v) => [v[0], v[1], v[2] - g * 120, v[3]])(cadena(g, 1500, 70, 1.1, 300))
     : modo === "quad"
     ? ((v) => [v[0], v[1], -g * 150, v[2]])(esquina(g, 780, 1500))
     : modo === "float"
