@@ -84,6 +84,7 @@
   //   tack — bordadas: cruza de un lado a otro mientras avanza hacia el fondo, como un velero que navega contra el viento
   //   float — sube despacio y el viento la empuja a la derecha meciéndola de lado, como un globo aerostático al amanecer
   //   chain — una espiral d'Arquímedes cap a dins, com la cadena de dòmino del reel101: cada parada una mica més a prop del centre i més avall
+  //   snake — baixa fent una serp, com les boles del reel102 vistes des de dalt: cada parada desfasada de l anterior
   //   quad — salta por las cuatro esquinas de un cuadrado (los cuatro mundos) y cada vuelta baja y se aleja, como cortes secos entre mundos
   //   orbit — un anillo: se aleja dando la vuelta y vuelve al punto de partida, como quien rodea un coche
   const modo = document.documentElement.dataset.fly || "drift";
@@ -309,6 +310,8 @@
     ? [si * 760, si * 1150, -si * 480]
     : modo === "chain"
     ? ((v) => [v[0], v[1], v[2] - si * 200])(cadena(si, 2600, 200, 1.05, 260))
+    : modo === "snake"
+    ? [Math.sin(si * 1.15) * 900, si * 1100, -si * 240]
     : modo === "quad"
     ? ((v) => [v[0], v[1], -si * 240])(esquina(si, 1500, 2300))
     : modo === "float"
@@ -390,6 +393,8 @@
     ? [g * 460, g * 820, -g * 320, 4]
     : modo === "chain"
     ? ((v) => [v[0], v[1], v[2] - g * 120, v[3]])(cadena(g, 1500, 70, 1.1, 300))
+    : modo === "snake"
+    ? [Math.sin(g * 1.15) * 380, g * 820, -g * 200, Math.cos(g * 1.15) * 5]
     : modo === "quad"
     ? ((v) => [v[0], v[1], -g * 150, v[2]])(esquina(g, 780, 1500))
     : modo === "float"
